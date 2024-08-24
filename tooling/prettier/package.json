@@ -1,0 +1,23 @@
+{
+  "name": "@repo/prettier-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "type-check": "tsc-files --noEmit",
+    "clean": "rm -rf .turbo node_modules"
+  },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.6.5"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

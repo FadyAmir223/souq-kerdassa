@@ -1,0 +1,16 @@
+@url = http://localhost:3000
+
+# todos
+
+### get todos
+GET {{url}}/api/trpc/todo.get
+
+
+### add todo
+POST  {{url}}/api/trpc/todo.add
+
+{
+  "json": {
+    "task": "hello"
+  }
+}

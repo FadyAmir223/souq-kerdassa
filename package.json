@@ -1,0 +1,50 @@
+{
+  "name": "monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "db:generate": "pnpm -F @repo/db db:generate:dev:env",
+    "db:push": "pnpm -F @repo/db db:push:dev:env",
+    "db:migrate": "pnpm -F @repo/db db:migrate:dev:env",
+    "db:seed": "pnpm -F @repo/db db:seed:dev:env",
+    "db:reset": "pnpm -F @repo/db db:reset:dev:env",
+    "db:studio": "pnpm -F @repo/db db:studio:dev:env",
+    "docker:dev:down": "docker compose -f docker-compose.dev.yml down",
+    "docker:dev:up": "docker compose -f docker-compose.dev.yml up -d",
+    "docker:prod:build": "docker compose -f docker-compose.prod.yml --env-file=apps/web/.env.production build app-prod",
+    "docker:prod:down": "docker compose -f docker-compose.prod.yml down --remove-orphans",
+    "docker:prod:up": "docker compose -f docker-compose.prod.yml up -d",
+    "docker:prod:up:swarm": "docker stack deploy -c docker-compose.prod.yml swarm-prod",
+    "docker:stage:build": "docker compose -f docker-compose.stage.yml --env-file=apps/web/.env.staging build app-stage",
+    "docker:stage:down": "docker compose -f docker-compose.stage.yml down --remove-orphans",
+    "docker:stage:up": "docker compose -f docker-compose.stage.yml up -d",
+    "prepare": "husky",
+    "format": "turbo run format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "format:fix": "turbo run format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
+    "lint": "turbo run lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "type-check": "turbo run type-check",
+    "postinstall": "pnpm dlx sherif@latest",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo run clean"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/types": "^19.0.3",
+    "eslint": "catalog:",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8",
+    "prettier": "catalog:",
+    "tsc-files": "catalog:",
+    "turbo": "^2.0.12"
+  },
+  "packageManager": "pnpm@9.6.0",
+  "engines": {
+    "node": ">=20.16.0"
+  },
+  "prettier": "@repo/prettier-config"
+}

@@ -1,0 +1,55 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+# api:
+#   dashboard: true
+#   insecure: true
+
+entryPoints:
+  http:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: :443
+
+certificatesResolvers:
+  staging:
+    acme:
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      email: fady2jericho@gmail.com
+      storage: /ssl-certs/acme.json
+      httpChallenge:
+        entryPoint: http
+
+  production:
+    acme:
+      caServer: https://acme-v02.api.letsencrypt.org/directory
+      email: fady2jericho@gmail.com
+      storage: /ssl-certs/acme.json
+      httpChallenge:
+        entryPoint: http
+
+providers:
+  docker:
+    exposedByDefault: false
+  # file:
+  #   filename: /config.yml
+  #   watch: true
+
+accesslog:
+  format: common
+  filePath: /logs/access.log
+  fields:
+    headers:
+      names:
+        User-Agent: keep
+
+log:
+  level: DEBUG
+  format: common
+  filePath: /logs/traefik.log

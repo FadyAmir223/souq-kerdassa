@@ -1,0 +1,60 @@
+services:
+  app-stage:
+    image: app-stage
+    container_name: app-stage
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+      network: host
+      args:
+        - ARG_NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+      secrets:
+        - SECRET_ENVS
+    ports:
+      - 3000:3000
+    volumes:
+      - ./apps/web/uploads:/app/apps/web/uploads
+    env_file:
+      - ./apps/web/.env.staging
+      - ./apps/web/.env.staging.local
+    networks:
+      - internal-stage
+    depends_on:
+      - db-stage
+
+  db-stage:
+    image: postgres:16.4-alpine
+    container_name: db-stage
+    ports:
+      - 5432:5432
+    user: '${MY_UID}:${MY_GID}'
+    volumes:
+      - db-stage-data:/var/lib/postgresql/data
+    environment:
+      - PGDATA=/var/lib/postgresql/data/data-stage
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+    secrets:
+      - postgres_user
+      - postgres_password
+      - postgres_db
+    networks:
+      - internal-stage
+
+volumes:
+  db-stage-data:
+
+networks:
+  internal-stage:
+    external: false
+
+secrets:
+  SECRET_ENVS:
+    file: ./apps/web/.env.staging.build.local
+  postgres_user:
+    file: ./apps/web/secrets/staging/postgres-user.txt
+  postgres_password:
+    file: ./apps/web/secrets/staging/postgres-password.txt
+  postgres_db:
+    file: ./apps/web/secrets/staging/postgres-db.txt

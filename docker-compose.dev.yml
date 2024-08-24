@@ -1,0 +1,23 @@
+services:
+  db-dev:
+    image: postgres:16.4-alpine
+    container_name: db-dev
+    ports:
+      - 5432:5432
+    user: '${MY_UID}:${MY_GID}'
+    volumes:
+      - db-dev-data:/var/lib/postgresql/data
+    environment:
+      - PGDATA=/var/lib/postgresql/data/data-dev
+    env_file:
+      - ./apps/web/.env.development.local
+    networks:
+      - internal-dev
+
+volumes:
+  app-dev-next:
+  db-dev-data:
+
+networks:
+  internal-dev:
+    external: false

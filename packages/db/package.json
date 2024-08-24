@@ -1,0 +1,52 @@
+{
+  "name": "@repo/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./types": "./dist/types.d.ts",
+    ".": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "with-env:dev": "dotenv -e ../../apps/web/.env.development.local --",
+    "db:generate:dev:env": "pnpm with-env:dev prisma generate",
+    "db:push:dev:env": "pnpm with-env:dev prisma db push",
+    "db:migrate:dev:env": "pnpm with-env:dev prisma migrate dev --name",
+    "db:seed:dev:env": "pnpm with-env:dev prisma db seed",
+    "db:reset:dev:env": "pnpm with-env:dev prisma migrate reset dev",
+    "db:studio:dev:env": "pnpm with-env:dev prisma studio",
+    "with-env:stage": "dotenv -e ../../apps/web/.env.staging.build.local --",
+    "db:generate:stage": "pnpm with-env:stage prisma generate",
+    "db:migrate:stage": "pnpm with-env:stage db:migrate:prod",
+    "db:seed:stage": "pnpm with-env:stage prisma db seed",
+    "db:migrate:prod": "pnpx prisma migrate deploy",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "type-check": "tsc-files --noEmit --emitDeclarationOnly false",
+    "clean": "rm -rf .turbo dist node_modules"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "prisma": "^5.18.0",
+    "tsc-files": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prisma": {
+    "schema": "./src/schema.prisma",
+    "seed": "node dist/seed.js"
+  },
+  "prettier": "@repo/prettier-config"
+}

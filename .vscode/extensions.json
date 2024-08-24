@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "expo.vscode-expo-tools",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "yoavbls.pretty-ts-errors",
+    "bradlc.vscode-tailwindcss",
+    "huachao.vscode-restclient",
+    "prisma.language-tools",
+    "microsoft.vscode-docker",
+    "cardinal90.multi-cursor-case-preserve"
+  ]
+}

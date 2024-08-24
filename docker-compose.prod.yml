@@ -1,0 +1,103 @@
+services:
+  app-prod:
+    image: fadyamir/app-prod
+    container_name: app-prod # compose
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+      network: host
+      args:
+        - ARG_NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+      secrets:
+        - SECRET_ENVS
+    volumes:
+      - ./apps/web/uploads:/app/apps/web/uploads
+    env_file:
+      - ./apps/web/.env.production
+      - ./apps/web/.env.production.local
+    networks:
+      - proxy
+    depends_on:
+      - db-prod
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.app-prod.rule=Host(`example.com`) || Host(`www.example.com`)
+      - traefik.http.services.app-prod.loadbalancer.server.port=3000
+      - traefik.http.routers.app-prod.tls.certresolver=staging # production
+    restart: on-failure
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 80s
+
+  db-prod:
+    image: postgres:16.4-alpine
+    container_name: db-prod # compose
+    # ports:
+    #   - 5432:5432
+    user: '${MY_UID}:${MY_GID}'
+    volumes:
+      - db-prod-data:/var/lib/postgresql/data
+    environment:
+      - PGDATA=/var/lib/postgresql/data/data-prod
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+    secrets:
+      - postgres_user
+      - postgres_password
+      - postgres_db
+    networks:
+      - proxy
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 80s
+
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    ports:
+      - 80:80
+      - 443:443
+      # - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/logs:/logs:rw
+      - traefik-ssl-certs:/ssl-certs
+    networks:
+      - proxy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    environment:
+      - TZ=Africa/Cairo
+    depends_on:
+      - app-prod
+
+volumes:
+  db-prod-data:
+  traefik-ssl-certs:
+
+networks:
+  proxy:
+    external: true
+
+secrets:
+  SECRET_ENVS:
+    file: ./apps/web/.env.production.build.local
+  postgres_user:
+    file: ./apps/web/secrets/production/postgres-user.txt
+  postgres_password:
+    file: ./apps/web/secrets/production/postgres-password.txt
+  postgres_db:
+    file: ./apps/web/secrets/production/postgres-db.txt
