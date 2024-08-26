@@ -11,8 +11,6 @@ coverage
 out/
 next-env.d.ts
 
-secrets/
-
 # nitro
 .nitro/
 .output/
@@ -50,4 +48,7 @@ dist/
 # turbo
 .turbo
 
+# custom
 _local/
+uploads/
+secrets/

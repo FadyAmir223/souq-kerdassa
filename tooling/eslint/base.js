@@ -56,6 +56,7 @@ export default tseslint.config(
 
       'no-console': 'warn',
       'prefer-template': 'error',
+      'object-shorthand': 'error',
 
       // import
       'import/order': 'off',
@@ -96,6 +97,7 @@ export default tseslint.config(
         { allowConstantLoopConditions: true },
       ],
 
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',

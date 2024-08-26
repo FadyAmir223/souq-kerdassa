@@ -7,9 +7,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id   String @id @default(cuid())
-  task String
+model Product {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?
+  images      String[]
+  price       Float
+  variants    ProductVariant[]
+
+  rating  Float
+  reviews Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductVariant {
+  id       String   @id @default(cuid())
+  season   Season
+  category Category
+  stock    Int      @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+enum Season {
+  SUMMER
+  WINTER
+}
+
+enum Category {
+  WOMEN
+  CHILDREN
+}
+
+model Review {
+  id     String @id @default(cuid())
+  rating Int
+
+  productId String
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -18,12 +59,33 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  address       String
+  phone         String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  Review        Review[]
 }
 
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  expires      DateTime
+  sessionToken String   @unique
+  accessToken  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+// TODO: remove
+model Todo {
+  id   String @id @default(cuid())
+  task String
+}
+
+// TODO: remove
 model Account {
   id                String  @id @default(cuid())
   type              String
@@ -41,15 +103,4 @@ model Account {
   userId String
 
   @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  userId       String
-  expires      DateTime
-  sessionToken String   @unique
-  accessToken  String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
 }

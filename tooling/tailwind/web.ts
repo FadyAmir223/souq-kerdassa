@@ -11,6 +11,13 @@ export default {
   content: base.content,
   presets: [base],
   theme: {
+    screens: {
+      sm: '480px',
+      md: '768px',
+      lg: '976px',
+      xl: '1240px',
+      '2xl': '1496px',
+    },
     container: {
       center: true,
       padding: '1rem',

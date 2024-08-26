@@ -19,6 +19,7 @@ export default tseslint.config(
 
       'react/self-closing-comp': 'error',
       'react/destructuring-assignment': 'warn',
+      'react/jsx-key': 'error',
 
       'tailwindcss/classnames-order': 'off',
       'tailwindcss/no-contradicting-classname': 'off',

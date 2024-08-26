@@ -1,6 +1,6 @@
 import { auth, signIn, signOut } from '@repo/auth'
 
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 export async function AuthShowcase() {
   const session = await auth()

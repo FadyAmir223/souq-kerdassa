@@ -1,6 +1,7 @@
 import './globals.css'
 
 import { Roboto } from 'next/font/google'
+import type { PropsWithChildren } from 'react'
 
 import { Toaster } from '@/components/ui/toaster'
 import { env } from '@/lib/env'
@@ -14,17 +15,14 @@ const roboto = Roboto({
   display: 'swap',
 })
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang='en'>
+    <html lang='ar' dir='rtl'>
       <body
         className={cn(
           roboto.className,
-          'flex min-h-screen flex-col overflow-x-hidden',
+          // TODO: remove color
+          'flex min-h-screen flex-col overflow-x-hidden bg-neutral-200',
           env.NODE_ENV === 'development' && 'debug-screens',
         )}
       >

@@ -1,31 +1,49 @@
-import { Suspense } from 'react'
+import type { Season } from '@repo/db/types'
+import Link from 'next/link'
 
-import { AuthShowcase } from '@/components/auth-showcase'
-import Todos from '@/components/todos'
-import ZustandShowcase from '@/components/zustand-showcase'
-import { api, HydrateClient } from '@/trpc/server'
+import { Button } from '@/components/ui/button'
+
+import Ad from './_components/ad'
+import ImageSlider from './_components/image-slider'
+import ProductList from './_components/product/product-list'
+
+const seasonProducts = [
+  { label: 'منتجات الصيف', season: 'SUMMER' },
+  { label: 'منتجات الشتاء', season: 'WINTER' },
+] satisfies { label: string; season: Season }[]
 
 export default function IndexPage() {
-  void api.todo.get.prefetch()
-
   return (
-    <HydrateClient>
-      <main>
-        <AuthShowcase />
-        <ZustandShowcase />
+    <main className='container'>
+      <ImageSlider />
 
-        <Suspense
-          fallback={
-            <>
-              <div>loading...</div>
-              <div>loading...</div>
-              <div>loading...</div>
-            </>
-          }
-        >
-          <Todos />
-        </Suspense>
-      </main>
-    </HydrateClient>
+      <section className='flex flex-col gap-4 py-14 lg:flex-row'>
+        <div className='flex-1'>
+          <div className='mb-4 flex items-center justify-between'>
+            <h2 className='mb-3 text-xl font-bold tracking-wider'>احدث المنتجات</h2>
+            <Button asChild variant='link' className='font-semibold'>
+              <Link href='/products?type=latest'>عرض الكل</Link>
+            </Button>
+          </div>
+
+          <ProductList type='LATEST' />
+        </div>
+
+        <Ad />
+      </section>
+
+      {seasonProducts.map(({ label, season }) => (
+        <section key={season} className='py-14'>
+          <div className='mb-4 flex items-center justify-between'>
+            <h2 className='mb-3 text-xl font-bold tracking-wider'>{label}</h2>
+            <Button asChild variant='link' className='font-semibold'>
+              <Link href={`/products?type=${season.toLowerCase()}`}>عرض الكل</Link>
+            </Button>
+          </div>
+
+          <ProductList type={season} />
+        </section>
+      ))}
+    </main>
   )
 }

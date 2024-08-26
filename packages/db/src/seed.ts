@@ -1,20 +1,100 @@
-// import type { User } from '@prisma/client'
+import type { Product, ProductVariant } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 
 const db = new PrismaClient()
 
-// const DEFAULT_USERS = [
-//   { email: 'fady@gmail.com' },
-//   { email: 'jessy@gmail.com' },
-// ] satisfies Partial<User>[]
+const PRODUCTS = [
+  {
+    name: 'mona - 1',
+    description: 'mona - 1',
+    images: [1, 2, 3].map((i) => `models/mona/${i}.png`),
+    price: 400,
+    rating: 3,
+    variants: [
+      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
+      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+    ],
+  },
+  {
+    name: 'mona - 2',
+    description: 'mona - 2',
+    images: [4, 5].map((i) => `models/mona/${i}.png`),
+    price: 400,
+    rating: 3.3,
+    variants: [
+      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
+      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+      { season: 'SUMMER', category: 'CHILDREN', stock: 5 },
+      { season: 'WINTER', category: 'WOMEN', stock: 3 },
+    ],
+  },
+  {
+    name: 'mona - 3',
+    description: 'mona - 3',
+    images: [7, 8, 9, 10].map((i) => `models/mona/${i}.png`),
+    price: 400,
+    rating: 5,
+    variants: [
+      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
+      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+      { season: 'WINTER', category: 'WOMEN', stock: 3 },
+    ],
+  },
+  {
+    name: 'mona - 4',
+    description: 'mona - 4',
+    images: [11, 12, 13].map((i) => `models/mona/${i}.png`),
+    price: 400,
+    rating: 4.3,
+    variants: [{ season: 'WINTER', category: 'CHILDREN', stock: 3 }],
+  },
+  {
+    name: 'mona - 5',
+    description: 'mona - 5',
+    images: [16, 17].map((i) => `models/mona/${i}.png`),
+    price: 400,
+    rating: 4.3,
+    variants: [{ season: 'SUMMER', category: 'WOMEN', stock: 5 }],
+  },
+  {
+    name: 'soha - 1',
+    description: 'soha - 1',
+    images: [1, 2].map((i) => `models/soha/${i}.png`),
+    price: 400,
+    rating: 4.6,
+    variants: [
+      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
+      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+    ],
+  },
+  {
+    name: 'toqa - 1',
+    description: 'toqa - 1',
+    images: [5, 6, 7].map((i) => `models/toqa/${i}.png`),
+    price: 400,
+    rating: 4.3,
+    variants: [
+      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
+      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+    ],
+  },
+] as const satisfies Partial<Product & { variants: Partial<ProductVariant>[] }>[]
 
 async function main() {
   await Promise.all(
-    [].map((user) =>
-      db.user.upsert({
-        where: { email: '' /* user.email */ },
+    PRODUCTS.map(({ variants, ...product }) =>
+      db.product.upsert({
+        where: { name: product.name },
         update: {},
-        create: user,
+        create: {
+          ...product,
+          variants: {
+            createMany: {
+              data: variants,
+            },
+          },
+        },
+        select: { id: true },
       }),
     ),
   )
@@ -25,10 +105,7 @@ main()
     await db.$disconnect()
   })
   .catch(async (e) => {
-    // @ts-expect-error FIXME
-    // eslint-disable-next-line no-console
     console.error(e)
     await db.$disconnect()
-    // @ts-expect-error process exists
     process.exit(1)
   })

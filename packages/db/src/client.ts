@@ -12,6 +12,5 @@ const db = globalForPrisma.prisma ?? prismaClientSingleton()
 
 export default db
 
-// @ts-expect-error process exists
 // eslint-disable-next-line no-restricted-properties
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
