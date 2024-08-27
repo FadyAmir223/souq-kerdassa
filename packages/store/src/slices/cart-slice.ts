@@ -23,6 +23,7 @@ type ItemIdentifiers = {
 
 type CartActions = {
   addCartItem: (item: Omit<CartItem, 'quantity'>) => void
+  incrementCartItem: ({ id, season, category }: ItemIdentifiers) => void
   decrementCartItem: ({ id, season, category }: ItemIdentifiers) => void
   deleteCartItem: ({ id, season, category }: ItemIdentifiers) => void
   getCartTotalPrice: () => CartItem['price']
@@ -57,6 +58,20 @@ export const createCartSlice: StateCreator<
     })
   },
 
+  incrementCartItem: (item) => {
+    const itemIndex = get().cart.findIndex(
+      (cartItem) =>
+        cartItem.id === item.id &&
+        cartItem.season === item.season &&
+        cartItem.category === item.category,
+    )
+
+    set((state) => {
+      if (itemIndex === -1) return
+      state.cart[itemIndex]!.quantity += 1
+    })
+  },
+
   decrementCartItem: (item) => {
     const itemIndex = get().cart.findIndex(
       (cartItem) =>
@@ -66,7 +81,7 @@ export const createCartSlice: StateCreator<
     )
 
     set((state) => {
-      if (itemIndex !== -1) return
+      if (itemIndex === -1) return
       if (state.cart[itemIndex]!.quantity > 1) state.cart[itemIndex]!.quantity -= 1
       else state.cart.splice(itemIndex, 1)
     })
@@ -74,7 +89,7 @@ export const createCartSlice: StateCreator<
 
   deleteCartItem: (item) =>
     set((state) => {
-      state.cart.filter(
+      state.cart = state.cart.filter(
         (cartItem) =>
           !(
             cartItem.id === item.id &&

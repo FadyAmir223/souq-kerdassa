@@ -23,7 +23,8 @@ export default function ImageViewer({ name, images }: ImageViewerProps) {
           fill
           priority
           sizes='
-            (max-width: 640px) 100vw,
+            (max-width: 480px) 100vw,
+            (max-width: 768px) 33.3vw,
             20rem
           '
         />

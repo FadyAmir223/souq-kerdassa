@@ -23,8 +23,8 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           fill
           sizes='
             (max-width: 480px) 100vw,
-            (max-width: 640px) 50vw,
-            (max-width: 768px) 25vw,
+            (max-width: 768px) 50vw,
+            (max-width: 967px) 25vw,
             16.67vw
           '
         />

@@ -30,10 +30,10 @@ export default async function ProductPage({
 
   return (
     <main className='container mb-6'>
-      <div className='flex gap-6'>
+      <div className='flex flex-col gap-y-10 md:flex-row md:gap-x-6'>
         <ProductSideBar recommendedProducts={recommendedProducts} />
 
-        <section className=''>
+        <section className='order-2 md:order-none'>
           <h1 className='mb-3 text-3xl font-bold'>{product.name}</h1>
           <div className='mb-3 flex items-center gap-x-9'>
             <span className='text-lg text-primary'>{product.reviewsCount}</span>
@@ -46,7 +46,7 @@ export default async function ProductPage({
           </div>
         </section>
 
-        <section className='mr-auto min-w-80'>
+        <section className='order-1 mr-auto w-full md:order-none md:w-1/3 lg:max-w-80'>
           <ImageViewer name={product.name} images={product.images} />
         </section>
       </div>

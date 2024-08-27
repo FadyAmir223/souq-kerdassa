@@ -12,6 +12,8 @@ const seasonProducts = [
   { label: 'منتجات الشتاء', season: 'WINTER' },
 ] satisfies { label: string; season: Season }[]
 
+export const dynamic = 'force-dynamic'
+
 export default function HomePage() {
   return (
     <main className='container'>

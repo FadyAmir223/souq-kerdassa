@@ -15,8 +15,8 @@ export default function ProductSideBar({
   recommendedProducts,
 }: ProductSideBarProps) {
   return (
-    <aside className='min-w-72'>
-      <div className='h-fit space-y-6 rounded-lg bg-[#f3f3f3] p-4'>
+    <aside className='order-3 w-full md:order-none md:w-fit lg:w-72'>
+      <div className='h-fit space-y-6 rounded-lg bg-white p-4'>
         <div className='flex items-center gap-x-2'>
           <Image src={qualityImage} alt='quality' className='w-8' />
           <span className=''>سياسة الإرجاع لمدة 7 ايام</span>
@@ -39,7 +39,12 @@ export default function ProductSideBar({
               className='flex h-36 justify-between gap-x-2 rounded-md bg-white p-2'
             >
               <div className='relative aspect-[83/100]'>
-                <ImageApi src={product.image!} alt={product.name} fill />
+                <ImageApi
+                  src={product.image!}
+                  alt={product.name}
+                  fill
+                  sizes='9rem'
+                />
               </div>
 
               <div className='flex-1 px-2 py-3.5'>

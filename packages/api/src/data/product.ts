@@ -1,9 +1,20 @@
 import type { DB } from '@repo/db'
 import type { Product, Season } from '@repo/db/types'
 
+// TODO: ask whether to show the out of stock products
+
 export async function getAllProducts(db: DB) {
   try {
     const products = await db.product.findMany({
+      where: {
+        variants: {
+          every: {
+            stock: {
+              gt: 0,
+            },
+          },
+        },
+      },
       select: {
         id: true,
         images: true,
@@ -26,6 +37,15 @@ export async function getAllProducts(db: DB) {
 export async function getLatestProducts(db: DB) {
   try {
     const products = await db.product.findMany({
+      where: {
+        variants: {
+          every: {
+            stock: {
+              gt: 0,
+            },
+          },
+        },
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -56,6 +76,11 @@ export async function getProductsBySeason(db: DB, type: Season) {
         variants: {
           some: {
             season: type,
+          },
+          every: {
+            stock: {
+              gt: 0,
+            },
           },
         },
       },
@@ -110,6 +135,15 @@ export async function getProductById(db: DB, id: Product['id']) {
 export async function getSimilarProducts(db: DB, limit: number) {
   try {
     const products = await db.product.findMany({
+      where: {
+        variants: {
+          every: {
+            stock: {
+              gt: 0,
+            },
+          },
+        },
+      },
       select: {
         id: true,
         name: true,

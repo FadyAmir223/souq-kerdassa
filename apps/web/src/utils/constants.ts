@@ -11,4 +11,15 @@ const ASSETS = {
   images: `${assetEP}/images`,
 } as const
 
-export { assetEP, ASSETS, SEARCH_PARAMS }
+const ar = {
+  season: {
+    SUMMER: 'صيفى',
+    WINTER: 'شتوى',
+  },
+  category: {
+    WOMEN: 'نساء',
+    CHILDREN: 'اطفال',
+  },
+}
+
+export { ar,assetEP, ASSETS, SEARCH_PARAMS }

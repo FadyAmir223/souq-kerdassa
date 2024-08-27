@@ -3,11 +3,13 @@ import { PrismaClient } from '@prisma/client'
 
 const db = new PrismaClient()
 
+const description =
+  'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات'
+
 const PRODUCTS = [
   {
     name: 'mona - 1',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [1, 2, 3].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 3,
@@ -18,22 +20,20 @@ const PRODUCTS = [
   },
   {
     name: 'mona - 2',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [4, 5].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 3.3,
     variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
+      { season: 'SUMMER', category: 'CHILDREN', stock: 0 },
+      { season: 'SUMMER', category: 'WOMEN', stock: 0 },
       { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'SUMMER', category: 'CHILDREN', stock: 5 },
       { season: 'WINTER', category: 'WOMEN', stock: 3 },
     ],
   },
   {
     name: 'mona - 3',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [7, 8, 9, 10].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 5,
@@ -45,8 +45,7 @@ const PRODUCTS = [
   },
   {
     name: 'mona - 4',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [11, 12, 13].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
@@ -54,8 +53,7 @@ const PRODUCTS = [
   },
   {
     name: 'mona - 5',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [16, 17].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
@@ -63,8 +61,7 @@ const PRODUCTS = [
   },
   {
     name: 'soha - 1',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [1, 2].map((i) => `models/soha/${i}.png`),
     price: 400,
     rating: 4.6,
@@ -75,8 +72,7 @@ const PRODUCTS = [
   },
   {
     name: 'toqa - 1',
-    description:
-      'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات',
+    description,
     images: [5, 6, 7].map((i) => `models/toqa/${i}.png`),
     price: 400,
     rating: 4.3,

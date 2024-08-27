@@ -7,32 +7,26 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore } from '@/providers/app-store-provider'
+import { ar } from '@/utils/constants'
 
 type AddToCartProps = {
   product: NonNullable<RouterOutputs['product']['byId']>
 }
 
-const ar = {
-  season: {
-    SUMMER: 'صيفى',
-    WINTER: 'شتوى',
-  },
-  category: {
-    WOMEN: 'نساء',
-    CHILDREN: 'اطفال',
-  },
-}
-
 export default function AddToCart({ product }: AddToCartProps) {
   const seasons: Season[] = Array.from(
-    new Set(product.variants.map((variant) => variant.season)),
+    new Set(
+      product.variants
+        .filter((variant) => variant.stock !== 0)
+        .map((variant) => variant.season),
+    ),
   )
 
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons[0]!)
 
-  const variants = product.variants.filter(
-    (variant) => variant.season === selectedSeason,
-  )
+  const variants = product.variants
+    .filter((variant) => variant.season === selectedSeason && variant.stock !== 0)
+    .sort((a, b) => (a.category as string).localeCompare(b.category))
 
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     variants[0]?.category,
@@ -61,7 +55,17 @@ export default function AddToCart({ product }: AddToCartProps) {
           <Button
             key={season}
             variant='outline'
-            onClick={() => setSelectedSeason(season)}
+            onClick={() => {
+              setSelectedSeason(season)
+
+              const firstVariant = product.variants
+                .filter((variant) => variant.season === season)
+                .sort((a, b) =>
+                  (a.category as string).localeCompare(b.category),
+                )[0]?.category
+
+              setSelectedCategory(firstVariant)
+            }}
             className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={season === selectedSeason}
           >
@@ -90,7 +94,7 @@ export default function AddToCart({ product }: AddToCartProps) {
         className='px-6 py-2 text-[1.0625rem]'
         size='none'
       >
-        اضف إلى السلة
+        اضف إلى العربة
       </Button>
     </>
   )

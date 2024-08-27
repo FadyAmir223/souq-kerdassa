@@ -10,7 +10,7 @@ import { useAppStore, useMainStore } from '@/providers/app-store-provider'
  * header exists in every page so...
  * https://github.com/pmndrs/zustand/discussions/2350#discussioncomment-10249137
  */
-export function CartIconQuantity() {
+export function CartTotalQuantity() {
   const [quantity, mainStoreApi] = useMainStore((s) => s.getCartTotalQuantity())
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function CartIconQuantity() {
   return quantity
 }
 
-export function CartIconPrice() {
+export function CartTotalPrice({ additionalCost = 0 }: { additionalCost?: number }) {
   const price = useAppStore((s) => s.getCartTotalPrice())
-  return price
+  return price + additionalCost
 }
