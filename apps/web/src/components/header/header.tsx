@@ -8,7 +8,7 @@ import { LuSearch } from 'react-icons/lu'
 import logo from '@/public/assets/images/logo.png'
 import { cn } from '@/utils/cn'
 
-import { CartIconCount, CartIconPrice } from './cart-icon'
+import { CartIconPrice,CartIconQuantity } from './cart-icon'
 
 export default async function Header() {
   const session = await auth()
@@ -46,7 +46,7 @@ export default async function Header() {
           <div className='relative grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>
             <BsCart className='size-5 md:size-[1.375rem]' />
             <div className='absolute right-0 top-0 grid size-[1.125rem] translate-x-[4px] translate-y-[-4px] place-items-center rounded-full bg-black text-xs text-white'>
-              <CartIconCount />
+              <CartIconQuantity />
             </div>
           </div>
 

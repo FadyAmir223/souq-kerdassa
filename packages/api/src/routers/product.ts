@@ -1,86 +1,33 @@
 import { cuidSchema, ProductTypeSchema } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
+import { z } from 'zod'
 
+import {
+  getAllProducts,
+  getLatestProducts,
+  getProductById,
+  getProductsBySeason,
+  getSimilarProducts,
+} from '../data/product'
 import { publicProcedure } from '../trpc'
 
 export const productRouter = {
-  all: publicProcedure.query(({ ctx }) =>
-    ctx.db.product.findMany({
-      select: {
-        id: true,
-        images: true,
-        name: true,
-        price: true,
-        rating: true,
-      },
-      take: 10,
-    }),
-  ),
+  all: publicProcedure.query(({ ctx }) => getAllProducts(ctx.db)),
 
   byCategory: publicProcedure
     .input(ProductTypeSchema)
-    .query(async ({ ctx, input: type }) => {
-      if (type === 'LATEST')
-        return ctx.db.product.findMany({
-          orderBy: {
-            createdAt: 'desc',
-          },
-          select: {
-            id: true,
-            images: true,
-            name: true,
-            price: true,
-            rating: true,
-            _count: {
-              select: {
-                reviews: true,
-              },
-            },
-          },
-          take: 10,
-        })
+    .query(async ({ ctx, input: type }) =>
+      type === 'LATEST'
+        ? getLatestProducts(ctx.db)
+        : getProductsBySeason(ctx.db, type),
+    ),
 
-      return ctx.db.product.findMany({
-        where: {
-          variants: {
-            some: {
-              season: type,
-            },
-          },
-        },
-        select: {
-          id: true,
-          images: true,
-          name: true,
-          price: true,
-          rating: true,
-          _count: {
-            select: {
-              reviews: true,
-            },
-          },
-        },
-        take: 10,
-      })
-    }),
+  byId: publicProcedure
+    .input(cuidSchema)
+    .query(({ ctx, input: id }) => getProductById(ctx.db, id)),
 
-  byId: publicProcedure.input(cuidSchema).query(({ ctx, input: id }) =>
-    ctx.db.product.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-        images: true,
-        name: true,
-        price: true,
-        rating: true,
-        _count: {
-          select: {
-            reviews: true,
-          },
-        },
-      },
-    }),
-  ),
+  // TODO: real correlation
+  similar: publicProcedure
+    .input(z.number())
+    .query(({ ctx, input: limit }) => getSimilarProducts(ctx.db, limit)),
 } satisfies TRPCRouterRecord

@@ -15,8 +15,9 @@ model Product {
   price       Float
   variants    ProductVariant[]
 
-  rating  Float
-  reviews Review[]
+  rating       Float
+  reviewsCount Int      @default(0)
+  reviews      Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

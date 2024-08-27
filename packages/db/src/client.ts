@@ -11,6 +11,7 @@ const globalForPrisma = globalThis as unknown as {
 const db = globalForPrisma.prisma ?? prismaClientSingleton()
 
 export default db
+export type DB = typeof db
 
 // eslint-disable-next-line no-restricted-properties
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db

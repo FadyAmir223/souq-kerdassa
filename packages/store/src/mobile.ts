@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-import { createCounterSlice } from './slices/counter-slice'
+import { createCartSlice } from './slices/cart-slice'
 import type { AppStore } from './types'
 
 export const mobileStorage = {
@@ -16,7 +16,7 @@ export const mobileStorage = {
 export const useCombinedStore = create<AppStore>()(
   persist(
     immer((...a) => ({
-      ...createCounterSlice(...a),
+      ...createCartSlice(...a),
     })),
     {
       name: 'counter-storage',

@@ -27,10 +27,21 @@ export const AppStoreProvider = ({ children }: AppStoreProviderProps) => {
 }
 
 export const useAppStore = <T,>(selector: (store: AppStore) => T): T => {
-  const appStoreContext = useContext(AppStoreContext)
+  const api = useContext(AppStoreContext)
 
-  if (!appStoreContext)
-    throw new Error(`useAppStore must be used within AppStoreProvider`)
+  if (!api) throw new Error(`useAppStore must be used within AppStoreProvider`)
 
-  return useStore(appStoreContext, selector)
+  return useStore(api, selector)
+}
+
+export const useMainStore = <T,>(
+  selector: (store: AppStore) => T,
+): [T, AppStore] => {
+  const api = useContext(AppStoreContext)
+
+  if (!api) throw new Error(`useAppStore must be used within AppStoreProvider`)
+
+  const store = useStore(api, selector)
+  // @ts-expect-error un-existing type
+  return [store, api]
 }

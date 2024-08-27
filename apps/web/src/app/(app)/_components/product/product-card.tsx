@@ -10,13 +10,7 @@ type ProductCardProps = {
 }
 
 export default function ProductCard({ product, className }: ProductCardProps) {
-  const {
-    name,
-    price,
-    rating,
-    images,
-    _count: { reviews: reviewsCount },
-  } = product
+  const { name, price, rating, image, reviewsCount } = product
 
   return (
     <div
@@ -24,14 +18,15 @@ export default function ProductCard({ product, className }: ProductCardProps) {
     >
       <div className='relative aspect-[83/100]'>
         <ImageApi
-          src={images[0]!}
+          src={image!}
           alt={name}
           fill
           sizes='
-              (max-width: 640px) 50vw,
-              (max-width: 768px) 25vw,
-              16.67vw
-            '
+            (max-width: 480px) 100vw,
+            (max-width: 640px) 50vw,
+            (max-width: 768px) 25vw,
+            16.67vw
+          '
         />
       </div>
 

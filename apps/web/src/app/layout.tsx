@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react'
 
 import { Toaster } from '@/components/ui/toaster'
 import { env } from '@/lib/env'
-import { AppStoreProvider } from '@/providers/counter-store-provider'
+import { AppStoreProvider } from '@/providers/app-store-provider'
 import { TRPCReactProvider } from '@/trpc/react'
 import { cn } from '@/utils/cn'
 

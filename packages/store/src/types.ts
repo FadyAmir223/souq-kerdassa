@@ -1,3 +1,3 @@
-import type { CounterSlice } from './slices/counter-slice'
+import type { CartSlice } from './slices/cart-slice'
 
-export type AppStore = CounterSlice
+export type AppStore = CartSlice

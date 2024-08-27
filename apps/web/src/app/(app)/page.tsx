@@ -12,7 +12,7 @@ const seasonProducts = [
   { label: 'منتجات الشتاء', season: 'WINTER' },
 ] satisfies { label: string; season: Season }[]
 
-export default function IndexPage() {
+export default function HomePage() {
   return (
     <main className='container'>
       <ImageSlider />

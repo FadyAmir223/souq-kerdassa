@@ -1,13 +1,27 @@
 'use client'
 
-// TODO: @repo/store
+import { useEffect } from 'react'
 
-export function CartIconCount() {
-  const count = 1
-  return count
+import { useAppStore, useMainStore } from '@/providers/app-store-provider'
+
+/**
+ * createStoes doesn't have .persist attached to it
+ * workaround: call it yourself once every page
+ * header exists in every page so...
+ * https://github.com/pmndrs/zustand/discussions/2350#discussioncomment-10249137
+ */
+export function CartIconQuantity() {
+  const [quantity, mainStoreApi] = useMainStore((s) => s.getCartTotalQuantity())
+
+  useEffect(() => {
+    // @ts-expect-error un-existing type
+    mainStoreApi.persist.rehydrate()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return quantity
 }
 
 export function CartIconPrice() {
-  const price = 400
+  const price = useAppStore((s) => s.getCartTotalPrice())
   return price
 }

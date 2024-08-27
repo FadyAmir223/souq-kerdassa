@@ -18,7 +18,7 @@ export default function ProductList({ type }: ProductListProps) {
   return (
     <ul
       className={cn(
-        'col-span-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6',
+        'col-span-6 grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6',
         isLatest && 'lg:col-span-4 lg:grid-cols-4',
       )}
     >
@@ -33,6 +33,7 @@ export default function ProductList({ type }: ProductListProps) {
   )
 }
 
+// TODO: may use trpc client api
 async function Products({ type }: ProductListProps) {
   const products = await api.product.byCategory(type)
 

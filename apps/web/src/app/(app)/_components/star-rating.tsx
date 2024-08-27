@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 
 const scales = {
   sm: 'scale-[1.17]',
-  lg: 'scale-[1.5]',
+  lg: 'scale-[1.7]',
 }
 
 type StarRatingProps = {
