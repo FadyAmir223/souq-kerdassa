@@ -6,6 +6,7 @@ import {
   getAllProducts,
   getLatestProducts,
   getProductById,
+  getProductsByQuery,
   getProductsBySeason,
   getSimilarProducts,
 } from '../data/product'
@@ -30,4 +31,13 @@ export const productRouter = {
   similar: publicProcedure
     .input(z.number())
     .query(({ ctx, input: limit }) => getSimilarProducts(ctx.db, limit)),
+
+  byQuery: publicProcedure
+    .input(
+      z.object({
+        query: z.string().trim().min(1),
+        cursor: z.string().optional(),
+      }),
+    )
+    .query(({ ctx, input }) => getProductsByQuery({ db: ctx.db, ...input })),
 } satisfies TRPCRouterRecord
