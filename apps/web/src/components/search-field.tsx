@@ -31,14 +31,14 @@ export default function SearchField() {
   useEffect(() => {
     const current = new URLSearchParams(Array.from(searchParams.entries()))
 
-    if (debouncedQuery) current.set(SEARCH_PARAMS.query, debouncedQuery)
+    if (debouncedQuery && isSearch) current.set(SEARCH_PARAMS.query, debouncedQuery)
     else current.delete(SEARCH_PARAMS.query)
 
     const search = current.toString()
     const queries = search ? `?${search}` : ''
 
     void router.push(`${pathname}${queries}`)
-  }, [debouncedQuery, pathname, router, searchParams])
+  }, [debouncedQuery, pathname, router, searchParams, isSearch])
 
   return (
     <Link
@@ -61,7 +61,7 @@ export default function SearchField() {
           !isSearch && 'cursor-pointer',
         )}
         readOnly={!isSearch}
-        value={query}
+        value={isSearch ? query : ''}
         onChange={(e) => setQuery(e.target.value)}
       />
     </Link>
