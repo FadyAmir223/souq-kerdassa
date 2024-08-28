@@ -3,12 +3,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { BsCart } from 'react-icons/bs'
 import { FaRegUser } from 'react-icons/fa'
-import { LuSearch } from 'react-icons/lu'
 
 import logo from '@/public/assets/images/logo.png'
 import { cn } from '@/utils/cn'
 
 import { CartTotalPrice, CartTotalQuantity } from '../cart-info'
+import SearchField from '../search-field'
 
 export default async function Header() {
   const session = await auth()
@@ -20,14 +20,8 @@ export default async function Header() {
           <Image src={logo} alt='logo' className='w-20' priority />
         </Link>
 
-        <Link href='/search' className='flex flex-1'>
-          <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed] md:block md:size-auto md:rounded-none md:rounded-r-lg md:bg-primary md:px-5 md:py-2'>
-            <LuSearch className='size-5 md:size-[1.375rem]' />
-          </div>
-          <p className='hidden flex-1 items-center rounded-l-lg border-y-2 border-l-2 border-gray-400 px-3 md:flex'>
-            بحث
-          </p>
-        </Link>
+        {/* TODO: remove search field from the header (come up with alt ui) */}
+        <SearchField />
 
         <Link href='/account' className={cn({ 'flex gap-x-3': session?.user })}>
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>

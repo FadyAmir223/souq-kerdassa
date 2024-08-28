@@ -35,7 +35,7 @@ export default function HomePage() {
       </section>
 
       {seasonProducts.map(({ label, season }) => (
-        <section key={season} className='py-14'>
+        <section key={season} className='pt-14'>
           <div className='mb-4 flex items-center justify-between'>
             <h2 className='mb-3 text-xl font-bold tracking-wider'>{label}</h2>
             <Button asChild variant='link' className='font-semibold'>

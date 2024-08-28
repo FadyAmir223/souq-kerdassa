@@ -2,6 +2,7 @@ const SEARCH_PARAMS = {
   path: 'p',
   width: 'w',
   quality: 'q',
+  query: 'q',
 } as const
 
 const assetEP = `/api/assets`
@@ -22,4 +23,4 @@ const ar = {
   },
 }
 
-export { ar,assetEP, ASSETS, SEARCH_PARAMS }
+export { ar, assetEP, ASSETS, SEARCH_PARAMS }

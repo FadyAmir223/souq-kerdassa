@@ -7,8 +7,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
   return (
     <>
       <Header />
-      <div className='mt-32' />
-      {children}
+      <div className='mb-16 mt-32 min-h-[65vh]'>{children}</div>
       <Footer />
     </>
   )

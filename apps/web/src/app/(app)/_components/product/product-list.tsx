@@ -34,6 +34,7 @@ export default function ProductList({ type }: ProductListProps) {
 }
 
 // TODO: may use trpc client api
+// TODO: refactor to be used with search page as well
 async function Products({ type }: ProductListProps) {
   const products = await api.product.byCategory(type)
 

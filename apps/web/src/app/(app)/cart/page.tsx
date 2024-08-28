@@ -6,6 +6,7 @@ import {
 } from 'react-icons/md'
 
 import { CartTotalPrice } from '@/components/cart-info'
+import H1 from '@/components/h1'
 import { Button } from '@/components/ui/button'
 import deliveryIcon from '@/public/assets/images/icons/delivery.png'
 import paymentIcon from '@/public/assets/images/icons/payment.png'
@@ -27,8 +28,8 @@ export default function CartPage() {
   const shippingCost = 0
 
   return (
-    <main className='container mb-10 mt-6 min-h-[65vh]'>
-      <h1 className='mb-3 text-3xl font-bold'>سلة المشتريات</h1>
+    <main className='container mb-10 mt-6'>
+      <H1>سلة المشتريات</H1>
 
       <section className='flex flex-col gap-4 lg:flex-row'>
         <div className='flex-1'>

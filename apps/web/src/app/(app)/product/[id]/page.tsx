@@ -1,6 +1,7 @@
 import { cuidSchema } from '@repo/validators'
 import { notFound } from 'next/navigation'
 
+import H1 from '@/components/h1'
 import { api } from '@/trpc/server'
 
 import StarRating from '../../_components/star-rating'
@@ -34,7 +35,7 @@ export default async function ProductPage({
         <ProductSideBar recommendedProducts={recommendedProducts} />
 
         <section className='order-2 md:order-none'>
-          <h1 className='mb-3 text-3xl font-bold'>{product.name}</h1>
+          <H1>{product.name}</H1>
           <div className='mb-3 flex items-center gap-x-9'>
             <span className='text-lg text-primary'>{product.reviewsCount}</span>
             <StarRating rating={product.rating} scale='lg' />
