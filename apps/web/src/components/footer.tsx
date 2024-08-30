@@ -3,25 +3,27 @@ import Link from 'next/link'
 
 import logo from '@/public/assets/images/logo.png'
 
+import { Button } from './ui/button'
+
 const cols = [
   {
     title: 'مميز',
     rows: [
       {
-        label: 'منتجات مميزة',
-        url: '/products?type=featured',
-      },
-      {
-        label: 'اخر المنتجات المضافة',
+        label: 'اخر العبايات المضافة',
         url: '/products?type=latest',
       },
       {
-        label: 'افضل المنتجات مبيعاً',
-        url: '/products?type=best-selling',
+        label: 'العبايات الافضل تقييماً',
+        url: '/products?type=top-rated',
       },
       {
-        label: 'المنتجات الافضل تقييماً',
-        url: '/products?type=top-rated',
+        label: 'عبايات صيفى',
+        url: '/products?type=featured',
+      },
+      {
+        label: 'عبايات شتوى',
+        url: '/products?type=featured',
       },
     ],
   },
@@ -60,9 +62,13 @@ export default function Footer() {
               {row.title}
             </h6>
 
-            <ul className='space-y-1 text-zinc-400'>
+            <ul>
               {row.rows.map(({ label, url }) => (
-                <li key={url}>{label}</li>
+                <li key={url}>
+                  <Button asChild variant='link' className='p-0 text-zinc-400'>
+                    <Link href={url}>{label}</Link>
+                  </Button>
+                </li>
               ))}
             </ul>
           </div>
@@ -73,10 +79,18 @@ export default function Footer() {
 
       <div className='container flex flex-col items-center justify-between gap-y-2 py-4 md:flex-row'>
         <p className='font-bold text-white'>جميع الحقوق محفوظة</p>
-        <div className='flex gap-x-5 text-sm text-zinc-400'>
-          <span>الشروط و الاحكام</span>
-          <span>سياسة الخصوصية</span>
-        </div>
+        <ul className='flex gap-x-5 text-sm text-zinc-400'>
+          {[
+            { label: 'الشروط و الاحكام', url: '/terms' },
+            { label: 'سياسة الخصوصية', url: '/privacy' },
+          ].map(({ label, url }) => (
+            <li key={url}>
+              <Button asChild variant='link' className='p-0 text-zinc-400'>
+                <Link href={url}>{label}</Link>
+              </Button>
+            </li>
+          ))}
+        </ul>
       </div>
     </footer>
   )

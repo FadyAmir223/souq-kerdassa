@@ -8,18 +8,18 @@ const SEARCH_PARAMS = {
 const assetEP = `/api/assets`
 
 const ASSETS = {
-  path: '/app/uploads',
+  path: '/app/apps/web/uploads',
   images: `${assetEP}/images`,
 } as const
 
 const ar = {
   season: {
-    SUMMER: 'صيفى',
-    WINTER: 'شتوى',
+    summer: 'صيفى',
+    winter: 'شتوى',
   },
   category: {
-    WOMEN: 'نساء',
-    CHILDREN: 'اطفال',
+    women: 'نساء',
+    children: 'اطفال',
   },
 }
 

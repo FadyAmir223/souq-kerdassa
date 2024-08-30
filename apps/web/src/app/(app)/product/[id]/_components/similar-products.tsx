@@ -1,4 +1,4 @@
-import ProductList from '@/app/(app)/_components/product/product-list'
+import ProductMiniList from '@/app/(app)/_components/product/product-list'
 
 export default function SimilarProducts() {
   return (
@@ -6,7 +6,7 @@ export default function SimilarProducts() {
       <h2 className='mb-3 text-2xl font-bold tracking-wider'>قد تعجبك</h2>
 
       {/* TOOD: real relevance */}
-      <ProductList type='SUMMER' />
+      <ProductMiniList type='summer' />
     </section>
   )
 }

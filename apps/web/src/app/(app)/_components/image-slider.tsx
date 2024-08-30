@@ -20,7 +20,14 @@ export default function ImageSlider() {
       {[1, 2].map((i) => (
         <SwiperSlide key={i}>
           <div className='relative aspect-[3/1] overflow-hidden'>
-            <ImageApi src={`/landing/${i}.png`} alt='landing' fill sizes='100vw' />
+            <ImageApi
+              src={`/landing/${i}.png`}
+              alt='landing'
+              fill
+              sizes='100vw'
+              priority
+              className='object-cover'
+            />
           </div>
         </SwiperSlide>
       ))}

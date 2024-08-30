@@ -14,8 +14,8 @@ const PRODUCTS = [
     price: 400,
     rating: 3,
     variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+      { season: 'summer', category: 'women', stock: 5 },
+      { season: 'winter', category: 'children', stock: 3 },
     ],
   },
   {
@@ -25,10 +25,10 @@ const PRODUCTS = [
     price: 400,
     rating: 3.3,
     variants: [
-      { season: 'SUMMER', category: 'CHILDREN', stock: 0 },
-      { season: 'SUMMER', category: 'WOMEN', stock: 0 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'WINTER', category: 'WOMEN', stock: 3 },
+      { season: 'summer', category: 'children', stock: 0 },
+      { season: 'summer', category: 'women', stock: 0 },
+      { season: 'winter', category: 'children', stock: 3 },
+      { season: 'winter', category: 'women', stock: 3 },
     ],
   },
   {
@@ -38,9 +38,9 @@ const PRODUCTS = [
     price: 400,
     rating: 5,
     variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'WINTER', category: 'WOMEN', stock: 3 },
+      { season: 'summer', category: 'women', stock: 5 },
+      { season: 'winter', category: 'children', stock: 3 },
+      { season: 'winter', category: 'women', stock: 3 },
     ],
   },
   {
@@ -49,7 +49,7 @@ const PRODUCTS = [
     images: [11, 12, 13].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [{ season: 'WINTER', category: 'CHILDREN', stock: 3 }],
+    variants: [{ season: 'winter', category: 'children', stock: 3 }],
   },
   {
     name: 'mona - 5',
@@ -57,7 +57,7 @@ const PRODUCTS = [
     images: [16, 17].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [{ season: 'SUMMER', category: 'WOMEN', stock: 5 }],
+    variants: [{ season: 'summer', category: 'women', stock: 5 }],
   },
   {
     name: 'soha - 1',
@@ -66,8 +66,8 @@ const PRODUCTS = [
     price: 400,
     rating: 4.6,
     variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+      { season: 'summer', category: 'women', stock: 5 },
+      { season: 'winter', category: 'children', stock: 3 },
     ],
   },
   {
@@ -77,8 +77,8 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
+      { season: 'summer', category: 'women', stock: 5 },
+      { season: 'winter', category: 'children', stock: 3 },
     ],
   },
 
@@ -88,10 +88,7 @@ const PRODUCTS = [
     images: [1, 2, 3].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 3,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-    ],
+    variants: [{ season: 'summer', category: 'women', stock: 5 }],
   },
   {
     name: 'mona - 20',
@@ -99,12 +96,7 @@ const PRODUCTS = [
     images: [4, 5].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 3.3,
-    variants: [
-      { season: 'SUMMER', category: 'CHILDREN', stock: 0 },
-      { season: 'SUMMER', category: 'WOMEN', stock: 0 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'WINTER', category: 'WOMEN', stock: 3 },
-    ],
+    variants: [{ season: 'summer', category: 'children', stock: 0 }],
   },
   {
     name: 'mona - 30',
@@ -112,11 +104,7 @@ const PRODUCTS = [
     images: [7, 8, 9, 10].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 5,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'WINTER', category: 'WOMEN', stock: 3 },
-    ],
+    variants: [{ season: 'summer', category: 'women', stock: 5 }],
   },
   {
     name: 'mona - 40',
@@ -124,7 +112,7 @@ const PRODUCTS = [
     images: [11, 12, 13].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [{ season: 'WINTER', category: 'CHILDREN', stock: 3 }],
+    variants: [{ season: 'summer', category: 'children', stock: 3 }],
   },
   {
     name: 'mona - 50',
@@ -132,7 +120,7 @@ const PRODUCTS = [
     images: [16, 17].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [{ season: 'SUMMER', category: 'WOMEN', stock: 5 }],
+    variants: [{ season: 'summer', category: 'women', stock: 5 }],
   },
   {
     name: 'soha - 10',
@@ -140,10 +128,7 @@ const PRODUCTS = [
     images: [1, 2].map((i) => `models/soha/${i}.png`),
     price: 400,
     rating: 4.6,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-    ],
+    variants: [{ season: 'summer', category: 'women', stock: 5 }],
   },
   {
     name: 'toqa - 10',
@@ -151,10 +136,7 @@ const PRODUCTS = [
     images: [5, 6, 7].map((i) => `models/toqa/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-    ],
+    variants: [{ season: 'summer', category: 'women', stock: 5 }],
   },
 
   {
@@ -163,10 +145,7 @@ const PRODUCTS = [
     images: [1, 2, 3].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 3,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-    ],
+    variants: [{ season: 'winter', category: 'children', stock: 3 }],
   },
   {
     name: 'mona - 200',
@@ -175,10 +154,8 @@ const PRODUCTS = [
     price: 400,
     rating: 3.3,
     variants: [
-      { season: 'SUMMER', category: 'CHILDREN', stock: 0 },
-      { season: 'SUMMER', category: 'WOMEN', stock: 0 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'WINTER', category: 'WOMEN', stock: 3 },
+      { season: 'winter', category: 'children', stock: 3 },
+      { season: 'winter', category: 'women', stock: 3 },
     ],
   },
   {
@@ -188,9 +165,8 @@ const PRODUCTS = [
     price: 400,
     rating: 5,
     variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-      { season: 'WINTER', category: 'WOMEN', stock: 3 },
+      { season: 'winter', category: 'children', stock: 3 },
+      { season: 'winter', category: 'women', stock: 3 },
     ],
   },
   {
@@ -199,7 +175,7 @@ const PRODUCTS = [
     images: [11, 12, 13].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [{ season: 'WINTER', category: 'CHILDREN', stock: 3 }],
+    variants: [{ season: 'winter', category: 'children', stock: 3 }],
   },
   {
     name: 'mona - 500',
@@ -207,7 +183,7 @@ const PRODUCTS = [
     images: [16, 17].map((i) => `models/mona/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [{ season: 'SUMMER', category: 'WOMEN', stock: 5 }],
+    variants: [{ season: 'winter', category: 'women', stock: 5 }],
   },
   {
     name: 'soha - 100',
@@ -215,10 +191,7 @@ const PRODUCTS = [
     images: [1, 2].map((i) => `models/soha/${i}.png`),
     price: 400,
     rating: 4.6,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-    ],
+    variants: [{ season: 'winter', category: 'children', stock: 3 }],
   },
   {
     name: 'toqa - 100',
@@ -226,10 +199,7 @@ const PRODUCTS = [
     images: [5, 6, 7].map((i) => `models/toqa/${i}.png`),
     price: 400,
     rating: 4.3,
-    variants: [
-      { season: 'SUMMER', category: 'WOMEN', stock: 5 },
-      { season: 'WINTER', category: 'CHILDREN', stock: 3 },
-    ],
+    variants: [{ season: 'winter', category: 'children', stock: 3 }],
   },
 ] as const satisfies Partial<Product & { variants: Partial<ProductVariant>[] }>[]
 

@@ -34,13 +34,13 @@ model ProductVariant {
 }
 
 enum Season {
-  SUMMER
-  WINTER
+  summer
+  winter
 }
 
 enum Category {
-  WOMEN
-  CHILDREN
+  women
+  children
 }
 
 model Review {

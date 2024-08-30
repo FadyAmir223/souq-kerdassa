@@ -1,7 +1,7 @@
 import './globals.css'
 
 import { Roboto } from 'next/font/google'
-import type { PropsWithChildren } from 'react'
+import type { PropsWithchildren } from 'react'
 
 import { Toaster } from '@/components/ui/toaster'
 import { env } from '@/lib/env'
@@ -15,7 +15,7 @@ const roboto = Roboto({
   display: 'swap',
 })
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({ children }: PropsWithchildren) {
   return (
     <html lang='ar' dir='rtl'>
       <body

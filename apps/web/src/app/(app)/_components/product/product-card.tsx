@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import StarRating from '../star-rating'
 
 type ProductCardProps = {
-  product: RouterOutputs['product']['byCategory'][number]
+  product: RouterOutputs['product']['byType'][number]
   className?: string
 }
 
@@ -27,6 +27,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             (max-width: 967px) 25vw,
             16.67vw
           '
+          className='object-cover'
         />
       </div>
 

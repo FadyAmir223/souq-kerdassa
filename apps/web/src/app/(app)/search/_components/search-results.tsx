@@ -7,20 +7,30 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
+import { useIsMedium, useIsSmall } from '@/hooks/use-responsive'
 import { api } from '@/trpc/react'
 import { SEARCH_PARAMS } from '@/utils/constants'
 
 import ProductCard from '../../_components/product/product-card'
 import ProductCardSkeleton from '../../_components/product/product-skeleton'
 
-export default function SearchForm() {
+const rows = 4
+
+export default function SearchResults() {
+  const isSmall = useIsSmall()
+  const isMedium = useIsMedium()
+
+  let limit = 6 * rows
+  if (isSmall) limit = 2 * rows
+  else if (isMedium) limit = 4 * rows
+
   const searchParams = useSearchParams()
   const query = searchParams.get(SEARCH_PARAMS.query)?.trim() ?? ''
 
   // bug in typing when using "select" & trpc don't accept types
   const { data, isFetching, hasNextPage, fetchNextPage } =
     api.product.byQuery.useInfiniteQuery(
-      { query },
+      { query, limit },
       {
         select: ({ pages }) => ({
           products: pages.flatMap((page) => page.products),

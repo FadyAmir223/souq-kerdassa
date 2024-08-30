@@ -6,12 +6,12 @@ import { api } from '@/trpc/server'
 import ProductCard from './product/product-card'
 
 export default async function Ad() {
-  const product = (await api.product.byCategory('LATEST'))[0]
+  const [product] = await api.product.byType({ type: 'latest', limit: 1 })
 
   if (!product) return null
 
   return (
-    <div className='rounded-md bg-primary p-6 md:min-w-full lg:min-w-80'>
+    <div className='h-fit rounded-md bg-primary p-6 md:min-w-full lg:min-w-80'>
       <h4 className='my-8 text-center text-3xl font-bold text-white'>منتج مقترح</h4>
       <ProductCard product={product} className='bg-white p-6' />
 

@@ -27,6 +27,7 @@ export default function ImageViewer({ name, images }: ImageViewerProps) {
             (max-width: 768px) 33.3vw,
             20rem
           '
+          className='object-cover'
         />
       </div>
 
@@ -40,7 +41,13 @@ export default function ImageViewer({ name, images }: ImageViewerProps) {
             onClick={() => setActiveImage(i)}
             disabled={i === activeImage}
           >
-            <ImageApi src={image} alt={name} fill sizes='5rem' />
+            <ImageApi
+              src={image}
+              alt={name}
+              fill
+              sizes='5rem'
+              className='object-cover'
+            />
           </Button>
         ))}
       </div>

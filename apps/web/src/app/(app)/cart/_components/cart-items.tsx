@@ -62,6 +62,7 @@ export default function CartItems() {
                 fill
                 priority
                 sizes='6rem'
+                className='object-cover'
               />
             </div>
 

@@ -44,6 +44,7 @@ export default function ProductSideBar({
                   alt={product.name}
                   fill
                   sizes='9rem'
+                  className='object-cover'
                 />
               </div>
 

@@ -37,7 +37,7 @@ export default function SearchField() {
     const search = current.toString()
     const queries = search ? `?${search}` : ''
 
-    void router.push(`${pathname}${queries}`)
+    void router.replace(`${pathname}${queries}`)
   }, [debouncedQuery, pathname, router, searchParams, isSearch])
 
   return (

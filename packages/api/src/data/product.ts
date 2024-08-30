@@ -1,5 +1,6 @@
 import type { DB } from '@repo/db'
-import type { Product, Season } from '@repo/db/types'
+import type { Category, Product, Season } from '@repo/db/types'
+import type { ProductTypeSchema } from '@repo/validators'
 
 // TODO: ask whether to show the out of stock products
 
@@ -31,6 +32,9 @@ export async function getAllProducts(db: DB) {
         price: true,
         rating: true,
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
       take: 10,
     })
 
@@ -43,7 +47,17 @@ export async function getAllProducts(db: DB) {
   }
 }
 
-export async function getLatestProducts(db: DB) {
+export async function getProductsByType({
+  db,
+  type,
+  limit,
+  page,
+}: {
+  db: DB
+  type: ProductTypeSchema
+  limit: number
+  page: number
+}) {
   try {
     const products = await db.product.findMany({
       where: {
@@ -55,11 +69,13 @@ export async function getLatestProducts(db: DB) {
           },
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
       select: productCardSelections,
-      take: 10,
+      orderBy: {
+        updatedAt: type === 'latest' ? 'desc' : undefined,
+        rating: type === 'top-rated' ? 'desc' : undefined,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
     })
 
     return products.map(({ images, ...product }) => ({
@@ -71,13 +87,24 @@ export async function getLatestProducts(db: DB) {
   }
 }
 
-export async function getProductsBySeason(db: DB, type: Season) {
+export async function getProductsBySeasonOrCategory({
+  db,
+  type,
+  limit,
+  page,
+}: {
+  db: DB
+  type: Season | Category
+  limit: number
+  page: number
+}) {
   try {
     const products = await db.product.findMany({
       where: {
         variants: {
           some: {
-            season: type,
+            season: type === 'summer' || type === 'winter' ? type : undefined,
+            category: type === 'women' || type === 'children' ? type : undefined,
           },
           every: {
             stock: {
@@ -87,7 +114,11 @@ export async function getProductsBySeason(db: DB, type: Season) {
         },
       },
       select: productCardSelections,
-      take: 10,
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
     })
 
     return products.map(({ images, ...product }) => ({
@@ -159,15 +190,15 @@ export async function getSimilarProducts(db: DB, limit: number) {
   }
 }
 
-const searchLimit = 6
-
 export async function getProductsByQuery({
   db,
   query,
+  limit,
   cursor,
 }: {
   db: DB
   query: string
+  limit: number
   cursor?: string
 }) {
   try {
@@ -179,9 +210,11 @@ export async function getProductsByQuery({
         ],
       },
       select: productCardSelections,
-      take: searchLimit + 1,
+      take: limit + 1,
       cursor: cursor ? { id: cursor } : undefined,
-      orderBy: { id: 'asc' },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     })
 
     const productsWithImage = products.map(({ images, ...product }) => ({
@@ -190,8 +223,7 @@ export async function getProductsByQuery({
     }))
 
     let nextCursor: typeof cursor | undefined
-    if (productsWithImage.length > searchLimit)
-      nextCursor = productsWithImage.pop()?.id
+    if (productsWithImage.length > limit) nextCursor = productsWithImage.pop()?.id
 
     return { products: productsWithImage, nextCursor }
   } catch {

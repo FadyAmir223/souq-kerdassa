@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button'
 
 import Ad from './_components/ad'
 import ImageSlider from './_components/image-slider'
-import ProductList from './_components/product/product-list'
+import ProductMiniList from './_components/product/product-list'
 
 const seasonProducts = [
-  { label: 'منتجات الصيف', season: 'SUMMER' },
-  { label: 'منتجات الشتاء', season: 'WINTER' },
+  { label: 'منتجات الصيف', season: 'summer' },
+  { label: 'منتجات الشتاء', season: 'winter' },
 ] satisfies { label: string; season: Season }[]
 
 export const dynamic = 'force-dynamic'
@@ -28,7 +28,7 @@ export default function HomePage() {
             </Button>
           </div>
 
-          <ProductList type='LATEST' />
+          <ProductMiniList type='latest' />
         </div>
 
         <Ad />
@@ -39,11 +39,11 @@ export default function HomePage() {
           <div className='mb-4 flex items-center justify-between'>
             <h2 className='mb-3 text-xl font-bold tracking-wider'>{label}</h2>
             <Button asChild variant='link' className='font-semibold'>
-              <Link href={`/products?type=${season.toLowerCase()}`}>عرض الكل</Link>
+              <Link href={`/products?type=${season}`}>عرض الكل</Link>
             </Button>
           </div>
 
-          <ProductList type={season} />
+          <ProductMiniList type={season} />
         </section>
       ))}
     </main>

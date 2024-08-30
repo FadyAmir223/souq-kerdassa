@@ -8,12 +8,12 @@ import { cn } from '@/utils/cn'
 import ProductCard from './product-card'
 import ProductCardSkeleton from './product-skeleton'
 
-type ProductListProps = {
-  type: Season | 'LATEST'
+type ProductMiniListProps = {
+  type: Season | 'latest'
 }
 
-export default function ProductList({ type }: ProductListProps) {
-  const isLatest = type === 'LATEST'
+export default function ProductMiniList({ type }: ProductMiniListProps) {
+  const isLatest = type === 'latest'
 
   return (
     <ul
@@ -33,10 +33,8 @@ export default function ProductList({ type }: ProductListProps) {
   )
 }
 
-// TODO: may use trpc client api
-// TODO: refactor to be used with search page as well
-async function Products({ type }: ProductListProps) {
-  const products = await api.product.byCategory(type)
+async function Products({ type }: ProductMiniListProps) {
+  const products = await api.product.byType({ type, limit: 6 })
 
   return products.map((product) => (
     <Link

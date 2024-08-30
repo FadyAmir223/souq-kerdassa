@@ -1,3 +1,14 @@
 import { z } from 'zod'
 
-export const ProductTypeSchema = z.enum(['SUMMER', 'WINTER', 'LATEST'])
+// TODO: support
+
+export const productTypeSchema = z.enum([
+  'latest',
+  'top-rated',
+  'summer',
+  'winter',
+  'women',
+  'children',
+])
+
+export type ProductTypeSchema = z.infer<typeof productTypeSchema>
