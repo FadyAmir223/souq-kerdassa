@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { LuSearch } from 'react-icons/lu'
-import { useDebounceValue } from 'usehooks-ts'
+import { useDebounce } from 'use-debounce'
 
 import { cn } from '@/utils/cn'
 import { SEARCH_PARAMS } from '@/utils/constants'
@@ -18,7 +18,7 @@ export default function SearchField() {
   const searchParams = useSearchParams()
   const savedQuery = searchParams.get(SEARCH_PARAMS.query)
   const [query, setQuery] = useState(savedQuery ?? '')
-  const [debouncedQuery] = useDebounceValue(query, 400)
+  const [debouncedQuery] = useDebounce(query, 400)
 
   const inputRef = useRef<HTMLInputElement>(null)
 

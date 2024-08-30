@@ -1,8 +1,5 @@
-import type { DB } from '@repo/db'
-import type { Category, Product, Season } from '@repo/db/types'
+import type { Category, DB, Prisma, Product, Season } from '@repo/db/types'
 import type { ProductTypeSchema } from '@repo/validators'
-
-// TODO: ask whether to show the out of stock products
 
 const productCardSelections = {
   id: true,
@@ -47,22 +44,28 @@ export async function getAllProducts(db: DB) {
   }
 }
 
-export async function getProductsByType({
+export async function getProductsByFilters({
   db,
-  type,
   limit,
   page,
+  type,
+  category,
+  season,
 }: {
   db: DB
-  type: ProductTypeSchema
   limit: number
   page: number
+  type?: ProductTypeSchema
+  category?: Category
+  season?: Season
 }) {
   try {
-    const products = await db.product.findMany({
+    const query = {
       where: {
         variants: {
           every: {
+            category,
+            season,
             stock: {
               gt: 0,
             },
@@ -76,57 +79,22 @@ export async function getProductsByType({
       },
       skip: (page - 1) * limit,
       take: limit,
-    })
+    } satisfies Prisma.ProductFindManyArgs
 
-    return products.map(({ images, ...product }) => ({
-      ...product,
-      image: images[0],
-    }))
+    const [products, count] = await db.$transaction([
+      db.product.findMany(query),
+      db.product.count({ where: query.where }),
+    ])
+
+    return {
+      products: products.map(({ images, ...product }) => ({
+        ...product,
+        image: images[0],
+      })),
+      total: count,
+    }
   } catch {
-    return []
-  }
-}
-
-export async function getProductsBySeasonOrCategory({
-  db,
-  type,
-  limit,
-  page,
-}: {
-  db: DB
-  type: Season | Category
-  limit: number
-  page: number
-}) {
-  try {
-    const products = await db.product.findMany({
-      where: {
-        variants: {
-          some: {
-            season: type === 'summer' || type === 'winter' ? type : undefined,
-            category: type === 'women' || type === 'children' ? type : undefined,
-          },
-          every: {
-            stock: {
-              gt: 0,
-            },
-          },
-        },
-      },
-      select: productCardSelections,
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-    })
-
-    return products.map(({ images, ...product }) => ({
-      ...product,
-      image: images[0],
-    }))
-  } catch {
-    return []
+    return { products: [], total: 0 }
   }
 }
 

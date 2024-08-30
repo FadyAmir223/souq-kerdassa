@@ -1,13 +1,12 @@
-import { cuidSchema, productTypeSchema } from '@repo/validators'
+import { cuidSchema, productsByFiltersSchema } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { z } from 'zod'
 
 import {
   getAllProducts,
   getProductById,
+  getProductsByFilters,
   getProductsByQuery,
-  getProductsBySeasonOrCategory,
-  getProductsByType,
   getSimilarProducts,
 } from '../data/product'
 import { publicProcedure } from '../trpc'
@@ -16,29 +15,8 @@ export const productRouter = {
   all: publicProcedure.query(({ ctx }) => getAllProducts(ctx.db)),
 
   byType: publicProcedure
-    .input(
-      z.object({
-        type: productTypeSchema,
-        limit: z.coerce.number(),
-        page: z.number(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      if (input.type === 'latest' || input.type === 'top-rated')
-        return getProductsByType({
-          db: ctx.db,
-          type: input.type,
-          limit: input.limit,
-          page: input.page,
-        })
-
-      return getProductsBySeasonOrCategory({
-        db: ctx.db,
-        type: input.type,
-        limit: input.limit,
-        page: input.page,
-      })
-    }),
+    .input(productsByFiltersSchema)
+    .query(async ({ ctx, input }) => getProductsByFilters({ db: ctx.db, ...input })),
 
   byId: publicProcedure
     .input(cuidSchema)

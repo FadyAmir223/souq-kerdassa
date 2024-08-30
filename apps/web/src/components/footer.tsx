@@ -19,11 +19,11 @@ const cols = [
       },
       {
         label: 'عبايات صيفى',
-        url: '/products?type=featured',
+        url: '/products?season=summer',
       },
       {
         label: 'عبايات شتوى',
-        url: '/products?type=featured',
+        url: '/products?season=winter',
       },
     ],
   },
