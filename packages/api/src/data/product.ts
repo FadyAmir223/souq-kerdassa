@@ -1,6 +1,11 @@
 import type { Category, DB, Prisma, Product, Season } from '@repo/db/types'
 import type { ProductTypeSchema } from '@repo/validators'
 
+import type {
+  ProductByQuerySchema,
+  SampleProductsSchema,
+} from '../validations/products'
+
 const productCardSelections = {
   id: true,
   images: true,
@@ -44,6 +49,43 @@ export async function getAllProducts(db: DB) {
   }
 }
 
+export async function getSampleProducts({
+  db,
+  type,
+  limit,
+}: { db: DB } & SampleProductsSchema) {
+  const isLatest = type === 'latest'
+
+  try {
+    const products = await db.product.findMany({
+      where: {
+        variants: {
+          some: {
+            season: !isLatest ? type : undefined,
+          },
+          every: {
+            stock: {
+              gt: 0,
+            },
+          },
+        },
+      },
+      select: productCardSelections,
+      orderBy: {
+        updatedAt: isLatest ? 'desc' : undefined,
+      },
+      take: limit,
+    })
+
+    return products.map(({ images, ...product }) => ({
+      ...product,
+      image: images[0],
+    }))
+  } catch {
+    return []
+  }
+}
+
 export async function getProductsByFilters({
   db,
   limit,
@@ -59,28 +101,30 @@ export async function getProductsByFilters({
   category?: Category
   season?: Season
 }) {
-  try {
-    const query = {
-      where: {
-        variants: {
-          every: {
-            category,
-            season,
-            stock: {
-              gt: 0,
-            },
+  const query = {
+    where: {
+      variants: {
+        some: {
+          category,
+          season,
+        },
+        every: {
+          stock: {
+            gt: 0,
           },
         },
       },
-      select: productCardSelections,
-      orderBy: {
-        updatedAt: type === 'latest' ? 'desc' : undefined,
-        rating: type === 'top-rated' ? 'desc' : undefined,
-      },
-      skip: (page - 1) * limit,
-      take: limit,
-    } satisfies Prisma.ProductFindManyArgs
+    },
+    select: productCardSelections,
+    orderBy: {
+      updatedAt: type === 'latest' ? 'desc' : undefined,
+      rating: type === 'top-rated' ? 'desc' : undefined,
+    },
+    skip: (page - 1) * limit,
+    take: limit,
+  } satisfies Prisma.ProductFindManyArgs
 
+  try {
     const [products, count] = await db.$transaction([
       db.product.findMany(query),
       db.product.count({ where: query.where }),
@@ -165,10 +209,7 @@ export async function getProductsByQuery({
   cursor,
 }: {
   db: DB
-  query: string
-  limit: number
-  cursor?: string
-}) {
+} & ProductByQuerySchema) {
   try {
     const products = await db.product.findMany({
       where: {

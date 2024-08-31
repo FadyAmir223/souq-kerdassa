@@ -7,12 +7,18 @@ import {
   getProductById,
   getProductsByFilters,
   getProductsByQuery,
+  getSampleProducts,
   getSimilarProducts,
 } from '../data/product'
 import { publicProcedure } from '../trpc'
+import { productByQuerySchema, sampleProductsSchema } from '../validations/products'
 
 export const productRouter = {
   all: publicProcedure.query(({ ctx }) => getAllProducts(ctx.db)),
+
+  sample: publicProcedure
+    .input(sampleProductsSchema)
+    .query(({ ctx, input }) => getSampleProducts({ db: ctx.db, ...input })),
 
   byType: publicProcedure
     .input(productsByFiltersSchema)
@@ -28,12 +34,6 @@ export const productRouter = {
     .query(({ ctx, input: limit }) => getSimilarProducts(ctx.db, limit)),
 
   byQuery: publicProcedure
-    .input(
-      z.object({
-        query: z.string().trim().min(1),
-        limit: z.number(),
-        cursor: z.string().optional(),
-      }),
-    )
+    .input(productByQuerySchema)
     .query(({ ctx, input }) => getProductsByQuery({ db: ctx.db, ...input })),
 } satisfies TRPCRouterRecord
