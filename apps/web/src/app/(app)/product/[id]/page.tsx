@@ -16,6 +16,8 @@ type ProductPageProps = {
   }
 }
 
+// TODO: skeleton
+
 export default async function ProductPage({
   params: { id: _id },
 }: ProductPageProps) {

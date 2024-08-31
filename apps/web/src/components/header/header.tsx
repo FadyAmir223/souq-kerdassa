@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { BsCart } from 'react-icons/bs'
 import { FaRegUser } from 'react-icons/fa'
+import { LuSearch } from 'react-icons/lu'
 
 import logo from '@/public/assets/images/logo.png'
 import { cn } from '@/utils/cn'
@@ -21,7 +22,14 @@ export default async function Header() {
         </Link>
 
         {/* TODO: remove search field from the header (come up with alt ui) */}
-        <SearchField />
+        {/* downside: only executable code on /search dragged everywhere */}
+        <SearchField isHeader />
+
+        <Link href='/search'>
+          <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed] sm:hidden'>
+            <LuSearch className='size-5 md:size-[1.375rem]' />
+          </div>
+        </Link>
 
         <Link href='/account' className={cn({ 'flex gap-x-3': session?.user })}>
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>

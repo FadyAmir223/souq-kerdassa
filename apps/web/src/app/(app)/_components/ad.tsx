@@ -6,7 +6,7 @@ import { api } from '@/trpc/server'
 import ProductCard from './product/product-card'
 
 export default async function Ad() {
-  const [product] = await api.product.byType({ type: 'latest', limit: 1 })
+  const [product] = await api.product.sample({ type: 'latest', limit: 1 })
 
   if (!product) return null
 

@@ -1,20 +1,17 @@
-'use client'
-
 import type { RouterInputs } from '@repo/api'
 import Link from 'next/link'
 
 import ProductCard from '@/app/(app)/_components/product/product-card'
-import { api } from '@/trpc/react'
+import { api } from '@/trpc/server'
 
 import Paginations from './paginations'
 
 type ProductListProps = {
-  productByTypeInput: RouterInputs['product']['byType']
+  searchParams: RouterInputs['product']['byType']
 }
 
-export default function ProductList({ productByTypeInput }: ProductListProps) {
-  const [{ products, total }] =
-    api.product.byType.useSuspenseQuery(productByTypeInput)
+export default async function ProductList({ searchParams }: ProductListProps) {
+  const { products, total } = await api.product.byType(searchParams)
 
   if (!products.length)
     return (
@@ -35,7 +32,7 @@ export default function ProductList({ productByTypeInput }: ProductListProps) {
         ))}
       </ul>
 
-      <Paginations currPage={productByTypeInput.page!} totalItems={total} />
+      <Paginations currPage={searchParams.page!} totalItems={total} />
     </section>
   )
 }

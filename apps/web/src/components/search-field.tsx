@@ -11,7 +11,11 @@ import { SEARCH_PARAMS } from '@/utils/constants'
 
 import { Input } from './ui/input'
 
-export default function SearchField() {
+type SearchFieldProps = {
+  isHeader?: boolean
+}
+
+export default function SearchField({ isHeader }: SearchFieldProps) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -43,7 +47,10 @@ export default function SearchField() {
   return (
     <Link
       href='/search'
-      className='flex flex-1 rounded-md ring-1 ring-black'
+      className={cn('flex flex-1 rounded-md ring-1 ring-black', {
+        'hidden md:flex': isHeader,
+        'md:hidden': isSearch && !isHeader,
+      })}
       onClick={(e) => {
         if (isSearch) e.preventDefault()
       }}

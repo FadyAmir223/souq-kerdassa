@@ -19,14 +19,14 @@ export default function Paginations({ currPage, totalItems }: PaginationsProps) 
   const totalPages = getTotalPages(totalItems)
   const sectionRange = getSectionRange(currPage, totalItems)
 
+  if (totalPages < 2) return null
+
   return (
     <Pagination>
       <PaginationContent>
         {currPage > 1 && (
           <PaginationItem>
-            <PaginationPrevious
-              href={{ href: '.', query: { page: currPage - 1 } }}
-            />
+            <PaginationPrevious href={{ query: { page: currPage - 1 } }} />
           </PaginationItem>
         )}
 
@@ -39,7 +39,7 @@ export default function Paginations({ currPage, totalItems }: PaginationsProps) 
         {sectionRange.map((pageNumber) => (
           <PaginationItem key={pageNumber}>
             <PaginationLink
-              href={{ href: '.', query: { page: pageNumber } }}
+              href={{ query: { page: pageNumber } }}
               isActive={pageNumber === currPage}
             >
               {pageNumber}
@@ -55,7 +55,7 @@ export default function Paginations({ currPage, totalItems }: PaginationsProps) 
 
         {currPage < totalPages && (
           <PaginationItem>
-            <PaginationNext href={{ href: '.', query: { page: currPage + 1 } }} />
+            <PaginationNext href={{ query: { page: currPage + 1 } }} />
           </PaginationItem>
         )}
       </PaginationContent>

@@ -34,7 +34,7 @@ export default function ProductMiniList({ type }: ProductMiniListProps) {
 }
 
 async function Products({ type }: ProductMiniListProps) {
-  const products = await api.product.byType({ type, limit: 6 })
+  const products = await api.product.sample({ type, limit: 6 })
 
   return products.map((product) => (
     <Link

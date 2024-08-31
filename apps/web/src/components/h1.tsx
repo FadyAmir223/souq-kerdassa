@@ -8,7 +8,7 @@ export default function H1({
   ...props
 }: ComponentPropsWithoutRef<'h1'>) {
   return (
-    <h1 className={cn('mb-3 text-3xl font-bold', className)} {...props}>
+    <h1 className={cn('mb-3 text-2xl font-bold md:text-3xl', className)} {...props}>
       {children}
     </h1>
   )

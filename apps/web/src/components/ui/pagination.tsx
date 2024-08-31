@@ -3,13 +3,13 @@ import {
   ChevronRightIcon,
   DotsHorizontalIcon,
 } from '@radix-ui/react-icons'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import * as React from 'react'
 
 import type { ButtonProps } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
+
+import LinkWithParams from '../link-with-params'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav
@@ -43,26 +43,16 @@ PaginationItem.displayName = 'PaginationItem'
 type PaginationLinkProps = {
   isActive?: boolean
 } & Pick<ButtonProps, 'size'> &
-  React.ComponentProps<typeof Link>
+  React.ComponentProps<typeof LinkWithParams>
 
 const PaginationLink = ({
   className,
-  href,
   isActive,
   size = 'icon',
   ...props
 }: PaginationLinkProps) => {
-  const searchParams = useSearchParams()
-  const params = Object.fromEntries(searchParams.entries())
-
   return (
-    <Link
-      href={{
-        // @ts-expect-error bad next.js types
-        pathname: href.pathname,
-        // @ts-expect-error bad next.js types
-        query: { ...params, ...href.query },
-      }}
+    <LinkWithParams
       aria-current={isActive ? 'page' : undefined}
       className={cn(
         buttonVariants({
