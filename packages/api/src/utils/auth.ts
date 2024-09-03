@@ -1,12 +1,9 @@
 import { signIn } from '@repo/auth'
-import type { LoginFormSchemaWithRedirect } from '@repo/validators'
+import type { LoginFormSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
 import { AuthError } from 'next-auth'
 
-export async function credentialSignIn({
-  phone,
-  password,
-}: LoginFormSchemaWithRedirect) {
+export async function credentialSignIn({ phone, password }: LoginFormSchema) {
   try {
     await signIn('credentials', {
       phone,

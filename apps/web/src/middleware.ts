@@ -1,19 +1,18 @@
 import { auth } from '@repo/auth'
+import { uuidSchema } from '@repo/validators'
 
-// import { uuidSchema } from '@repo/validators'
 import { ROUTES, SEARCH_PARAMS } from './utils/constants'
 
 export default auth((req) => {
   const { nextUrl } = req
 
-  // req.auth doesn't exist because of  { strategy: 'database' }
-  // and db calls not allowed in middlewares
+  // req.auth doesn't support database strategy because dbs doesn't support edge
   // https://next-auth.js.org/configuration/nextjs#caveats
   // const isLoggedIn = !!req.auth
 
-  // may also check whether cookie is uuid - if invalid delete it then return to login
-  const isLoggedIn = !!req.cookies.get('authjs.session-token')
+  const cookie = req.cookies.get('authjs.session-token')?.value
 
+  const isLoggedIn = uuidSchema.safeParse(cookie).success
   const isAuthRoute = ROUTES.authRoutes.includes(nextUrl.pathname)
 
   if (isAuthRoute) {

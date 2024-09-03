@@ -1,5 +1,5 @@
 import { invalidateSessionToken } from '@repo/auth'
-import { registerFormSchema } from '@repo/validators'
+import { loginFormSchema, registerFormSchema } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import bcrypt from 'bcryptjs'
 
@@ -21,6 +21,11 @@ export const authRouter = {
       await createUser(ctx.db, { name, phone, password: hashedPassword })
       await credentialSignIn({ phone, password })
     }),
+
+  login: publicProcedure.input(loginFormSchema).mutation(async ({ input }) => {
+    const { phone, password } = input
+    await credentialSignIn({ phone, password })
+  }),
 
   signOut: protectedProcedure.mutation(async (opts) => {
     if (!opts.ctx.token) return { success: false }

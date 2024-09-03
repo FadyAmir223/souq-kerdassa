@@ -39,7 +39,7 @@ const newPasswordRoute = '/new-password'
 
 export const ROUTES = {
   defaultLoginRedirect: '/account',
-  regiter: registerRoute,
+  register: registerRoute,
   login: loginRoute,
   resetPassword: resetPasswordRoute,
   newPassword: newPasswordRoute,

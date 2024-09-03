@@ -1,8 +1,8 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { RegisterFormSchema } from '@repo/validators'
-import { registerFormSchema } from '@repo/validators'
+import type { LoginFormSchema } from '@repo/validators'
+import { loginFormSchema } from '@repo/validators'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
@@ -14,13 +14,6 @@ import { api } from '@/trpc/react'
 import { PLACEHOLDER, ROUTES, SEARCH_PARAMS } from '@/utils/constants'
 
 const inputs = [
-  {
-    type: 'text',
-    label: 'الاسم بالكامل',
-    name: 'name',
-    placeholder: PLACEHOLDER.name,
-    autoComplete: 'off',
-  },
   {
     type: 'text',
     label: 'رقم التليفون',
@@ -35,16 +28,9 @@ const inputs = [
     placeholder: PLACEHOLDER.password,
     autoComplete: 'new-password',
   },
-  {
-    type: 'password',
-    label: 'تأكيد كلمة السر',
-    name: 'confirmPassword',
-    placeholder: PLACEHOLDER.password,
-    autoComplete: 'new-password',
-  },
 ] as const
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const { toast } = useToast()
 
   const router = useRouter()
@@ -53,19 +39,17 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormSchema>({
-    resolver: zodResolver(registerFormSchema),
+  } = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      name: '',
       phone: '',
       password: '',
-      confirmPassword: '',
     },
   })
 
   const searchParams = useSearchParams()
 
-  const registerUser = api.auth.register.useMutation({
+  const loginUser = api.auth.login.useMutation({
     onSuccess: () => {
       router.push(
         searchParams.get(SEARCH_PARAMS.redirectTo) ?? ROUTES.defaultLoginRedirect,
@@ -86,7 +70,7 @@ export default function RegisterForm() {
 
   return (
     <form
-      onSubmit={handleSubmit((formData) => registerUser.mutate(formData))}
+      onSubmit={handleSubmit((formData) => loginUser.mutate(formData))}
       className='space-y-3'
     >
       {inputs.map(({ name, label, ...props }) => (
@@ -99,7 +83,7 @@ export default function RegisterForm() {
         </div>
       ))}
 
-      <Button disabled={registerUser.isPending}>إنشاء حساب</Button>
+      <Button disabled={loginUser.isPending}>تسجيل الدخول</Button>
     </form>
   )
 }
