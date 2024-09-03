@@ -58,6 +58,16 @@ export default tseslint.config(
       'prefer-template': 'error',
       'object-shorthand': 'error',
 
+      /**
+       * TODO: add rules
+       *
+       * <X x={''} />
+       * <X x='' />
+       *
+       * import { x } from 'x'; import { y } from 'x'
+       * import { x, y } from 'x'
+       */
+
       // import
       'import/order': 'off',
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],

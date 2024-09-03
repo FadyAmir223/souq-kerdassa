@@ -7,6 +7,7 @@ import { ZodError } from 'zod'
 
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get('Authorization') ?? null
+
   if (authToken) return validateToken(authToken)
   return auth()
 }

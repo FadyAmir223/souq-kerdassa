@@ -2,7 +2,6 @@
   "name": "@repo/auth",
   "version": "0.0.0",
   "private": true,
-  "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
@@ -23,9 +22,11 @@
     "@auth/core": "0.32.0",
     "@auth/prisma-adapter": "^2.4.1",
     "@repo/db": "workspace:*",
+    "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "next": "^14.2.4",
-    "next-auth": "5.0.0-beta.19",
+    "bcryptjs": "catalog:",
+    "next": "catalog:",
+    "next-auth": "catalog:",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
     "zod": "catalog:"
@@ -34,6 +35,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
+    "@types/bcryptjs": "catalog:",
     "@types/react": "catalog:react18",
     "eslint": "catalog:",
     "prettier": "catalog:",

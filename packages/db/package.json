@@ -5,6 +5,10 @@
   "type": "module",
   "exports": {
     "./types": "./dist/types.d.ts",
+    "./prisma": {
+      "types": "./dist/prisma.d.ts",
+      "default": "./dist/prisma.js"
+    },
     ".": {
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
@@ -31,7 +35,7 @@
     "clean": "rm -rf .turbo dist node_modules"
   },
   "dependencies": {
-    "@prisma/client": "^5.18.0"
+    "@prisma/client": "^5.19.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -41,7 +45,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prisma": "^5.18.0",
+    "prisma": "^5.19.1",
     "tsc-files": "catalog:",
     "typescript": "catalog:"
   },

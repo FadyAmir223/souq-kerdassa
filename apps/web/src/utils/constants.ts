@@ -1,18 +1,21 @@
-const SEARCH_PARAMS = {
+export const SEARCH_PARAMS = {
   path: 'p',
   width: 'w',
   quality: 'q',
-  query: 'q',
+  query: 'query',
+  redirectTo: 'redirectTo',
 } as const
 
-const assetEP = `/api/assets`
+export const bcryptSalt = 10
 
-const ASSETS = {
+export const assetEP = `/api/assets`
+
+export const ASSETS = {
   path: '/app/apps/web/uploads',
   images: `${assetEP}/images`,
 } as const
 
-const ar = {
+export const AR = {
   season: {
     summer: 'صيفى',
     winter: 'شتوى',
@@ -23,4 +26,33 @@ const ar = {
   },
 }
 
-export { ar, assetEP, ASSETS, SEARCH_PARAMS }
+export const PLACEHOLDER = {
+  name: 'سارة',
+  phone: '01XXXXXXXXXX',
+  password: '********',
+}
+
+const registerRoute = '/register'
+const loginRoute = '/login'
+const resetPasswordRoute = '/reset-password'
+const newPasswordRoute = '/new-password'
+
+export const ROUTES = {
+  defaultLoginRedirect: '/account',
+  regiter: registerRoute,
+  login: loginRoute,
+  resetPassword: resetPasswordRoute,
+  newPassword: newPasswordRoute,
+  authRoutes: [registerRoute, loginRoute, resetPasswordRoute, newPasswordRoute],
+  publicRoutesRegex: [
+    '^/$',
+    '^/products$',
+    '^/product/.+$',
+    '^/cart$',
+    '^/faq$',
+    '^/policy$',
+    '^/robots.txt$',
+    '^.*/sitemap.*.xml.*$',
+    `^${ASSETS.path}/.*$`,
+  ],
+}

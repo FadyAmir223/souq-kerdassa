@@ -5,7 +5,9 @@ import type { QueryClient } from '@tanstack/react-query'
 import { QueryClientProvider } from '@tanstack/react-query'
 import {
   createTRPCReact,
+  httpBatchLink,
   loggerLink,
+  splitLink,
   unstable_httpBatchStreamLink,
 } from '@trpc/react-query'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
@@ -31,6 +33,16 @@ export const api = createTRPCReact<AppRouter>()
 export type RouterInputs = inferRouterInputs<AppRouter>
 export type RouterOutputs = inferRouterOutputs<AppRouter>
 
+const httpBatchLinkConfig = {
+  transformer: SuperJSON,
+  url: `${getBaseUrl()}/api/trpc`,
+  headers: () => {
+    const headers = new Headers()
+    headers.set('x-trpc-source', 'nextjs-react')
+    return headers
+  },
+}
+
 export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient()
 
@@ -42,14 +54,12 @@ export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
             env.NODE_ENV === 'development' ||
             (op.direction === 'down' && op.result instanceof Error),
         }),
-        unstable_httpBatchStreamLink({
-          transformer: SuperJSON,
-          url: `${getBaseUrl()}/api/trpc`,
-          headers: () => {
-            const headers = new Headers()
-            headers.set('x-trpc-source', 'nextjs-react')
-            return headers
+        splitLink({
+          condition(op) {
+            return Boolean(op.context.skipStream)
           },
+          false: unstable_httpBatchStreamLink(httpBatchLinkConfig),
+          true: httpBatchLink(httpBatchLinkConfig),
         }),
       ],
     }),

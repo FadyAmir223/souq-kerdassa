@@ -9,7 +9,7 @@ import { useShallow } from 'zustand/react/shallow'
 import ImageApi from '@/components/image'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
-import { ar } from '@/utils/constants'
+import { AR } from '@/utils/constants'
 
 import CartItemSkeleton from './cart-item-skeleton'
 
@@ -69,8 +69,8 @@ export default function CartItems() {
             <div className='self-center'>
               <h5 className='mb-2.5 text-lg font-semibold'>{item.name}</h5>
               <div className='space-x-5'>
-                <p className=''>{ar.season[item.season]}</p>
-                <p className=''>{ar.category[item.category]}</p>
+                <p className=''>{AR.season[item.season]}</p>
+                <p className=''>{AR.category[item.category]}</p>
               </div>
             </div>
           </div>

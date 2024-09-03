@@ -25,6 +25,7 @@ function rewriteRequestUrlInDevelopment(req: NextRequest) {
 export const POST = async (_req: NextRequest) => {
   // First step must be to correct the request URL.
   const req = rewriteRequestUrlInDevelopment(_req)
+
   return handlers.POST(req)
 }
 

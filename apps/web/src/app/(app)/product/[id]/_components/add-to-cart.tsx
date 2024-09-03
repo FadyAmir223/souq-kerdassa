@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore } from '@/providers/app-store-provider'
-import { ar } from '@/utils/constants'
+import { AR } from '@/utils/constants'
 
 type AddToCartProps = {
   product: NonNullable<RouterOutputs['product']['byId']>
@@ -45,7 +45,7 @@ export default function AddToCart({ product }: AddToCartProps) {
       season: selectedSeason!,
     })
 
-    toast({ description: 'تم الإضافة للعربة', variant: 'success', duration: 2000 })
+    toast({ description: 'تم الإضافة للعربة', variant: 'success' })
   }
 
   return (
@@ -70,7 +70,7 @@ export default function AddToCart({ product }: AddToCartProps) {
             className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={season === selectedSeason}
           >
-            {ar.season[season]}
+            {AR.season[season]}
           </Button>
         ))}
       </div>
@@ -85,7 +85,7 @@ export default function AddToCart({ product }: AddToCartProps) {
             className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={category === selectedCategory}
           >
-            {ar.category[category as Category]}
+            {AR.category[category as Category]}
           </Button>
         ))}
       </div>

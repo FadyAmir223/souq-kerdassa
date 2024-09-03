@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import StarRating from '../star-rating'
 
 type ProductCardProps = {
-  product: RouterOutputs['product']['byType'][number]
+  product: RouterOutputs['product']['byType']['products'][number]
   className?: string
 }
 
