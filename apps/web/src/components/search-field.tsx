@@ -17,16 +17,16 @@ type SearchFieldProps = {
 
 export default function SearchField({ isHeader }: SearchFieldProps) {
   const pathname = usePathname()
-  const router = useRouter()
+  const isSearch = pathname === '/search'
 
   const searchParams = useSearchParams()
-  const savedQuery = searchParams.get(SEARCH_PARAMS.query)
-  const [query, setQuery] = useState(savedQuery ?? '')
-  const [debouncedQuery] = useDebounce(query, 400)
-
   const inputRef = useRef<HTMLInputElement>(null)
+  const router = useRouter()
 
-  const isSearch = pathname === '/search'
+  const [query, setQuery] = useState(
+    () => searchParams.get(SEARCH_PARAMS.query) ?? '',
+  )
+  const [debouncedQuery] = useDebounce(query, 400)
 
   useEffect(() => {
     if (isSearch) inputRef.current?.focus()
@@ -35,14 +35,14 @@ export default function SearchField({ isHeader }: SearchFieldProps) {
   useEffect(() => {
     const current = new URLSearchParams(Array.from(searchParams.entries()))
 
-    if (debouncedQuery && isSearch) current.set(SEARCH_PARAMS.query, debouncedQuery)
+    if (debouncedQuery) current.set(SEARCH_PARAMS.query, debouncedQuery)
     else current.delete(SEARCH_PARAMS.query)
 
     const search = current.toString()
     const queries = search ? `?${search}` : ''
 
-    void router.replace(`${pathname}${queries}`)
-  }, [debouncedQuery, pathname, router, searchParams, isSearch])
+    router.replace(`${pathname}${queries}`)
+  }, [debouncedQuery]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Link

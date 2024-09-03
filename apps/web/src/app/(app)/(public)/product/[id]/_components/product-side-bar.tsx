@@ -2,7 +2,7 @@ import type { RouterOutputs } from '@repo/api'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import StarRating from '@/app/(app)/_components/star-rating'
+import StarRating from '@/app/(app)/(public)/_components/star-rating'
 import ImageApi from '@/components/image'
 import qualityImage from '@/public/assets/images/icons/quality.png'
 import returnImage from '@/public/assets/images/icons/return.png'

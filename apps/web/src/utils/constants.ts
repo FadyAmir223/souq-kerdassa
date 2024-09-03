@@ -48,6 +48,7 @@ export const ROUTES = {
     '^/$',
     '^/products$',
     '^/product/.+$',
+    '^/search$',
     '^/cart$',
     '^/faq$',
     '^/policy$',

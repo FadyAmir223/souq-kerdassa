@@ -21,15 +21,9 @@ catalogs:
     '@trpc/server':
       specifier: 11.0.0-rc.482
       version: 11.0.0-rc.482
-    '@types/bcryptjs':
-      specifier: ^2.4.6
-      version: 2.4.6
     '@types/node':
       specifier: ^20
       version: 20.16.3
-    bcryptjs:
-      specifier: ^2.4.3
-      version: 2.4.3
     eslint:
       specifier: ^9.7.0
       version: 9.9.1
@@ -42,9 +36,6 @@ catalogs:
     prettier:
       specifier: ^3.3.3
       version: 3.3.3
-    react-native:
-      specifier: ~0.74.3
-      version: 0.74.5
     superjson:
       specifier: 2.2.1
       version: 2.2.1

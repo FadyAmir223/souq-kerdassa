@@ -1,4 +1,4 @@
-import ProductMiniList from '@/app/(app)/_components/product/product-list'
+import ProductMiniList from '@/app/(app)/(public)/_components/product/product-list'
 
 export default function SimilarProducts() {
   return (

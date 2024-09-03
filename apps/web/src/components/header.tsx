@@ -8,8 +8,8 @@ import { LuSearch } from 'react-icons/lu'
 import logo from '@/public/assets/images/logo.png'
 import { cn } from '@/utils/cn'
 
-import { CartTotalPrice, CartTotalQuantity } from '../cart-info'
-import SearchField from '../search-field'
+import { CartTotalPrice, CartTotalQuantity } from './cart-info'
+import SearchField from './search-field'
 
 export default async function Header() {
   const session = await auth()

@@ -1,7 +1,7 @@
 import type { RouterInputs } from '@repo/api'
 import Link from 'next/link'
 
-import ProductCard from '@/app/(app)/_components/product/product-card'
+import ProductCard from '@/app/(app)/(public)/_components/product/product-card'
 import { api } from '@/trpc/server'
 
 import Paginations from './paginations'
