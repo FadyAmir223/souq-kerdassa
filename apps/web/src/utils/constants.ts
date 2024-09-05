@@ -30,6 +30,13 @@ export const PLACEHOLDER = {
   name: 'سارة',
   phone: '01XXXXXXXXXX',
   password: '********',
+  address: {
+    city: 'القاهرة',
+    region: 'مدينة نصر / النزهة',
+    street: 'اسم الشارع',
+    building: 'اسم / رقم المبنى, رقم الطابق, رقم الشقة',
+    mark: 'اختيارى',
+  },
 }
 
 const registerRoute = '/register'
@@ -38,7 +45,7 @@ const resetPasswordRoute = '/reset-password'
 const newPasswordRoute = '/new-password'
 
 export const ROUTES = {
-  defaultLoginRedirect: '/account',
+  defaultLoginRedirect: '/account/profile',
   register: registerRoute,
   login: loginRoute,
   resetPassword: resetPasswordRoute,

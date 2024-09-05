@@ -40,7 +40,7 @@ export default function CartItems() {
   if (cart.length === 0)
     return (
       <div className='text-center'>
-        <h3 className='mb-16 text-2xl font-bold'>لا يوجد منتجات</h3>
+        <p className='mb-16 text-2xl font-bold'>لا يوجد منتجات</p>
         <Button asChild variant='outline'>
           <Link href='/'>املأ سلة المشتريات</Link>
         </Button>

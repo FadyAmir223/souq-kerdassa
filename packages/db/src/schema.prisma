@@ -64,7 +64,7 @@ model Address {
   region   String
   street   String
   building String
-  mark     String
+  mark     String?
 
   updatedAt DateTime @updatedAt
 

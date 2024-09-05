@@ -1,9 +1,9 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { RegisterFormSchema } from '@repo/validators'
-import { registerFormSchema } from '@repo/validators'
-import { useRouter, useSearchParams } from 'next/navigation'
+import type { EditProfileSchema } from '@repo/validators'
+import { editProfileSchema } from '@repo/validators'
+import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
-import { PLACEHOLDER, ROUTES, SEARCH_PARAMS } from '@/utils/constants'
+import { PLACEHOLDER } from '@/utils/constants'
+
+import { useCurrentUser } from '../../../_hooks/use-current-user'
 
 const inputs = [
   {
@@ -28,46 +30,38 @@ const inputs = [
     placeholder: PLACEHOLDER.phone,
     autoComplete: 'off',
   },
-  {
-    type: 'password',
-    label: 'كلمة السر',
-    name: 'password',
-    placeholder: PLACEHOLDER.password,
-    autoComplete: 'new-password',
-  },
-  {
-    type: 'password',
-    label: 'تأكيد كلمة السر',
-    name: 'confirmPassword',
-    placeholder: PLACEHOLDER.password,
-    autoComplete: 'new-password',
-  },
 ] as const
 
-export default function RegisterForm() {
+export default function EditProfileForm() {
   const { toast } = useToast()
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const user = useCurrentUser()
+  const { update } = useSession()
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<RegisterFormSchema>({
-    resolver: zodResolver(registerFormSchema),
+  } = useForm<EditProfileSchema>({
+    resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      name: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
+      name: user?.name ?? '',
+      phone: user?.phone,
     },
   })
 
-  const registerUser = api.auth.register.useMutation({
-    onSuccess: () => {
-      router.push(
-        searchParams.get(SEARCH_PARAMS.redirectTo) ?? ROUTES.defaultLoginRedirect,
-      )
+  const watchFields = watch()
+
+  const isInitData =
+    user?.name === watchFields.name && user.phone === watchFields.phone
+
+  const editProfile = api.user.editProfile.useMutation({
+    onSuccess: async () => {
+      await update()
+      toast({
+        variant: 'success',
+        description: 'تم تحديث البيانات',
+      })
     },
     onError: ({ message }) => {
       toast({
@@ -75,16 +69,11 @@ export default function RegisterForm() {
         description: message,
       })
     },
-    trpc: {
-      context: {
-        skipStream: true,
-      },
-    },
   })
 
   return (
     <form
-      onSubmit={handleSubmit((formData) => registerUser.mutate(formData))}
+      onSubmit={handleSubmit((formData) => editProfile.mutate(formData))}
       className='space-y-3'
     >
       {inputs.map(({ name, label, ...props }) => (
@@ -97,7 +86,7 @@ export default function RegisterForm() {
         </div>
       ))}
 
-      <Button disabled={registerUser.isPending}>إنشاء حساب</Button>
+      <Button disabled={isInitData || editProfile.isPending}>تعديل البيانات</Button>
     </form>
   )
 }

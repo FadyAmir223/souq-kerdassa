@@ -37,7 +37,7 @@ export default async function Header() {
           </div>
 
           {session?.user && (
-            <div className='text-sm'>
+            <div className='hidden text-sm md:block'>
               <p className='max-w-28 truncate'>اهلاً {session.user.name}</p>
               <p className=''>لوحة التحكم</p>
             </div>

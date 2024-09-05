@@ -5,6 +5,7 @@ import Credentials from '@auth/core/providers/credentials'
 import Google from '@auth/core/providers/google'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import db from '@repo/db'
+import type { User } from '@repo/db/types'
 import { loginFormSchema } from '@repo/validators'
 import bcrypt from 'bcryptjs'
 import type {
@@ -19,7 +20,8 @@ import { getUserByPhone } from './data/user'
 declare module 'next-auth' {
   interface Session {
     user: {
-      id: string
+      id: User['id']
+      phone?: User['phone'] // TODO: type me properly
     } & DefaultSession['user']
   }
 }
@@ -88,6 +90,8 @@ export const authConfig = {
       return token?.id as string
     },
   },
+
+  // TODO: @repo/constants
   pages: {
     newUser: 'register',
     signIn: 'login',

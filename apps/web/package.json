@@ -26,6 +26,7 @@
     "@repo/validators": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "@tanstack/react-query-devtools": "^5.51.24",
     "@trpc/client": "catalog:",
     "@trpc/react-query": "catalog:",
     "@trpc/server": "catalog:",

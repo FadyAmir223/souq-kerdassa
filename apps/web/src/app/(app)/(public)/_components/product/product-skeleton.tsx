@@ -1,3 +1,5 @@
+// TODO: may use <Skeleton />
+
 export default function ProductCardSkeleton() {
   return (
     <div className='animate-pulse overflow-hidden rounded-lg bg-white text-center shadow-lg'>
