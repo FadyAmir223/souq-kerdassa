@@ -13,6 +13,7 @@ import paymentIcon from '@/public/assets/images/icons/payment.png'
 import qualityIcon from '@/public/assets/images/icons/quality.png'
 import returnIcon from '@/public/assets/images/icons/return.png'
 import { cn } from '@/utils/cn'
+import { PAGES } from '@/utils/constants'
 
 import CartItems from './_components/cart-items'
 
@@ -39,12 +40,12 @@ export default function CartPage() {
             {[
               {
                 label: 'مواصلة التسوق',
-                url: '/',
+                url: PAGES.public.main,
                 icon: MdOutlineKeyboardDoubleArrowRight,
               },
               {
                 label: 'الدفع',
-                url: 'checkout',
+                url: PAGES.protected.buy.checkout,
                 icon: MdOutlineKeyboardDoubleArrowLeft,
               },
             ].map(({ label, url, icon: Icon }, idx) => (

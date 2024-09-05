@@ -1,7 +1,8 @@
 import { auth } from '@repo/auth'
 import { uuidSchema } from '@repo/validators'
 
-import { ROUTES, SEARCH_PARAMS } from './utils/constants'
+import { checkPublicRoute } from './utils/check-public-route'
+import { PAGES, SEARCH_PARAMS } from './utils/constants'
 
 export default auth((req) => {
   const { nextUrl } = req
@@ -13,16 +14,14 @@ export default auth((req) => {
   const cookie = req.cookies.get('authjs.session-token')?.value
 
   const isLoggedIn = uuidSchema.safeParse(cookie).success
-  const isAuthRoute = ROUTES.authRoutes.includes(nextUrl.pathname)
+  const isAuthRoute = PAGES.authRoutes().includes(nextUrl.pathname)
 
   if (isAuthRoute) {
     if (!isLoggedIn) return
-    return Response.redirect(new URL(ROUTES.defaultLoginRedirect, nextUrl))
+    return Response.redirect(new URL(PAGES.defaultLoginRedirect(), nextUrl))
   }
 
-  const isPublicRoute = ROUTES.publicRoutesRegex.some((route) =>
-    new RegExp(route).test(nextUrl.pathname),
-  )
+  const isPublicRoute = checkPublicRoute(nextUrl.pathname)
   if (isLoggedIn || isPublicRoute) return
 
   let redirectTo = nextUrl.pathname
@@ -31,7 +30,7 @@ export default auth((req) => {
 
   return Response.redirect(
     new URL(
-      `${ROUTES.login}?${SEARCH_PARAMS.redirectTo}=${encodedRedirectTo}`,
+      `${PAGES.auth.login}?${SEARCH_PARAMS.redirectTo}=${encodedRedirectTo}`,
       nextUrl,
     ),
   )

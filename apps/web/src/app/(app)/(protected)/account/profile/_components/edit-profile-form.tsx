@@ -20,14 +20,14 @@ const inputs = [
     type: 'text',
     label: 'الاسم بالكامل',
     name: 'name',
-    placeholder: PLACEHOLDER.name,
+    placeholder: PLACEHOLDER.form.name,
     autoComplete: 'off',
   },
   {
     type: 'text',
     label: 'رقم التليفون',
     name: 'phone',
-    placeholder: PLACEHOLDER.phone,
+    placeholder: PLACEHOLDER.form.phone,
     autoComplete: 'off',
   },
 ] as const

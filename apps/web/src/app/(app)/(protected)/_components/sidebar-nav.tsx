@@ -16,7 +16,7 @@ export default function SidebarNav({ label, url }: SidebarNavProps) {
 
   return (
     <Link
-      href={`/account/${url}`}
+      href={url}
       className={cn('block rounded-md px-3 py-1', {
         'pointer-events-none bg-primary/70 font-semibold': url === segment,
         'transition-colors hover:bg-primary/15': url !== segment,

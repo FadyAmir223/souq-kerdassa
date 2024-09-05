@@ -27,9 +27,11 @@ export const AR = {
 }
 
 export const PLACEHOLDER = {
-  name: 'سارة',
-  phone: '01XXXXXXXXXX',
-  password: '********',
+  form: {
+    name: 'سارة',
+    phone: '01XXXXXXXXXX',
+    password: '********',
+  },
   address: {
     city: 'القاهرة',
     region: 'مدينة نصر / النزهة',
@@ -39,36 +41,13 @@ export const PLACEHOLDER = {
   },
 }
 
-const registerRoute = '/register'
-const loginRoute = '/login'
-
-export const ROUTES = {
-  defaultLoginRedirect: '/account/profile',
-  register: registerRoute,
-  login: loginRoute,
-  authRoutes: [registerRoute, loginRoute],
-  publicRoutesRegex: [
-    '^/$',
-    '^/products$',
-    '^/product/.+$',
-    '^/search$',
-    '^/cart$',
-    '^/faq$',
-    '^/policy$',
-    '^/robots.txt$',
-    '^.*/sitemap.*.xml.*$',
-    `^${ASSETS.path}/.*$`,
-  ],
-}
-
-// TODO: migrate from ROUTES into PAGES
-
 export const PAGES = {
   public: {
-    mainPage: '/',
-    cart: '/cart',
+    main: '/',
     products: '/products',
     product: (id: string) => `/product/${id}`,
+    cart: '/cart',
+    search: '/search',
     faq: '/faq',
     policy: '/policy',
   },
@@ -84,5 +63,15 @@ export const PAGES = {
       address: '/account/address',
       orders: '/account/orders',
     },
+    buy: {
+      checkout: '/checkout',
+    },
   },
+  other: {
+    robots: '/robots.txt',
+    sitemap: (id: string) => `/sitemap.${id}.xml`,
+    assets: ASSETS.path,
+  },
+  defaultLoginRedirect: () => PAGES.protected.user.profile,
+  authRoutes: () => Object.values(PAGES.auth),
 }

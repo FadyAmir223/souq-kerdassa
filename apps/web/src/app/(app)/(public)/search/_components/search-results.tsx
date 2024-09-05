@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer'
 
 import { useIsMedium, useIsSmall } from '@/hooks/use-responsive'
 import { api } from '@/trpc/react'
-import { SEARCH_PARAMS } from '@/utils/constants'
+import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
 import ProductCard from '../../_components/product/product-card'
 import ProductCardSkeleton from '../../_components/product/product-card-skeleton'
@@ -68,7 +68,7 @@ export default function SearchResults() {
               : null
           }
           key={product.id}
-          href={`/product/${product.id}`}
+          href={PAGES.public.product(product.id)}
           className='transition-transform hover:scale-[1.03]'
         >
           <ProductCard product={product} />

@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import ProductCard from '@/app/(app)/(public)/_components/product/product-card'
 import { api } from '@/trpc/server'
+import { PAGES } from '@/utils/constants'
 
 import Paginations from './paginations'
 
@@ -24,7 +25,7 @@ export default async function ProductList({ searchParams }: ProductListProps) {
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/product/${product.id}`}
+            href={PAGES.public.product(product.id)}
             className='transition-transform hover:scale-[1.03]'
           >
             <ProductCard key={product.id} product={product} />

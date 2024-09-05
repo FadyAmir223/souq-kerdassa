@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { api } from '@/trpc/server'
+import { PAGES } from '@/utils/constants'
 
 import ProductCard from './product/product-card'
 
@@ -22,7 +23,7 @@ export default async function Ad() {
           className='mt-6 text-xl font-bold hover:bg-secondary/90'
           size='lg'
         >
-          <Link href={`/products/${product.id}`}>اشترى الآن</Link>
+          <Link href={`${PAGES.public.products}/${product.id}`}>اشترى الآن</Link>
         </Button>
       </div>
     </div>

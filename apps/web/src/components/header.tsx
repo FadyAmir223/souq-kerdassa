@@ -7,7 +7,7 @@ import { LuSearch } from 'react-icons/lu'
 
 import logo from '@/public/assets/images/logo.png'
 import { cn } from '@/utils/cn'
-import { ROUTES } from '@/utils/constants'
+import { PAGES } from '@/utils/constants'
 
 import { CartTotalPrice, CartTotalQuantity } from './cart-info'
 import SearchField from './search-field'
@@ -18,7 +18,7 @@ export default async function Header() {
   return (
     <header className='fixed z-40 w-full bg-white shadow-lg'>
       <div className='container flex items-center justify-between gap-x-4 py-4 md:gap-x-6 lg:gap-x-8'>
-        <Link href='/'>
+        <Link href={PAGES.public.main}>
           <Image src={logo} alt='logo' className='w-20' priority />
         </Link>
 
@@ -26,14 +26,14 @@ export default async function Header() {
         {/* downside: only executable code on /search dragged everywhere */}
         <SearchField isHeader />
 
-        <Link href='/search'>
+        <Link href={PAGES.public.search}>
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed] sm:hidden'>
             <LuSearch className='size-5 md:size-[1.375rem]' />
           </div>
         </Link>
 
         <Link
-          href={session?.user ? ROUTES.defaultLoginRedirect : ROUTES.login}
+          href={session?.user ? PAGES.defaultLoginRedirect() : PAGES.auth.login}
           className={cn({ 'flex gap-x-3': session?.user })}
         >
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>
@@ -48,7 +48,7 @@ export default async function Header() {
           )}
         </Link>
 
-        <Link href='/cart' className='flex gap-x-3'>
+        <Link href={PAGES.public.cart} className='flex gap-x-3'>
           <div className='relative grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>
             <BsCart className='size-5 md:size-[1.375rem]' />
             <div className='absolute right-0 top-0 grid size-[1.125rem] translate-x-[4px] translate-y-[-4px] place-items-center rounded-full bg-black text-xs text-white'>

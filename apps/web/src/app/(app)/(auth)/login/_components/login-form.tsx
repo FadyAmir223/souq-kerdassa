@@ -11,21 +11,21 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
-import { PLACEHOLDER, ROUTES, SEARCH_PARAMS } from '@/utils/constants'
+import { PAGES, PLACEHOLDER, SEARCH_PARAMS } from '@/utils/constants'
 
 const inputs = [
   {
     type: 'text',
     label: 'رقم التليفون',
     name: 'phone',
-    placeholder: PLACEHOLDER.phone,
+    placeholder: PLACEHOLDER.form.phone,
     autoComplete: 'off',
   },
   {
     type: 'password',
     label: 'كلمة السر',
     name: 'password',
-    placeholder: PLACEHOLDER.password,
+    placeholder: PLACEHOLDER.form.password,
     autoComplete: 'new-password',
   },
 ] as const
@@ -52,7 +52,7 @@ export default function LoginForm() {
   const loginUser = api.auth.login.useMutation({
     onSuccess: () => {
       router.push(
-        searchParams.get(SEARCH_PARAMS.redirectTo) ?? ROUTES.defaultLoginRedirect,
+        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect(),
       )
       router.refresh()
     },

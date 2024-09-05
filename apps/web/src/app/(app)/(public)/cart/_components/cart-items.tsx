@@ -42,7 +42,7 @@ export default function CartItems() {
       <div className='text-center'>
         <p className='mb-16 text-2xl font-bold'>لا يوجد منتجات</p>
         <Button asChild variant='outline'>
-          <Link href='/'>املأ سلة المشتريات</Link>
+          <Link href={PAGES.public.main}>املأ سلة المشتريات</Link>
         </Button>
       </div>
     )

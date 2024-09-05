@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import logo from '@/public/assets/images/logo.png'
+import { PAGES } from '@/utils/constants'
 
 import { Button } from './ui/button'
 
@@ -11,19 +12,19 @@ const cols = [
     rows: [
       {
         label: 'اخر العبايات المضافة',
-        url: '/products?type=latest',
+        url: `${PAGES.public.products}?type=latest`,
       },
       {
         label: 'العبايات الافضل تقييماً',
-        url: '/products?type=top-rated',
+        url: `${PAGES.public.products}?type=top-rated`,
       },
       {
         label: 'عبايات صيفى',
-        url: '/products?season=summer',
+        url: `${PAGES.public.products}?season=summer`,
       },
       {
         label: 'عبايات شتوى',
-        url: '/products?season=winter',
+        url: `${PAGES.public.products}?season=winter`,
       },
     ],
   },
@@ -32,15 +33,15 @@ const cols = [
     rows: [
       {
         label: 'معلومات الحساب',
-        url: '/account/profile',
+        url: PAGES.protected.user.profile,
       },
       {
         label: 'تتبع الطلبات',
-        url: '/account/orders',
+        url: PAGES.protected.user.orders,
       },
       {
         label: 'عنوان',
-        url: '/account/address',
+        url: PAGES.protected.user.address,
       },
     ],
   },
@@ -51,7 +52,7 @@ export default function Footer() {
     <footer className='mt-auto bg-[#121D2C]'>
       <div className='container grid-cols-4 py-8 text-center md:grid md:text-start'>
         <div className='flex justify-center'>
-          <Link href='/'>
+          <Link href={PAGES.public.main}>
             <Image src={logo} alt='logo' className='w-14' priority />
           </Link>
         </div>

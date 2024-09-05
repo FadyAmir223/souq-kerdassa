@@ -1,13 +1,14 @@
 import { signOut } from '@repo/auth'
 
 import { Button } from '@/components/ui/button'
+import { PAGES } from '@/utils/constants'
 
 import SidebarNav from './sidebar-nav'
 
 const navs = [
-  { label: 'معلومات الحساب', url: 'profile' },
-  { label: 'عناوينى', url: 'address' },
-  { label: 'طلباتى', url: 'orders' },
+  { label: 'معلومات الحساب', url: PAGES.protected.user.profile },
+  { label: 'عناوينى', url: PAGES.protected.user.address },
+  { label: 'طلباتى', url: PAGES.protected.user.orders },
 ]
 
 export default function AccountSidebar() {

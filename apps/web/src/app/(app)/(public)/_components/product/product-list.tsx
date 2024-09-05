@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 
 import { api } from '@/trpc/server'
 import { cn } from '@/utils/cn'
+import { PAGES } from '@/utils/constants'
 
 import ProductCard from './product-card'
 import ProductCardSkeleton from './product-card-skeleton'
@@ -39,7 +40,7 @@ async function Products({ type }: ProductMiniListProps) {
   return products.map((product) => (
     <Link
       key={product.id}
-      href={`/product/${product.id}`}
+      href={PAGES.public.product(product.id)}
       className='transition-transform hover:scale-[1.03]'
     >
       <ProductCard product={product} />

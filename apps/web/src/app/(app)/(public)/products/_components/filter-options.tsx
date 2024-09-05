@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { IoClose } from 'react-icons/io5'
 
+import { PAGES } from '@/utils/constants'
+
 import FilterButton from './filter-button'
 
 const filters = [
@@ -39,7 +41,7 @@ export default function FilterOptions({ hasParams }: FilterOptionsProps) {
     <>
       {hasParams && (
         <Link
-          href='/products'
+          href={PAGES.public.products}
           replace
           className='mb-3 mr-auto flex w-fit items-center gap-x-2 text-sm text-destructive'
         >

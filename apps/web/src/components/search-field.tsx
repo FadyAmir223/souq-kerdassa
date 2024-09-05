@@ -7,7 +7,7 @@ import { LuSearch } from 'react-icons/lu'
 import { useDebounce } from 'use-debounce'
 
 import { cn } from '@/utils/cn'
-import { SEARCH_PARAMS } from '@/utils/constants'
+import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
 import { Input } from './ui/input'
 
@@ -46,7 +46,7 @@ export default function SearchField({ isHeader }: SearchFieldProps) {
 
   return (
     <Link
-      href='/search'
+      href={PAGES.public.search}
       className={cn('flex flex-1 rounded-md ring-1 ring-black', {
         'hidden md:flex': isHeader,
         'md:hidden': isSearch && !isHeader,
