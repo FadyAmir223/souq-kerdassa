@@ -12,7 +12,7 @@ import { api } from '@/trpc/react'
 import { SEARCH_PARAMS } from '@/utils/constants'
 
 import ProductCard from '../../_components/product/product-card'
-import ProductCardSkeleton from '../../_components/product/product-skeleton'
+import ProductCardSkeleton from '../../_components/product/product-card-skeleton'
 
 const rows = 4
 

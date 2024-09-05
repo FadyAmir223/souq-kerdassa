@@ -9,7 +9,7 @@ import { useShallow } from 'zustand/react/shallow'
 import ImageApi from '@/components/image'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
-import { AR } from '@/utils/constants'
+import { AR, PAGES } from '@/utils/constants'
 
 import CartItemSkeleton from './cart-item-skeleton'
 
@@ -55,16 +55,18 @@ export default function CartItems() {
           className='flex items-center justify-between rounded-md bg-white p-3'
         >
           <div className='flex gap-x-5'>
-            <div className='relative aspect-[83/100] w-24'>
-              <ImageApi
-                src={item.image}
-                alt={item.name}
-                fill
-                priority
-                sizes='6rem'
-                className='object-cover'
-              />
-            </div>
+            <Link href={PAGES.public.product(item.id)}>
+              <div className='relative aspect-[83/100] w-24'>
+                <ImageApi
+                  src={item.image}
+                  alt={item.name}
+                  fill
+                  priority
+                  sizes='6rem'
+                  className='object-cover'
+                />
+              </div>
+            </Link>
 
             <div className='self-center'>
               <h5 className='mb-2.5 text-lg font-semibold'>{item.name}</h5>

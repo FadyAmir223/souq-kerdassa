@@ -6,7 +6,7 @@ import { api } from '@/trpc/server'
 import { cn } from '@/utils/cn'
 
 import ProductCard from './product-card'
-import ProductCardSkeleton from './product-skeleton'
+import ProductCardSkeleton from './product-card-skeleton'
 
 type ProductMiniListProps = {
   type: Season | 'latest'

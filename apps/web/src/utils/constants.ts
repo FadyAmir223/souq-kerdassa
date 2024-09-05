@@ -41,16 +41,12 @@ export const PLACEHOLDER = {
 
 const registerRoute = '/register'
 const loginRoute = '/login'
-const resetPasswordRoute = '/reset-password'
-const newPasswordRoute = '/new-password'
 
 export const ROUTES = {
   defaultLoginRedirect: '/account/profile',
   register: registerRoute,
   login: loginRoute,
-  resetPassword: resetPasswordRoute,
-  newPassword: newPasswordRoute,
-  authRoutes: [registerRoute, loginRoute, resetPasswordRoute, newPasswordRoute],
+  authRoutes: [registerRoute, loginRoute],
   publicRoutesRegex: [
     '^/$',
     '^/products$',
@@ -63,4 +59,30 @@ export const ROUTES = {
     '^.*/sitemap.*.xml.*$',
     `^${ASSETS.path}/.*$`,
   ],
+}
+
+// TODO: migrate from ROUTES into PAGES
+
+export const PAGES = {
+  public: {
+    mainPage: '/',
+    cart: '/cart',
+    products: '/products',
+    product: (id: string) => `/product/${id}`,
+    faq: '/faq',
+    policy: '/policy',
+  },
+  auth: {
+    register: '/register',
+    login: '/login',
+    resetPassword: '/password/reset',
+    newPassword: '/password/new',
+  },
+  protected: {
+    user: {
+      profile: '/account/profile',
+      address: '/account/address',
+      orders: '/account/orders',
+    },
+  },
 }

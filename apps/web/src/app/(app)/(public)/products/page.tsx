@@ -2,7 +2,7 @@ import { productsByFiltersSchema } from '@repo/validators'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-import ProductCardSkeleton from '../_components/product/product-skeleton'
+import ProductCardSkeleton from '../_components/product/product-card-skeleton'
 import FilterDrawer from './_components/filter-drawer'
 import FilterSidebar from './_components/filter-sidebar'
 import ProductList from './_components/product-list'
