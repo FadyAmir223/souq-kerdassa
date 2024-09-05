@@ -75,7 +75,6 @@ model Address {
 model User {
   id String @id @default(cuid())
 
-  // TODO: oauth
   name     String
   phone    String  @unique
   password String?
@@ -83,7 +82,7 @@ model User {
   addresses Address[]
   reviews   Review[]
 
-  // TOOD: for oauth
+  // TODO: oauth
   // email         String?   @unique
   // emailVerified DateTime?
   // image         String?

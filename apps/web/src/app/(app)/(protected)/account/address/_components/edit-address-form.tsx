@@ -77,12 +77,15 @@ export default function EditAddressForm({ address }: EditAddressFormProps) {
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='none' size='none'>
-          <FaEdit className='size-[1.375rem]' />
+          <div className='flex items-center gap-x-1'>
+            <span className='select-none text-sm font-semibold'>تعديل</span>
+            <FaEdit size={20} />
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle>اضافة عنوان جديد</DialogTitle>
+          <DialogTitle>تعديل العنوان</DialogTitle>
           <DialogDescription>
             سجل عنوانك حتى يصل إليك طلبك بكل سهولة
           </DialogDescription>
@@ -103,14 +106,14 @@ export default function EditAddressForm({ address }: EditAddressFormProps) {
                   <p className='h-[1.21875rem] text-[0.8rem] font-medium text-destructive'>
                     {errors[name]?.message}
                   </p>
-                  <Input {...register(name)} {...props} />
+                  <Input className='border-black' {...register(name)} {...props} />
                 </div>
               </div>
             </div>
           ))}
 
           <DialogFooter>
-            <Button>اضف العنوان</Button>
+            <Button>عدل العنوان</Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -1,5 +1,7 @@
 'use client'
 
+import { FaLocationDot } from 'react-icons/fa6'
+
 import { api } from '@/trpc/react'
 
 import DeleteAddressForm from './delete-address-form'
@@ -13,9 +15,14 @@ export default function Addresses() {
 
   return addresses.map((address) => (
     <li key={address.id} className='rounded-md bg-white px-4 py-5 shadow-md'>
-      <div className='mb-2 flex justify-end gap-x-3'>
-        <EditAddressForm address={address} />
-        <DeleteAddressForm addressId={address.id} />
+      <div className='mb-3 flex justify-between'>
+        <FaLocationDot size={20} />
+
+        <div className='flex gap-x-3'>
+          <EditAddressForm address={address} />
+          <div className='relative mx-1 before:absolute before:h-full before:w-[2.5px] before:bg-black' />
+          <DeleteAddressForm addressId={address.id} />
+        </div>
       </div>
 
       <div className=''>

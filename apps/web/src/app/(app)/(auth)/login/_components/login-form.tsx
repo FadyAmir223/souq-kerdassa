@@ -54,6 +54,7 @@ export default function LoginForm() {
       router.push(
         searchParams.get(SEARCH_PARAMS.redirectTo) ?? ROUTES.defaultLoginRedirect,
       )
+      router.refresh()
     },
     onError: ({ message }) => {
       toast({

@@ -1,7 +1,17 @@
 import type { Address } from '@repo/db/types'
+import { useState } from 'react'
 import { FaTrashCan } from 'react-icons/fa6'
 
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
 
@@ -10,6 +20,7 @@ type DeleteAddressFormProps = {
 }
 
 export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps) {
+  const [isOpen, setOpen] = useState(false)
   const utils = api.useUtils()
   const { toast } = useToast()
 
@@ -33,12 +44,39 @@ export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps)
   })
 
   return (
-    <Button
-      variant='none'
-      size='none'
-      onClick={() => deleteAddress.mutate(addressId)}
-    >
-      <FaTrashCan className='size-[1.375rem] text-destructive' />
-    </Button>
+    <>
+      <Dialog open={isOpen} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant='none' size='none'>
+            <div className='flex items-center gap-x-1'>
+              <span className='select-none text-sm font-semibold'>حذف</span>
+              <FaTrashCan className='text-destructive' size={20} />
+            </div>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className='sm:max-w-[425px]'>
+          <DialogHeader>
+            <DialogTitle>هل انت متأكد من حذف العنوان؟</DialogTitle>
+            <DialogDescription />
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              className='me-4 min-w-16'
+              variant='destructive'
+              onClick={() => deleteAddress.mutate(addressId)}
+            >
+              نعم
+            </Button>
+            <Button
+              variant='outline'
+              className='min-w-16'
+              onClick={() => setOpen(false)}
+            >
+              لا
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

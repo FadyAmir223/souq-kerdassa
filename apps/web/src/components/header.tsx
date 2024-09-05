@@ -7,6 +7,7 @@ import { LuSearch } from 'react-icons/lu'
 
 import logo from '@/public/assets/images/logo.png'
 import { cn } from '@/utils/cn'
+import { ROUTES } from '@/utils/constants'
 
 import { CartTotalPrice, CartTotalQuantity } from './cart-info'
 import SearchField from './search-field'
@@ -31,7 +32,10 @@ export default async function Header() {
           </div>
         </Link>
 
-        <Link href='/account' className={cn({ 'flex gap-x-3': session?.user })}>
+        <Link
+          href={session?.user ? ROUTES.defaultLoginRedirect : ROUTES.login}
+          className={cn({ 'flex gap-x-3': session?.user })}
+        >
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>
             <FaRegUser className='size-5 md:size-[1.375rem]' />
           </div>

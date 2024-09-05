@@ -100,7 +100,7 @@ export default function AddAddressForm() {
                   <p className='h-[1.21875rem] text-[0.8rem] font-medium text-destructive'>
                     {errors[name]?.message}
                   </p>
-                  <Input {...register(name)} {...props} />
+                  <Input className='border-black' {...register(name)} {...props} />
                 </div>
               </div>
             </div>
