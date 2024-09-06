@@ -4,11 +4,16 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
+import {
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight,
+} from 'react-icons/md'
 import { useShallow } from 'zustand/react/shallow'
 
 import ImageApi from '@/components/image'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
+import { cn } from '@/utils/cn'
 import { AR, PAGES } from '@/utils/constants'
 
 import CartItemSkeleton from './cart-item-skeleton'
@@ -48,89 +53,117 @@ export default function CartItems() {
     )
 
   return (
-    <ul className='space-y-3'>
-      {cart.map((item) => (
-        <li
-          key={item.id}
-          className='flex items-center justify-between rounded-md bg-white p-3'
-        >
-          <div className='flex gap-x-5'>
-            <Link href={PAGES.public.product(item.id)}>
-              <div className='relative aspect-[83/100] w-24'>
-                <ImageApi
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  priority
-                  sizes='6rem'
-                  className='object-cover'
-                />
-              </div>
-            </Link>
+    <>
+      <ul className='space-y-3'>
+        {cart.map((item) => (
+          <li
+            key={item.id + item.season + item.category}
+            className='flex items-center justify-between rounded-md bg-white p-3'
+          >
+            <div className='flex gap-x-5'>
+              <Link href={PAGES.public.product(item.id)}>
+                <div className='relative aspect-[83/100] w-24'>
+                  <ImageApi
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    priority
+                    sizes='6rem'
+                    className='object-cover'
+                  />
+                </div>
+              </Link>
 
-            <div className='self-center'>
-              <h5 className='mb-2.5 text-lg font-semibold'>{item.name}</h5>
-              <div className='space-x-5'>
-                <p className=''>{AR.season[item.season]}</p>
-                <p className=''>{AR.category[item.category]}</p>
+              <div className='self-center'>
+                <h5 className='mb-2.5 text-lg font-semibold'>{item.name}</h5>
+                <div className='space-x-5'>
+                  <p className=''>{AR.season[item.season]}</p>
+                  <p className=''>{AR.category[item.category]}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <span className='text-lg font-semibold text-primary'>
-            {item.price} EGP
-          </span>
+            <span className='text-lg font-semibold text-primary'>
+              {item.price} جنية
+            </span>
 
-          <div className='flex gap-x-4 border-2 border-gray-400 p-0.5'>
+            <div className='flex gap-x-4 border-2 border-gray-400 p-0.5'>
+              <Button
+                variant='none'
+                size='none'
+                className='grid size-5 place-items-center text-gray-400'
+                onClick={() => {
+                  incrementCartItem({
+                    id: item.id,
+                    category: item.category,
+                    season: item.season,
+                  })
+                }}
+              >
+                <FaPlus />
+              </Button>
+
+              <span className='text-sm text-gray-600'>{item.quantity}</span>
+
+              <Button
+                variant='none'
+                size='none'
+                className='grid size-5 place-items-center text-gray-400'
+                onClick={() => {
+                  decrementCartItem({
+                    id: item.id,
+                    category: item.category,
+                    season: item.season,
+                  })
+                }}
+              >
+                <FaMinus />
+              </Button>
+            </div>
+
             <Button
               variant='none'
-              size='none'
-              className='grid size-5 place-items-center text-gray-400'
-              onClick={() => {
-                incrementCartItem({
+              size='icon'
+              className='text-destructive'
+              onClick={() =>
+                deleteCartItem({
                   id: item.id,
                   category: item.category,
                   season: item.season,
                 })
-              }}
+              }
             >
-              <FaPlus />
+              <IoClose size={30} />
             </Button>
+          </li>
+        ))}
+      </ul>
 
-            <span className='text-sm text-gray-600'>{item.quantity}</span>
-
-            <Button
-              variant='none'
-              size='none'
-              className='grid size-5 place-items-center text-gray-400'
-              onClick={() => {
-                decrementCartItem({
-                  id: item.id,
-                  category: item.category,
-                  season: item.season,
-                })
-              }}
-            >
-              <FaMinus />
-            </Button>
-          </div>
-
+      <div className='mt-7 flex justify-between'>
+        {[
+          {
+            label: 'مواصلة التسوق',
+            url: PAGES.public.main,
+            icon: MdOutlineKeyboardDoubleArrowRight,
+          },
+          {
+            label: 'الدفع',
+            url: PAGES.protected.buy.checkout,
+            icon: MdOutlineKeyboardDoubleArrowLeft,
+          },
+        ].map(({ label, url, icon: Icon }, idx) => (
           <Button
-            variant='none'
-            size='icon'
-            className='text-destructive'
-            onClick={() =>
-              deleteCartItem({
-                id: item.id,
-                category: item.category,
-                season: item.season,
-              })
-            }
+            key={label}
+            asChild
+            className='flex min-w-44 items-center justify-between py-5 text-lg'
           >
-            <IoClose size={30} />
+            <Link href={url}>
+              <span className={cn(idx === 0 && 'order-1')}>{label}</span>
+              <Icon size={22} />
+            </Link>
           </Button>
-        </li>
-      ))}
-    </ul>
+        ))}
+      </div>
+    </>
   )
 }

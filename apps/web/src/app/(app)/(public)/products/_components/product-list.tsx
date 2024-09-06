@@ -8,11 +8,11 @@ import { PAGES } from '@/utils/constants'
 import Paginations from './paginations'
 
 type ProductListProps = {
-  searchParams: RouterInputs['product']['byType']
+  searchParams: RouterInputs['product']['byFilter']
 }
 
 export default async function ProductList({ searchParams }: ProductListProps) {
-  const { products, total } = await api.product.byType(searchParams)
+  const { products, total } = await api.product.byFilter(searchParams)
 
   if (!products.length)
     return (

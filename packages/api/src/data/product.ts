@@ -1,10 +1,7 @@
 import type { Category, DB, Prisma, Product, Season } from '@repo/db/types'
-import type { ProductTypeSchema } from '@repo/validators'
+import type { CreateOrderSchema, ProductTypeSchema } from '@repo/validators'
 
-import type {
-  ProductByQuerySchema,
-  SampleProductsSchema,
-} from '../validations/products'
+import type { ProductByQuerySchema } from '../validations/products'
 
 const productCardSelections = {
   id: true,
@@ -49,40 +46,31 @@ export async function getAllProducts(db: DB) {
   }
 }
 
-export async function getSampleProducts({
-  db,
-  type,
-  limit,
-}: { db: DB } & SampleProductsSchema) {
-  const isLatest = type === 'latest'
-
+export async function getProductById(db: DB, id: Product['id']) {
   try {
-    const products = await db.product.findMany({
+    return await db.product.findUnique({
       where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        images: true,
+        rating: true,
         variants: {
-          some: {
-            season: !isLatest ? type : undefined,
-          },
-          every: {
-            stock: {
-              gt: 0,
-            },
+          select: {
+            season: true,
+            category: true,
+            stock: true,
           },
         },
+        reviewsCount: true,
       },
-      select: productCardSelections,
-      orderBy: {
-        updatedAt: isLatest ? 'desc' : undefined,
-      },
-      take: limit,
     })
-
-    return products.map(({ images, ...product }) => ({
-      ...product,
-      image: images[0],
-    }))
   } catch {
-    return []
+    return null
   }
 }
 
@@ -142,66 +130,6 @@ export async function getProductsByFilters({
   }
 }
 
-export async function getProductById(db: DB, id: Product['id']) {
-  try {
-    return await db.product.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        price: true,
-        images: true,
-        rating: true,
-        variants: {
-          select: {
-            season: true,
-            category: true,
-            stock: true,
-          },
-        },
-        reviewsCount: true,
-      },
-    })
-  } catch {
-    return null
-  }
-}
-
-export async function getSimilarProducts(db: DB, limit: number) {
-  try {
-    const products = await db.product.findMany({
-      where: {
-        variants: {
-          every: {
-            stock: {
-              gt: 0,
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        name: true,
-        images: true,
-        price: true,
-        rating: true,
-        reviewsCount: true,
-      },
-      take: limit,
-    })
-
-    return products.map(({ images, ...product }) => ({
-      ...product,
-      image: images[0],
-    }))
-  } catch {
-    return []
-  }
-}
-
 export async function getProductsByQuery({
   db,
   query,
@@ -237,5 +165,62 @@ export async function getProductsByQuery({
     return { products: productsWithImage, nextCursor }
   } catch {
     return { products: [] as Product[] }
+  }
+}
+
+export async function getSimilarProducts(db: DB, limit: number) {
+  try {
+    const products = await db.product.findMany({
+      where: {
+        variants: {
+          every: {
+            stock: {
+              gt: 0,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        images: true,
+        price: true,
+        rating: true,
+        reviewsCount: true,
+      },
+      take: limit,
+    })
+
+    return products.map(({ images, ...product }) => ({
+      ...product,
+      image: images[0],
+    }))
+  } catch {
+    return []
+  }
+}
+
+export async function getSoldOutProducts(
+  db: DB,
+  cartItems: CreateOrderSchema['cart'],
+) {
+  try {
+    // TODO: save productVariant id in cart store to index it
+    await db.$transaction(
+      cartItems.map((item) =>
+        db.productVariant.findFirst({
+          where: {
+            productId: item.id,
+            season: item.season,
+            category: item.category,
+          },
+          select: {
+            stock: true,
+          },
+        }),
+      ),
+    )
+  } catch {
+    return null
   }
 }

@@ -7,7 +7,8 @@ import { PAGES } from '@/utils/constants'
 import ProductCard from './product/product-card'
 
 export default async function Ad() {
-  const [product] = await api.product.sample({ type: 'latest', limit: 1 })
+  const { products } = await api.product.byFilter({ type: 'latest', limit: 1 })
+  const [product] = products
 
   if (!product) return null
 

@@ -9,7 +9,7 @@ const phoneField = {
     ? z
         .string()
         .min(1, { message: 'رقم التليفون مطلوب' })
-        .min(8, { message: 'حد ادنى 8 احرف' })
+        .length(11, { message: 'يجب ان يكون 11 رقم' })
     : z.string().min(1, { message: 'رقم التليفون مطلوب' }),
 }
 

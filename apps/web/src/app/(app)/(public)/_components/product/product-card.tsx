@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import StarRating from '../star-rating'
 
 type ProductCardProps = {
-  product: RouterOutputs['product']['byType']['products'][number]
+  product: RouterOutputs['product']['byFilter']['products'][number]
   className?: string
 }
 
@@ -37,7 +37,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           <StarRating rating={rating} />
           <span className=''>({reviewsCount})</span>
         </div>
-        <p className='font-bold text-primary'>{price} EGP</p>
+        <p className='font-bold text-primary'>{price} جنية</p>
       </div>
     </div>
   )

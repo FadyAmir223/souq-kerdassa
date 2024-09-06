@@ -1,13 +1,3 @@
-export const SEARCH_PARAMS = {
-  path: 'p',
-  width: 'w',
-  quality: 'q',
-  query: 'query',
-  redirectTo: 'redirectTo',
-} as const
-
-export const bcryptSalt = 10
-
 export const assetEP = `/api/assets`
 
 export const ASSETS = {
@@ -15,16 +5,13 @@ export const ASSETS = {
   images: `${assetEP}/images`,
 } as const
 
-export const AR = {
-  season: {
-    summer: 'صيفى',
-    winter: 'شتوى',
-  },
-  category: {
-    women: 'نساء',
-    children: 'اطفال',
-  },
-}
+export const SEARCH_PARAMS = {
+  path: 'p',
+  width: 'w',
+  quality: 'q',
+  query: 'query',
+  redirectTo: 'redirectTo',
+} as const
 
 export const PLACEHOLDER = {
   form: {
@@ -75,3 +62,19 @@ export const PAGES = {
   defaultLoginRedirect: () => PAGES.protected.user.profile,
   authRoutes: () => Object.values(PAGES.auth),
 }
+
+export const AR = {
+  season: {
+    summer: 'صيفى',
+    winter: 'شتوى',
+  },
+  category: {
+    women: 'نساء',
+    children: 'اطفال',
+  },
+}
+
+export const bcryptSalt = 10
+
+// TODO: real cost
+export const shippingCost = 0

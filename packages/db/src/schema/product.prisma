@@ -1,0 +1,53 @@
+model Product {
+  id String @id @default(cuid())
+
+  name        String           @unique
+  description String?
+  images      String[]
+  price       Float
+  variants    ProductVariant[]
+
+  rating       Float
+  reviewsCount Int      @default(0)
+  reviews      Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ProductOrder ProductOrder[]
+}
+
+model ProductVariant {
+  id String @id @default(cuid())
+
+  season   Season
+  category Category
+  stock    Int      @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  ProductOrder ProductOrder[]
+}
+
+enum Season {
+  summer
+  winter
+}
+
+enum Category {
+  women
+  children
+}
+
+model Review {
+  id String @id @default(cuid())
+
+  rating Int
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}

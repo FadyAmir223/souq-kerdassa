@@ -1,4 +1,4 @@
-import type { Season } from '@repo/db/types'
+import type { ProductsByFiltersSchema } from '@repo/validators'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -10,11 +10,11 @@ import ProductCard from './product-card'
 import ProductCardSkeleton from './product-card-skeleton'
 
 type ProductMiniListProps = {
-  type: Season | 'latest'
+  filter: ProductsByFiltersSchema
 }
 
-export default function ProductMiniList({ type }: ProductMiniListProps) {
-  const isLatest = type === 'latest'
+export default function ProductMiniList({ filter }: ProductMiniListProps) {
+  const isLatest = filter.type === 'latest'
 
   return (
     <ul
@@ -24,18 +24,18 @@ export default function ProductMiniList({ type }: ProductMiniListProps) {
       )}
     >
       <Suspense
-        fallback={Array.from({ length: 4 }).map((_, i) => (
+        fallback={Array.from({ length: 6 }).map((_, i) => (
           <ProductCardSkeleton key={i} />
         ))}
       >
-        <Products type={type} />
+        <Products filter={filter} />
       </Suspense>
     </ul>
   )
 }
 
-async function Products({ type }: ProductMiniListProps) {
-  const products = await api.product.sample({ type, limit: 6 })
+async function Products({ filter }: ProductMiniListProps) {
+  const { products } = await api.product.byFilter({ limit: 6, ...filter })
 
   return products.map((product) => (
     <Link

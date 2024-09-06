@@ -32,7 +32,7 @@ export default async function ProductRelates() {
           <span className='text-sm'>({product.reviewsCount})</span>
         </div>
 
-        <p className='text-[1.0625rem] text-primary/90'>{product.price} EGP</p>
+        <p className='text-[1.0625rem] text-primary/90'>{product.price} جنية</p>
       </div>
     </Link>
   ))

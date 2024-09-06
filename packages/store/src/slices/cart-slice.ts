@@ -1,7 +1,7 @@
 import type { Product, ProductVariant } from '@repo/db/types'
 import type { StateCreator } from 'zustand'
 
-type CartItem = {
+export type CartItem = {
   id: Product['id']
   name: Product['name']
   image: Product['images'][number]

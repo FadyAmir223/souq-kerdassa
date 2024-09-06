@@ -25,7 +25,7 @@ export default async function ProductDetails({ productId }: ProductDetailsProps)
           <span className='text-lg text-primary'>{product.reviewsCount}</span>
           <StarRating rating={product.rating} scale='lg' />
         </div>
-        <p className='mb-5 text-3xl font-bold text-primary'>{product.price} EGP</p>
+        <p className='mb-5 text-3xl font-bold text-primary'>{product.price} جنية</p>
 
         <div className=''>
           <AddToCart product={product} />

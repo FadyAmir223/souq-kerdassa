@@ -59,7 +59,7 @@ export default async function Header() {
           <div className='hidden lg:block'>
             <p className='text-xs'>عربة التسوق الخاصة بى</p>
             <p className='text-sm'>
-              EGP <CartTotalPrice />
+              <CartTotalPrice /> جنية
             </p>
           </div>
         </Link>

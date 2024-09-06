@@ -6,7 +6,8 @@ export default function SimilarProducts() {
       <h2 className='mb-3 text-2xl font-bold tracking-wider'>قد تعجبك</h2>
 
       {/* TODO: real relevance */}
-      <ProductMiniList type='summer' />
+      {/* @ts-expect-error page & limit has default */}
+      <ProductMiniList filter={{ season: 'summer' }} />
     </section>
   )
 }

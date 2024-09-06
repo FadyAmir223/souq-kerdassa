@@ -16,3 +16,4 @@ export const productsByFiltersSchema = z.object({
   season: productSeasonSchema.optional(),
   category: productCategorySchema.optional(),
 })
+export type ProductsByFiltersSchema = z.infer<typeof productsByFiltersSchema>

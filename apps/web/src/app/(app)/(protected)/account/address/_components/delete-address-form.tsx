@@ -19,6 +19,9 @@ type DeleteAddressFormProps = {
   addressId: Address['id']
 }
 
+// TODO: change to
+// https://ui.shadcn.com/docs/components/alert-dialog
+
 export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps) {
   const [isOpen, setOpen] = useState(false)
   const utils = api.useUtils()

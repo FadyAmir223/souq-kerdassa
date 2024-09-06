@@ -1,4 +1,5 @@
 import { auth } from '@repo/auth'
+import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -8,6 +9,11 @@ import { api, HydrateClient } from '@/trpc/server'
 import AddAddressForm from './_components/add-address-form'
 import AddressSkeleton from './_components/address-skeleton'
 import Addresses from './_components/addresses'
+
+const RedirectToCheckoutButton = dynamic(
+  () => import('./_components/redirect-to-checkout-button'),
+  { ssr: false },
+)
 
 export default async function AddressesPage() {
   const session = await auth()
@@ -28,6 +34,8 @@ export default async function AddressesPage() {
             <Addresses />
           </Suspense>
         </ul>
+
+        <RedirectToCheckoutButton />
       </main>
     </HydrateClient>
   )
