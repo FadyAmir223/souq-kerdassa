@@ -14,7 +14,7 @@ export default async function CheckoutUserInfo() {
     <HydrateClient>
       <section className='mb-6'>
         <h3 className='mb-3 text-xl font-bold'>معلومات التواصل</h3>
-        <div className='flex gap-x-5'>
+        <div className='flex flex-col gap-x-5 sm:flex-row'>
           <div className='flex-1'>
             <Label>الإسم</Label>
             <Input

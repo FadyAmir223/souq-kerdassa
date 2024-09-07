@@ -20,10 +20,10 @@ export default function CheckoutItemsSection() {
   const router = useRouter()
 
   useEffect(() => {
-    setHydrated(true)
+    if (!isHydrated) setHydrated(true)
 
-    if (cart.length === 0) router.replace(PAGES.public.main)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    if (cart.length === 0 && isHydrated) router.replace(PAGES.public.main)
+  }, [isHydrated]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

@@ -25,7 +25,7 @@ export default function CheckoutAddresses({
       key={address.id}
       onClick={() => setSelectedAddress(address)}
       className={cn(
-        'cursor-pointer select-none rounded-md border-2 border-transparent bg-secondary px-4 py-5 shadow-md',
+        'cursor-pointer select-none rounded-md border-2 border-transparent bg-white px-4 py-5 shadow-md md:bg-secondary',
         {
           'border-green-500': selectedAddress?.id === address.id,
           'border-destructive': selectedAddress === undefined,

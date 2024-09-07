@@ -17,13 +17,13 @@ export default async function CheckoutPage() {
     )
 
   return (
-    <main className='-mb-16 -mt-7 min-h-[80vh] bg-gradient-to-l from-white from-60% to-secondary to-60%'>
-      <div className='container flex'>
-        <section className='my-7 flex-1 pe-10'>
+    <main className='min-h-[80dvh] md:-mb-16 md:-mt-7 md:bg-gradient-to-l md:from-white md:from-60% md:to-secondary md:to-60%'>
+      <div className='container flex flex-col gap-y-6 md:my-0 md:flex-row md:gap-y-0'>
+        <section className='md:my-7md:flex-1 order-1 md:order-none md:pe-10'>
           <CheckoutUserInfo />
         </section>
 
-        <section className='my-7 w-2/5 ps-10'>
+        <section className='md:my-7 md:w-2/5 md:ps-10'>
           <CheckoutItemsSection />
         </section>
       </div>
