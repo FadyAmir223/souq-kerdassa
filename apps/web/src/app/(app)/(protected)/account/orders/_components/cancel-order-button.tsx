@@ -1,6 +1,8 @@
-import type { Address } from '@repo/db/types'
+'use client'
+
+import type { Order } from '@repo/db/types'
 import { useState } from 'react'
-import { FaTrashCan } from 'react-icons/fa6'
+import { IoClose } from 'react-icons/io5'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -15,26 +17,28 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
 
-type DeleteAddressFormProps = {
-  addressId: Address['id']
+type CancelOrderButtonProps = {
+  orderId: Order['id']
 }
 
-export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps) {
+export default function CancelOrderButton({ orderId }: CancelOrderButtonProps) {
   const [isOpen, setOpen] = useState(false)
   const utils = api.useUtils()
   const { toast } = useToast()
 
-  const deleteAddress = api.user.addresses.delete.useMutation({
+  const cancelOrder = api.order.cancel.useMutation({
     onMutate: async () => {
-      await utils.user.addresses.all.cancel()
-      const oldAddresses = utils.user.addresses.all.getData() ?? []
-      const newAddresses = oldAddresses.filter(({ id }) => id !== addressId)
-      utils.user.addresses.all.setData(undefined, newAddresses)
+      setOpen(false)
 
-      return { oldAddresses }
+      await utils.order.all.cancel()
+      const oldOrder = utils.order.all.getData() ?? []
+      const newOrder = oldOrder.filter(({ id }) => id !== orderId)
+      utils.order.all.setData(undefined, newOrder)
+
+      return { oldOrder }
     },
     onError: ({ message }, _, ctx) => {
-      utils.user.addresses.all.setData(undefined, ctx?.oldAddresses)
+      utils.order.all.setData(undefined, ctx?.oldOrder)
 
       toast({
         variant: 'destructive',
@@ -46,23 +50,23 @@ export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps)
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='none' size='none'>
+        <Button variant='ghost' size='sm'>
           <div className='flex items-center gap-x-1'>
-            <span className='select-none text-sm font-semibold'>حذف</span>
-            <FaTrashCan className='text-destructive' size={20} />
+            <IoClose className='text-destructive' size={20} />
+            <span className='select-none text-sm font-semibold'>حذف الطلب</span>
           </div>
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle>هل انت متأكد من حذف العنوان؟</DialogTitle>
+          <DialogTitle>هل انت متأكد من حذف الطلب؟</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <DialogFooter>
           <Button
             className='me-4 min-w-16'
             variant='destructive'
-            onClick={() => deleteAddress.mutate(addressId)}
+            onClick={() => cancelOrder.mutate(orderId)}
           >
             نعم
           </Button>

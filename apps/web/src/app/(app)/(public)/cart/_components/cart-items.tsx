@@ -11,6 +11,7 @@ import {
 import { useShallow } from 'zustand/react/shallow'
 
 import ImageApi from '@/components/image'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
 import { cn } from '@/utils/cn'
@@ -77,8 +78,14 @@ export default function CartItems() {
               <div className='self-center'>
                 <h5 className='mb-2.5 text-lg font-semibold'>{item.name}</h5>
                 <div className='space-x-5'>
-                  <p className=''>{AR.season[item.season]}</p>
-                  <p className=''>{AR.category[item.category]}</p>
+                  <div className='mb-1'>
+                    <Badge>{AR.season[item.season]}</Badge>
+                  </div>
+                  <div className=''>
+                    <Badge className='bg-sky-500 hover:bg-sky-500/80'>
+                      {AR.category[item.category]}
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>

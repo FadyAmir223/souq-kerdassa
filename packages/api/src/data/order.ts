@@ -1,6 +1,69 @@
-import type { DB, Product, User } from '@repo/db/types'
+import type { DB, Order, Product, User } from '@repo/db/types'
 import type { CreateOrderSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
+
+export async function getOrders(db: DB, userId: User['id']) {
+  await new Promise((r) => setTimeout(r, 2000))
+  try {
+    const orders = await db.order.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        id: true,
+        status: true,
+        totalPrice: true,
+        createdAt: true,
+        products: {
+          select: {
+            id: true,
+            quantity: true,
+            product: {
+              select: {
+                name: true,
+                price: true,
+                images: true,
+              },
+            },
+            productVariant: {
+              select: {
+                season: true,
+                category: true,
+              },
+            },
+          },
+        },
+        address: {
+          select: {
+            city: true,
+            region: true,
+            street: true,
+            building: true,
+            mark: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 10,
+    })
+
+    return orders.map((order) => ({
+      ...order,
+      products: order.products.map((product) => ({
+        id: product.id,
+        quantity: product.quantity,
+        name: product.product.name,
+        price: product.product.price,
+        image: product.product.images[0] ?? '',
+        ...product.productVariant,
+      })),
+    }))
+  } catch {
+    return []
+  }
+}
 
 export async function createOrder({
   db,
@@ -96,6 +159,40 @@ export async function createOrder({
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'تعذر تسجيل الطلب',
+    })
+  }
+}
+
+export async function cancelOrder({
+  db,
+  userId,
+  orderId,
+}: {
+  db: DB
+  userId: User['id']
+  orderId: Order['id']
+}) {
+  try {
+    await db.order.delete({
+      where: {
+        id: orderId,
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    })
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error)
+      if (error.code === 'P2025')
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'الطلب ليس موجود',
+        })
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'تعذر إلغاء الطلب',
     })
   }
 }

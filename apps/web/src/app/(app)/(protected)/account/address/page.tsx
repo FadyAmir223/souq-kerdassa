@@ -23,7 +23,7 @@ export default async function AddressesPage() {
 
   return (
     <HydrateClient>
-      <main className='w-full'>
+      <main className='flex-1'>
         <div className='flex justify-between'>
           <H1>عناوينى</H1>
           <AddAddressForm />

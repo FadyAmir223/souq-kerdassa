@@ -72,6 +72,11 @@ export const AR = {
     women: 'نساء',
     children: 'اطفال',
   },
+  status: {
+    pending: 'جارى الوصول',
+    completed: 'تم الوصول',
+    cancelled: 'ملغى',
+  },
 }
 
 export const bcryptSalt = 10

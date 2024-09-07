@@ -18,7 +18,7 @@ export default function AccountSidebar() {
         {navs.map(({ label, url }) => (
           <li
             key={url}
-            className='border-b border-b-black/30 pb-2 last:border-b-0 last:pb-0'
+            className='[&:not(:last-child)]::pb-0 border-b border-b-black/30 pb-2'
           >
             <SidebarNav label={label} url={url} />
           </li>

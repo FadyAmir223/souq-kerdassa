@@ -1,12 +1,16 @@
-import { createOrderSchema } from '@repo/validators'
+import { createOrderSchema, cuidSchema } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
 
-import { createOrder } from '../data/order'
+import { cancelOrder, createOrder, getOrders } from '../data/order'
 import { getSoldOutVariants } from '../data/product'
 import { protectedProcedure } from '../trpc'
 
 export const ordersRouter = {
+  all: protectedProcedure.query(async ({ ctx }) =>
+    getOrders(ctx.db, ctx.session.user.id),
+  ),
+
   create: protectedProcedure
     .input(createOrderSchema)
     .mutation(async ({ ctx, input }) => {
@@ -28,4 +32,14 @@ export const ordersRouter = {
 
       return orderId
     }),
+
+  cancel: protectedProcedure
+    .input(cuidSchema)
+    .mutation(async ({ ctx, input: orderId }) =>
+      cancelOrder({
+        db: ctx.db,
+        userId: ctx.session.user.id,
+        orderId,
+      }),
+    ),
 } satisfies TRPCRouterRecord
