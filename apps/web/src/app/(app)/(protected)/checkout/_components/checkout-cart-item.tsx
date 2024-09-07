@@ -15,6 +15,12 @@ export default function CheckoutCartItem({ item }: CheckoutCartItemProps) {
         {item.quantity}
       </div>
 
+      {item.overQuantity && (
+        <div className='before: absolute right-5 top-0 z-10 grid size-[1.1875rem] place-items-center rounded-full bg-destructive text-[0.8125rem] font-semibold text-white before:absolute before:h-full before:w-0.5 before:rotate-45 before:bg-black'>
+          {item.overQuantity}
+        </div>
+      )}
+
       <div className='relative aspect-[83/100] w-20 overflow-hidden rounded-md'>
         <ImageApi
           src={item.image}

@@ -92,13 +92,7 @@ export default function CartItems() {
                 variant='none'
                 size='none'
                 className='grid size-5 place-items-center text-gray-400'
-                onClick={() => {
-                  incrementCartItem({
-                    id: item.id,
-                    category: item.category,
-                    season: item.season,
-                  })
-                }}
+                onClick={() => incrementCartItem(item.variantId)}
               >
                 <FaPlus />
               </Button>
@@ -109,13 +103,7 @@ export default function CartItems() {
                 variant='none'
                 size='none'
                 className='grid size-5 place-items-center text-gray-400'
-                onClick={() => {
-                  decrementCartItem({
-                    id: item.id,
-                    category: item.category,
-                    season: item.season,
-                  })
-                }}
+                onClick={() => decrementCartItem(item.variantId)}
               >
                 <FaMinus />
               </Button>
@@ -125,13 +113,7 @@ export default function CartItems() {
               variant='none'
               size='icon'
               className='text-destructive'
-              onClick={() =>
-                deleteCartItem({
-                  id: item.id,
-                  category: item.category,
-                  season: item.season,
-                })
-              }
+              onClick={() => deleteCartItem(item.variantId)}
             >
               <IoClose size={30} />
             </Button>

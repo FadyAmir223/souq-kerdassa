@@ -17,6 +17,8 @@ const iconsSection = [
   { image: paymentIcon, label: 'دفع آمن' },
 ]
 
+// TODO: responsive for _ screens
+
 export default function CartPage() {
   return (
     <main className='container mb-10 mt-6'>
@@ -50,9 +52,15 @@ export default function CartPage() {
           </div>
 
           <div className='mt-3 flex h-fit justify-between rounded-md bg-white p-3'>
-            {iconsSection.map(({ image, label }) => (
+            {iconsSection.map(({ image, label }, index) => (
               <div key={label} className='flex-1'>
-                <Image src={image} alt={label} className='mx-auto w-14' />
+                <Image
+                  src={image}
+                  alt={label}
+                  className='mx-auto w-14'
+                  sizes='3.5 rem'
+                  priority={index < 2}
+                />
                 <p className='text-center text-[0.8125rem]'>{label}</p>
               </div>
             ))}

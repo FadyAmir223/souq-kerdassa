@@ -6,6 +6,8 @@ import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 import CheckoutItemsSection from './_components/checkout-items-section'
 import CheckoutUserInfo from './_components/checkout-user-info'
 
+// TODO: responsive
+
 export default async function CheckoutPage() {
   const addresses = await api.user.addresses.all()
 

@@ -21,7 +21,7 @@ export default function ProductDetailsSkeleton() {
         </div>
 
         <div className='mt-auto max-w-lg'>
-          <div className='mx-auto mb-4 h-7 w-[4.5rem] rounded-md bg-neutral-500/50' />
+          <div className='mb-4 mt-10 h-7 w-[4.5rem] rounded-md bg-neutral-500/50 md:mx-auto md:mt-0' />
 
           <div className='mb-1.5 h-4 w-full rounded-md bg-neutral-500/50' />
           <div className='mb-1.5 h-4 w-full rounded-md bg-neutral-500/50' />
@@ -29,7 +29,7 @@ export default function ProductDetailsSkeleton() {
         </div>
       </div>
 
-      <div className='order-1 mr-auto animate-pulse md:order-none md:w-1/3 lg:max-w-80'>
+      <div className='order-1 mr-auto w-full animate-pulse md:order-none md:w-1/3 lg:max-w-80'>
         <div className='mb-5 aspect-[83/100] w-full rounded-md bg-neutral-500/50' />
 
         <div className='grid grid-cols-4 gap-3.5'>

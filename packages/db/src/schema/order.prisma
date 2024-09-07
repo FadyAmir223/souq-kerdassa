@@ -3,10 +3,13 @@ model Order {
 
   products   ProductOrder[]
   totalPrice Float
-  status     OrderStatus
+  status     OrderStatus    @default(pending)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  addressId String  @unique
+  address   Address @relation(fields: [addressId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

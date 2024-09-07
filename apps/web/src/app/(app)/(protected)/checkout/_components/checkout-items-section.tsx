@@ -1,10 +1,11 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
 import { useAppStore } from '@/providers/app-store-provider'
-import { shippingCost } from '@/utils/constants'
+import { PAGES, shippingCost } from '@/utils/constants'
 
 import CheckoutCartItem from './checkout-cart-item'
 import CheckoutCartItemsSkeleton from './checkout-cart-items-skeleton'
@@ -16,9 +17,13 @@ export default function CheckoutItemsSection() {
 
   const [isHydrated, setHydrated] = useState(false)
 
+  const router = useRouter()
+
   useEffect(() => {
     setHydrated(true)
-  }, [])
+
+    if (cart.length === 0) router.replace(PAGES.public.main)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

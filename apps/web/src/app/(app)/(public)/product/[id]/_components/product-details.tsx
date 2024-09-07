@@ -32,7 +32,9 @@ export default async function ProductDetails({ productId }: ProductDetailsProps)
         </div>
 
         <div className='mt-auto max-w-lg'>
-          <h3 className='mb-3 text-center text-2xl font-bold text-primary'>الوصف</h3>
+          <h3 className='mb-3 mt-10 text-2xl font-bold text-primary md:mt-0 md:text-center'>
+            الوصف
+          </h3>
           <p className=''>{product.description}</p>
         </div>
       </section>

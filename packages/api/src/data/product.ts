@@ -1,4 +1,11 @@
-import type { Category, DB, Prisma, Product, Season } from '@repo/db/types'
+import type {
+  Category,
+  DB,
+  Prisma,
+  Product,
+  ProductVariant,
+  Season,
+} from '@repo/db/types'
 import type { CreateOrderSchema, ProductTypeSchema } from '@repo/validators'
 
 import type { ProductByQuerySchema } from '../validations/products'
@@ -61,6 +68,7 @@ export async function getProductById(db: DB, id: Product['id']) {
         rating: true,
         variants: {
           select: {
+            id: true,
             season: true,
             category: true,
             stock: true,
@@ -200,27 +208,42 @@ export async function getSimilarProducts(db: DB, limit: number) {
   }
 }
 
-export async function getSoldOutProducts(
+export async function getSoldOutVariants(
   db: DB,
   cartItems: CreateOrderSchema['cart'],
 ) {
   try {
-    // TODO: save productVariant id in cart store to index it
-    await db.$transaction(
-      cartItems.map((item) =>
-        db.productVariant.findFirst({
-          where: {
-            productId: item.id,
-            season: item.season,
-            category: item.category,
-          },
-          select: {
-            stock: true,
-          },
-        }),
-      ),
+    const variants = await db.productVariant.findMany({
+      where: {
+        id: {
+          in: cartItems.map((item) => item.variantId),
+        },
+      },
+      select: {
+        id: true,
+        stock: true,
+      },
+    })
+
+    const variantMap = variants.reduce(
+      (acc, variant) => {
+        acc[variant.id] = variant.stock
+        return acc
+      },
+      {} as Record<ProductVariant['id'], ProductVariant['stock'] | null>,
     )
+
+    const soldOutVariants = cartItems
+      .map((item) => {
+        const stock = variantMap[item.variantId] ?? 0
+
+        if (item.quantity > stock)
+          return { variantId: item.variantId, remaining: stock }
+      })
+      .filter(Boolean)
+
+    return soldOutVariants
   } catch {
-    return null
+    return []
   }
 }

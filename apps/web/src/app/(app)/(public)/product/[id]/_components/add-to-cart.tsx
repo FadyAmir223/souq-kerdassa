@@ -41,6 +41,11 @@ export default function AddToCart({ product }: AddToCartProps) {
       name: product.name,
       price: product.price,
       image: product.images[0]!,
+      variantId:
+        variants.find(
+          ({ season, category }) =>
+            season === selectedSeason && category === selectedCategory,
+        )?.id ?? '',
       category: selectedCategory!,
       season: selectedSeason!,
     })

@@ -1,19 +1,31 @@
 import { createOrderSchema } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
+import { TRPCError } from '@trpc/server'
 
-import { getSoldOutProducts } from '../data/product'
+import { createOrder } from '../data/order'
+import { getSoldOutVariants } from '../data/product'
 import { protectedProcedure } from '../trpc'
 
 export const ordersRouter = {
   create: protectedProcedure
     .input(createOrderSchema)
     .mutation(async ({ ctx, input }) => {
-      // check items exist
-      // const soldOutProducts =
-      await getSoldOutProducts(ctx.db, input.cart)
-      // if (soldOutProducts) return { error: { soldOutProducts } }
+      const soldOutVariants = await getSoldOutVariants(ctx.db, input.cart)
 
-      // save order  user, address, product, productVariant
-      // decrement the count from variants
+      if (soldOutVariants.length !== 0)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'الكمية المطلوبة غير متوفرة من بعض المنتجات',
+          cause: { soldOutVariants },
+        })
+
+      const orderId = await createOrder({
+        db: ctx.db,
+        userId: ctx.session.user.id,
+        address: input.address,
+        cart: input.cart,
+      })
+
+      return orderId
     }),
 } satisfies TRPCRouterRecord
