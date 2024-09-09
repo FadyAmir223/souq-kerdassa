@@ -5,7 +5,7 @@ import ProductCard from '@/app/(app)/(public)/_components/product/product-card'
 import { api } from '@/trpc/server'
 import { PAGES } from '@/utils/constants'
 
-import Paginations from './paginations'
+import ProductsPagination from './products-pagination'
 
 type ProductListProps = {
   searchParams: RouterInputs['product']['byFilter']
@@ -21,7 +21,7 @@ export default async function ProductList({ searchParams }: ProductListProps) {
 
   return (
     <section className='flex-1'>
-      <ul className='mb-9 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+      <ul className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
         {products.map((product) => (
           <Link
             key={product.id}
@@ -33,7 +33,7 @@ export default async function ProductList({ searchParams }: ProductListProps) {
         ))}
       </ul>
 
-      <Paginations currPage={searchParams.page!} totalItems={total} />
+      <ProductsPagination currPage={searchParams.page!} totalItems={total} />
     </section>
   )
 }

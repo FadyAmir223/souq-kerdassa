@@ -77,7 +77,7 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
 
   const handlePurchaseSuccess = () => {
     resetCart()
-    router.replace(PAGES.public.main)
+    router.replace(PAGES.protected.user.orders)
   }
 
   return (

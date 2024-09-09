@@ -1,6 +1,8 @@
 import type { Product, ProductVariant } from '@repo/db/types'
 import type { StateCreator } from 'zustand'
 
+import type { ReviewSlice } from './review-slice'
+
 export type CartItem = {
   id: Product['id']
   name: Product['name']
@@ -40,7 +42,7 @@ const initialState: CartState = {
 }
 
 export const createCartSlice: StateCreator<
-  CartSlice,
+  CartSlice & ReviewSlice,
   [['zustand/immer', never]],
   [],
   CartSlice

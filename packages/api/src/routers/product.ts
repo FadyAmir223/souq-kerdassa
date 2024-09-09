@@ -1,5 +1,6 @@
-import { cuidSchema, productsByFiltersSchema } from '@repo/validators'
+import { cuidSchema, productsByFiltersSchema, reviewSchema } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import {
@@ -9,7 +10,9 @@ import {
   getProductsByQuery,
   getSimilarProducts,
 } from '../data/product'
-import { publicProcedure } from '../trpc'
+import { addReview, deleteReview, getReviews } from '../data/review'
+import { getPurchaseStatus } from '../data/user'
+import { protectedProcedure, publicProcedure } from '../trpc'
 import { productByQuerySchema } from '../validations/products'
 
 export const productRouter = {
@@ -31,4 +34,50 @@ export const productRouter = {
   similar: publicProcedure
     .input(z.number())
     .query(({ ctx, input: limit }) => getSimilarProducts(ctx.db, limit)),
+
+  review: {
+    some: publicProcedure
+      .input(
+        z.object({
+          productId: cuidSchema,
+          limit: z.coerce.number().default(3),
+          page: z.coerce.number().default(1),
+        }),
+      )
+      .query(async ({ ctx, input }) =>
+        getReviews({
+          db: ctx.db,
+          ...input,
+        }),
+      ),
+
+    add: protectedProcedure
+      .input(z.object({ productId: cuidSchema, review: reviewSchema }))
+      .mutation(async ({ ctx, input }) => {
+        const hasPurchased = await getPurchaseStatus({
+          db: ctx.db,
+          userId: ctx.session.user.id,
+          productId: input.productId,
+        })
+
+        if (!hasPurchased)
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'اشترى المنتج لتستطيع تقديم مراجعة له',
+          })
+
+        await addReview({
+          db: ctx.db,
+          userId: ctx.session.user.id,
+          productId: input.productId,
+          review: input.review,
+        })
+      }),
+
+    delete: protectedProcedure
+      .input(cuidSchema)
+      .mutation(async ({ ctx, input: productId }) =>
+        deleteReview({ db: ctx.db, userId: ctx.session.user.id, productId }),
+      ),
+  } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

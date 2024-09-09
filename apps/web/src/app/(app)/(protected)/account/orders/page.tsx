@@ -6,6 +6,8 @@ import { api, HydrateClient } from '@/trpc/server'
 import OrderSkeleton from './_components/order-skeleton'
 import Orders from './_components/orders'
 
+// another approach is to separate each category in its tab
+
 export default function OrdersPage() {
   void api.order.all.prefetch()
 

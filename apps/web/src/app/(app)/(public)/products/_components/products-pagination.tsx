@@ -10,19 +10,22 @@ import {
 
 import { getSectionRange, getTotalPages } from '../_utils/pagination'
 
-type PaginationsProps = {
+type ProductsPaginationProps = {
   currPage: number
   totalItems: number
 }
 
-export default function Paginations({ currPage, totalItems }: PaginationsProps) {
+export default function ProductsPagination({
+  currPage,
+  totalItems,
+}: ProductsPaginationProps) {
   const totalPages = getTotalPages(totalItems)
   const sectionRange = getSectionRange(currPage, totalItems)
 
   if (totalPages < 2) return null
 
   return (
-    <Pagination>
+    <Pagination className='mt-9'>
       <PaginationContent>
         {currPage > 1 && (
           <PaginationItem>

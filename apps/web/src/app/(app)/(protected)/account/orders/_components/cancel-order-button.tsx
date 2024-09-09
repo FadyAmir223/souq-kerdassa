@@ -32,7 +32,9 @@ export default function CancelOrderButton({ orderId }: CancelOrderButtonProps) {
 
       await utils.order.all.cancel()
       const oldOrder = utils.order.all.getData() ?? []
-      const newOrder = oldOrder.filter(({ id }) => id !== orderId)
+      const newOrder = oldOrder.map((order) =>
+        order.id === orderId ? { ...order, status: 'cancelled' } : order,
+      )
       utils.order.all.setData(undefined, newOrder)
 
       return { oldOrder }
@@ -53,13 +55,13 @@ export default function CancelOrderButton({ orderId }: CancelOrderButtonProps) {
         <Button variant='ghost' size='sm'>
           <div className='flex items-center gap-x-1'>
             <IoClose className='text-destructive' size={20} />
-            <span className='select-none text-sm font-semibold'>حذف الطلب</span>
+            <span className='select-none text-sm font-semibold'>إلغاء الطلب</span>
           </div>
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle>هل انت متأكد من حذف الطلب؟</DialogTitle>
+          <DialogTitle>هل انت متأكد من إلغاء الطلب؟</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <DialogFooter>

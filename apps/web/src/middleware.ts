@@ -18,7 +18,14 @@ export default auth((req) => {
 
   if (isAuthRoute) {
     if (!isLoggedIn) return
-    return Response.redirect(new URL(PAGES.defaultLoginRedirect(), nextUrl))
+
+    return Response.redirect(
+      new URL(
+        nextUrl.searchParams.get(SEARCH_PARAMS.redirectTo) ??
+          PAGES.defaultLoginRedirect(),
+        nextUrl,
+      ),
+    )
   }
 
   const isPublicRoute = checkPublicRoute(nextUrl.pathname)

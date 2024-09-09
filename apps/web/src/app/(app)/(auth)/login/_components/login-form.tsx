@@ -51,9 +51,11 @@ export default function LoginForm() {
 
   const loginUser = api.auth.login.useMutation({
     onSuccess: () => {
-      router.push(
-        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect(),
-      )
+      const redirectTo = searchParams.get(SEARCH_PARAMS.redirectTo)
+      router.replace(redirectTo ?? PAGES.defaultLoginRedirect(), {
+        scroll: !redirectTo,
+      })
+
       router.refresh()
     },
     onError: ({ message }) => {

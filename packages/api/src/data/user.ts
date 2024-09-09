@@ -1,4 +1,4 @@
-import type { Address, DB, User } from '@repo/db/types'
+import type { Address, DB, Product, User } from '@repo/db/types'
 import type { AddressSchema, AddressSchemaWithId } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
 
@@ -68,6 +68,98 @@ export async function editUserProfile(
       code: 'INTERNAL_SERVER_ERROR',
       message: 'تعذر تحديث البيانات',
     })
+  }
+}
+
+export async function getPurchaseStatus({
+  db,
+  userId,
+  productId,
+}: {
+  db: DB
+  userId?: User['id']
+  productId: Product['id']
+}) {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        orders: {
+          where: {
+            products: {
+              some: {
+                productId,
+              },
+            },
+          },
+          select: {
+            id: true,
+          },
+          take: 1,
+        },
+      },
+    })
+
+    return !!user?.orders[0]?.id
+  } catch {
+    return {
+      hasPurchased: false,
+      hasReviewed: false,
+    }
+  }
+}
+
+export async function getPurchaseAndReviewStatus({
+  db,
+  userId,
+  productId,
+}: {
+  db: DB
+  userId?: User['id']
+  productId: Product['id']
+}) {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        orders: {
+          where: {
+            products: {
+              some: {
+                productId,
+              },
+            },
+          },
+          select: {
+            id: true,
+          },
+          take: 1,
+        },
+        reviews: {
+          where: {
+            productId,
+          },
+          select: {
+            id: true,
+          },
+          take: 1,
+        },
+      },
+    })
+
+    return {
+      hasPurchased: !!user?.orders[0]?.id,
+      hasReviewed: !!user?.reviews[0]?.id,
+    }
+  } catch {
+    return {
+      hasPurchased: false,
+      hasReviewed: false,
+    }
   }
 }
 

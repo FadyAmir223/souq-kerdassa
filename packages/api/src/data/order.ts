@@ -1,7 +1,6 @@
 import type { DB, Order, Product, User } from '@repo/db/types'
 import type { CreateOrderSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
-
 export async function getOrders(db: DB, userId: User['id']) {
   await new Promise((r) => setTimeout(r, 2000))
   try {
@@ -20,6 +19,7 @@ export async function getOrders(db: DB, userId: User['id']) {
             quantity: true,
             product: {
               select: {
+                id: true,
                 name: true,
                 price: true,
                 images: true,
@@ -54,6 +54,7 @@ export async function getOrders(db: DB, userId: User['id']) {
       products: order.products.map((product) => ({
         id: product.id,
         quantity: product.quantity,
+        productId: product.product.id,
         name: product.product.name,
         price: product.product.price,
         image: product.product.images[0] ?? '',
@@ -173,10 +174,13 @@ export async function cancelOrder({
   orderId: Order['id']
 }) {
   try {
-    await db.order.delete({
+    await db.order.update({
       where: {
         id: orderId,
         userId,
+      },
+      data: {
+        status: 'cancelled',
       },
       select: {
         id: true,

@@ -74,7 +74,7 @@ const PaginationPrevious = ({
   <PaginationLink
     aria-label='اذهب إلى الصفحة السابقة'
     size='default'
-    className={cn('gap-1 pl-2.5', className)}
+    className={cn('gap-1 pe-2.5', className)}
     {...props}
   >
     <ChevronRightIcon className='size-4' />
@@ -90,7 +90,7 @@ const PaginationNext = ({
   <PaginationLink
     aria-label='اذهب إلى الصفحة التالية'
     size='default'
-    className={cn('gap-1 pr-2.5', className)}
+    className={cn('gap-1 ps-2.5', className)}
     {...props}
   >
     <span>التالى</span>

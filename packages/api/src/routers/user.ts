@@ -12,8 +12,9 @@ import {
   editAddress,
   editUserProfile,
   getAddresses,
+  getPurchaseAndReviewStatus,
 } from '../data/user'
-import { protectedProcedure } from '../trpc'
+import { protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
   editProfile: protectedProcedure
@@ -21,6 +22,18 @@ export const userRouter = {
     .mutation(async ({ ctx, input }) =>
       editUserProfile(ctx.db, { id: ctx.session.user.id, ...input }),
     ),
+
+  getReviewStatus: publicProcedure
+    .input(cuidSchema)
+    .query(async ({ ctx, input: productId }) => {
+      if (!ctx.session) return { hasPurchased: false, hasReviewed: false }
+
+      return getPurchaseAndReviewStatus({
+        db: ctx.db,
+        userId: ctx.session.user.id,
+        productId,
+      })
+    }),
 
   addresses: {
     all: protectedProcedure.query(async ({ ctx }) =>

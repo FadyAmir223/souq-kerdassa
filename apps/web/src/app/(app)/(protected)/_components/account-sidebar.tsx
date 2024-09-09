@@ -16,10 +16,7 @@ export default function AccountSidebar() {
     <aside className='h-fit rounded-md bg-white p-4 shadow-md md:min-w-60 lg:min-w-80'>
       <ul className='space-y-2 text-lg'>
         {navs.map(({ label, url }) => (
-          <li
-            key={url}
-            className='[&:not(:last-child)]::pb-0 border-b border-b-black/30 pb-2'
-          >
+          <li key={url} className='border-b border-b-black/30 pb-2'>
             <SidebarNav label={label} url={url} />
           </li>
         ))}

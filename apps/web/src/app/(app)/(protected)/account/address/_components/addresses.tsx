@@ -7,6 +7,15 @@ import { api } from '@/trpc/react'
 import DeleteAddressForm from './delete-address-form'
 import EditAddressForm from './edit-address-form'
 
+/**
+ * TODO: bug
+ * when use is redirected from /cart -> /checkout -> /profile/address
+ * after adding the address it instantly refuses to navigate from link
+ * what is the stale data?
+ * is it router cache?
+ * does it relate to auth() and useSession() ?
+ */
+
 export default function Addresses() {
   const [addresses] = api.user.addresses.all.useSuspenseQuery()
 

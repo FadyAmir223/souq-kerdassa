@@ -5,6 +5,7 @@ import { cn } from '@/utils/cn'
 
 const scales = {
   sm: 'scale-[1.17]',
+  md: 'scale-[1.5]',
   lg: 'scale-[1.7]',
 }
 
@@ -12,6 +13,8 @@ type StarRatingProps = {
   rating: number
   scale?: keyof typeof scales
 }
+
+// TODO: fix the scale to be an icon size not a <div/> scale
 
 export default function StarRating({ rating, scale = 'sm' }: StarRatingProps) {
   return (

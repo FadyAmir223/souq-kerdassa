@@ -10,10 +10,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
+import { useCurrentUser } from '@/hooks/use-current-user'
 import { api } from '@/trpc/react'
 import { PLACEHOLDER } from '@/utils/constants'
-
-import { useCurrentUser } from '../../../_hooks/use-current-user'
 
 const inputs = [
   {
