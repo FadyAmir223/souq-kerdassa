@@ -88,6 +88,7 @@ export async function getPurchaseStatus({
       select: {
         orders: {
           where: {
+            status: 'completed',
             products: {
               some: {
                 productId,
@@ -128,6 +129,7 @@ export async function getPurchaseAndReviewStatus({
       select: {
         orders: {
           where: {
+            status: 'completed',
             products: {
               some: {
                 productId,

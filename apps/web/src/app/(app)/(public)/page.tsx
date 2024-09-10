@@ -31,7 +31,7 @@ export default function HomePage() {
         <section key={label} className='flex flex-col gap-4 py-14 lg:flex-row'>
           <div className='flex-1'>
             <div className='mb-4 flex items-center justify-between'>
-              <h2 className='mb-3 text-xl font-bold tracking-wider'>{label}</h2>
+              <h2 className='mb-3 text-xl font-bold'>{label}</h2>
               <Button asChild variant='link' className='font-semibold'>
                 <Link
                   href={`${PAGES.public.products}?${Object.keys(filter)[0]}=${Object.values(filter)[0]}`}

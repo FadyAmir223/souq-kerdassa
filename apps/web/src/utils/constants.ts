@@ -35,8 +35,8 @@ export const PAGES = {
     product: (id: string) => `/product/${id}`,
     cart: '/cart',
     search: '/search',
-    faq: '/faq',
-    policy: '/policy',
+    terms: '/terms',
+    privacy: '/privacy-policy',
   },
   auth: {
     register: '/register',

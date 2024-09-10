@@ -6,6 +6,7 @@ import { z } from 'zod'
 import {
   getAllProducts,
   getProductById,
+  getProductIds,
   getProductsByFilters,
   getProductsByQuery,
   getSimilarProducts,
@@ -17,6 +18,7 @@ import { productByQuerySchema } from '../validations/products'
 
 export const productRouter = {
   all: publicProcedure.query(({ ctx }) => getAllProducts(ctx.db)),
+  ids: publicProcedure.query(({ ctx }) => getProductIds(ctx.db)),
 
   byId: publicProcedure
     .input(cuidSchema)

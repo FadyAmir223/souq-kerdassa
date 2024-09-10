@@ -1,4 +1,5 @@
 import { cuidSchema } from '@repo/validators'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -14,6 +15,17 @@ import SimilarProducts from './_components/similar-products'
 type ProductPageProps = {
   params: {
     id: string
+  }
+}
+
+export async function generateMetadata({
+  params: { id },
+}: ProductPageProps): Promise<Metadata> {
+  const product = await api.product.byId(id)
+
+  return {
+    title: product?.name,
+    description: product?.description,
   }
 }
 

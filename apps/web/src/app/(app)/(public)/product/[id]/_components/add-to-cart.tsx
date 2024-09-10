@@ -35,6 +35,13 @@ export default function AddToCart({ product }: AddToCartProps) {
   const addCartItem = useAppStore((s) => s.addCartItem)
   const { toast } = useToast()
 
+  if (variants.length === 0)
+    return (
+      <p className='mt-4 text-lg font-bold md:text-center'>
+        هذا المنتج غير متوفر حالياً
+      </p>
+    )
+
   const handleAddCartItem = () => {
     addCartItem({
       id: product.id,
@@ -101,7 +108,7 @@ export default function AddToCart({ product }: AddToCartProps) {
         className='px-6 py-2 text-[1.0625rem]'
         size='none'
       >
-        اضف إلى العربة
+        اضف إلى عربة التسوق
       </Button>
     </>
   )

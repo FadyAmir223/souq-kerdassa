@@ -22,9 +22,7 @@ export default function ProductSidebar() {
       </div>
 
       <div className='mt-8'>
-        <h3 className='mb-3 text-center text-lg font-bold tracking-wider'>
-          مقترحة لك
-        </h3>
+        <h3 className='mb-3 text-center text-lg font-bold'>مقترحة لك</h3>
         <div className='space-y-3'>
           <Suspense
             fallback={

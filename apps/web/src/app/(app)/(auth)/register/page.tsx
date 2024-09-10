@@ -1,9 +1,17 @@
+import type { Metadata } from 'next'
+
 import H1 from '@/components/h1'
 import LinkWithParams from '@/components/link-with-params'
 import { Button } from '@/components/ui/button'
 import { PAGES } from '@/utils/constants'
 
 import RegisterForm from './_components/register-form'
+
+export const metadata: Metadata = {
+  title: 'إنشاء حساب',
+  description:
+    'أنشئى حسابك في سوق كرداسة لبدء التسوق. سجلى الآن واستمتعى بأحدث التصاميم والموديلات.',
+}
 
 export default function RegisterPage() {
   return (

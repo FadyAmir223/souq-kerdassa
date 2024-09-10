@@ -1,9 +1,8 @@
-import { signOut } from '@repo/auth'
 
-import { Button } from '@/components/ui/button'
 import { PAGES } from '@/utils/constants'
 
 import SidebarNav from './sidebar-nav'
+import SignOutButton from './sign-out-button'
 
 const navs = [
   { label: 'معلومات الحساب', url: PAGES.protected.user.profile },
@@ -22,18 +21,7 @@ export default function AccountSidebar() {
         ))}
 
         <form>
-          {/* TODO: may convert into client component to disable */}
-          <Button
-            variant='none'
-            size='none'
-            className='block w-full rounded-md bg-destructive px-3 py-1 text-start text-lg transition-colors hover:bg-destructive/90'
-            formAction={async () => {
-              'use server'
-              await signOut({ redirectTo: '/' })
-            }}
-          >
-            تسجيل الخروج
-          </Button>
+          <SignOutButton />
         </form>
       </ul>
     </aside>

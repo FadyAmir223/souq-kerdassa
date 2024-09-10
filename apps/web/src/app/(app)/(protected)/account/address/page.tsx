@@ -1,4 +1,5 @@
 import { auth } from '@repo/auth'
+import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
@@ -9,6 +10,12 @@ import { api, HydrateClient } from '@/trpc/server'
 import AddAddressForm from './_components/add-address-form'
 import AddressSkeleton from './_components/address-skeleton'
 import Addresses from './_components/addresses'
+
+export const metadata: Metadata = {
+  title: 'عناوينى',
+  description:
+    'قومى بإضافة و تحديث عناوين الشحن الخاصة بك. سهّلى عملية الشراء بإدارة عناوينك بشكل مريح وفعال.',
+}
 
 const RedirectToCheckoutButton = dynamic(
   () => import('./_components/redirect-to-checkout-button'),

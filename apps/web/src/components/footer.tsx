@@ -82,8 +82,8 @@ export default function Footer() {
         <p className='font-bold text-white'>جميع الحقوق محفوظة</p>
         <ul className='flex gap-x-5 text-sm text-zinc-400'>
           {[
-            { label: 'الشروط و الاحكام', url: '/terms' },
-            { label: 'سياسة الخصوصية', url: '/privacy' },
+            { label: 'الشروط و الاحكام', url: PAGES.public.terms },
+            { label: 'سياسة الخصوصية', url: PAGES.public.privacy },
           ].map(({ label, url }) => (
             <li key={url}>
               <Button asChild variant='link' className='p-0 text-zinc-400'>

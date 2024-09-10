@@ -53,6 +53,18 @@ export async function getAllProducts(db: DB) {
   }
 }
 
+export async function getProductIds(db: DB) {
+  try {
+    return await db.product.findMany({
+      select: {
+        id: true,
+      },
+    })
+  } catch {
+    return []
+  }
+}
+
 export async function getProductById(db: DB, id: Product['id']) {
   try {
     return await db.product.findUnique({
@@ -113,7 +125,7 @@ export async function getProductsByFilters({
     },
     select: productCardSelections,
     orderBy: {
-      updatedAt: type === 'latest' ? 'desc' : undefined,
+      createdAt: type === 'latest' ? 'desc' : undefined,
       rating: type === 'top-rated' ? 'desc' : undefined,
     },
     skip: (page - 1) * limit,

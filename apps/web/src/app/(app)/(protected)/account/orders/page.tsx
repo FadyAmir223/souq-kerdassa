@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
 import H1 from '@/components/h1'
@@ -5,6 +6,11 @@ import { api, HydrateClient } from '@/trpc/server'
 
 import OrderSkeleton from './_components/order-skeleton'
 import Orders from './_components/orders'
+
+export const metadata: Metadata = {
+  title: 'طلباتى',
+  description: 'استعرضي تفاصيل طلباتك و راجعي حالة الطلبات بسهولة',
+}
 
 // another approach is to separate each category in its tab
 

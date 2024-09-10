@@ -12,10 +12,10 @@ export default function AuthShowcase() {
       {user?.name ? (
         <View>
           <Text className='pb-2 text-center text-xl font-semibold text-black'>
-            {user?.name}
+            {user.name}
           </Text>
           <Text className='pb-2 text-center text-xl font-semibold text-black'>
-            {user?.email}
+            {user.email}
           </Text>
         </View>
       ) : (

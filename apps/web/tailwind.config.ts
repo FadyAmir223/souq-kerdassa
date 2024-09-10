@@ -12,6 +12,17 @@ export default {
         sans: ['var(--font-geist-sans)', ...fontFamily.sans],
         mono: ['var(--font-geist-mono)', ...fontFamily.mono],
       },
+
+      keyframes: {
+        scale: {
+          '0%, 100%': { scale: '1' },
+          '50%': { scale: '1.2' },
+        },
+      },
+
+      animation: {
+        scale: 'scale 1.5s ease-out infinite',
+      },
     },
   },
 } satisfies Config

@@ -1,7 +1,14 @@
+import type { Metadata } from 'next'
+
 import H1 from '@/components/h1'
 import SearchField from '@/components/search-field'
 
 import SearchResults from './_components/search-results'
+
+export const metadata: Metadata = {
+  title: 'نتائج البحث',
+  description: 'ابحثي عن العبايات التي تفضلينها. اكتشفي تشكيلتنا المتنوعة بسهولة.',
+}
 
 export default function SearchPage() {
   return (

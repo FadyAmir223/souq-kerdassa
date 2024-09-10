@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 
 import { CartTotalPrice } from '@/components/cart-info'
@@ -9,6 +10,12 @@ import returnIcon from '@/public/assets/images/icons/return.png'
 import { shippingCost } from '@/utils/constants'
 
 import CartItems from './_components/cart-items'
+
+export const metadata: Metadata = {
+  title: 'عربة التسوق',
+  description:
+    'استعرضى العبايات التي اخترتِها في عربة التسوق. تأكدي من المنتجات و الكميات قبل إتمام عملية الشراء. تسوقي الآن و أكملي طلبك بسهولة.',
+}
 
 const iconsSection = [
   { image: deliveryIcon, label: '3 ايام التوصيل مجانى' },
@@ -22,7 +29,7 @@ const iconsSection = [
 export default function CartPage() {
   return (
     <main className='container mb-10 mt-6'>
-      <H1>سلة المشتريات</H1>
+      <H1>عربة التسوق</H1>
 
       <section className='flex flex-col gap-4 lg:flex-row'>
         <div className='flex-1'>

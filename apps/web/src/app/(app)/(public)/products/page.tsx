@@ -1,4 +1,5 @@
 import { productsByFiltersSchema } from '@repo/validators'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -6,6 +7,11 @@ import ProductCardSkeleton from '../_components/product/product-card-skeleton'
 import FilterDrawer from './_components/filter-drawer'
 import FilterSidebar from './_components/filter-sidebar'
 import ProductList from './_components/product-list'
+
+export const metadata: Metadata = {
+  title: 'تسوقى العبايات',
+  description: 'اكتشفى مجموعة متنوعة من العبايات',
+}
 
 type ProductsPageProps = {
   searchParams: Record<string, string | string[] | undefined>

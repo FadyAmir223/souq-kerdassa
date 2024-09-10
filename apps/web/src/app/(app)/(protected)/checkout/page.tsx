@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { api } from '@/trpc/server'
@@ -6,7 +7,11 @@ import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 import CheckoutItemsSection from './_components/checkout-items-section'
 import CheckoutUserInfo from './_components/checkout-user-info'
 
-// TODO: responsive
+export const metadata: Metadata = {
+  title: 'إتمام عملية الشراء',
+  description:
+    'أكملى عملية شراء العبايات الخاصة بك. قومى بمراجعة تفاصيل طلبك ثم اختارى معلومات الشحن.',
+}
 
 export default async function CheckoutPage() {
   const addresses = await api.user.addresses.all()
