@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'سياسة الخصوصية',
+  description:
+    'اكتشف سياسة الخصوصية لدينا التي توضح كيفية جمعنا و استخدامنا و حمايتنا لمعلوماتك الشخصية. نحن نقدر خصوصيتك و ملتزمون بحماية بياناتك مع ضمان الشفافية في التعامل مع المعلومات.',
+}
+
 export default function PrivacyPolicyPage() {
   return (
     <main className='container'>

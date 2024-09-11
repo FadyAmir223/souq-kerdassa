@@ -1,40 +1,43 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'الشروط و الأحكام',
+  description:
+    'اطلع على شروط و أحكام استخدام خدماتنا، بما في ذلك تفاصيل الشحن و التسليم، سياسة الاستبدال و الاسترجاع.',
+}
+
 export default function TermsPage() {
   return (
     <main className='container'>
-      <h1 className='mt-3 text-center text-2xl font-bold'>الشروط والأحكام</h1>
+      <h1 className='mt-3 text-center text-2xl font-bold'>الشروط و الأحكام</h1>
 
       <section className='px-4 py-6'>
-        <h2 className='text-xl font-semibold'>الشحن والتسليم</h2>
+        <h2 className='text-xl font-semibold'>الشحن و التسليم</h2>
 
         <h3 className='mt-4 text-lg font-semibold'>أوقات الاستلام</h3>
         <p className='mt-2'>
-          أوقات التسليم تقديرية وغير مضمونة. سنبذل قصارى جهدنا لتوصيل الشحنات بأسرع
+          أوقات التسليم تقديرية و غير مضمونة. سنبذل قصارى جهدنا لتوصيل الشحنات بأسرع
           وقت ممكن، مع العلم:
           <br />
           – قد تؤثر تأخيرات من شركات الشحن على أوقات التسليم.
           <br />
-          – الطقس والظروف الأخرى قد تؤخر التسليم.
+          – الطقس و الظروف الأخرى قد تؤخر التسليم.
           <br />– الشحن إلى جنوب مصر قد يستغرق وقتاً أطول.
         </p>
 
         <h3 className='mt-4 font-bold'>
           أوقات التسليم المقدرة بعد مغادرة مستودعاتنا:
         </h3>
-        <p className='mt-2'>من اليوم التالى إلى 4 ايام عمل</p>
+        <p className='mt-2'>من يوم العمل التالى إلى 4 ايام</p>
 
-        <h3 className='mt-6 font-bold'>أسعار الشحن</h3>
-        <p className='mt-2'>
-          تكلفة ثابتة للشحن داخل القاهرة والجيزة: 40<strong> جنيهاً</strong>
-          <br />
-          العرض لفترة محدودة وقد يتغير بدون إشعار.
-        </p>
+        <h3 className='mt-6 font-bold'>أسعار الشحن:</h3>
 
         <p className='mt-4'>
-          تكلفة الشحن تعتمد على الوجهة، والجداول الزمنية للتسليم تقديرية وتخضع لتأخير
-          من قبل شركات الشحن.
+          تكلفة الشحن تعتمد على الوجهة، و الجداول الزمنية للتسليم تقديرية وتخضع
+          لتأخير من قبل شركات الشحن.
         </p>
 
-        <p className='mt-4'>قائمة أسعار الشحن للمحافظات:</p>
+        <p className='mt-4 font-semibold'>قائمة أسعار الشحن للمحافظات:</p>
         <ul className='mt-2'>
           <li>القاهرة والجيزة: 40 جنيهاً</li>
           <li>الأسكندرية: 50 جنيهاً</li>

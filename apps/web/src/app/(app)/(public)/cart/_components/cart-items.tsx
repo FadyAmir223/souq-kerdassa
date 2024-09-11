@@ -59,7 +59,7 @@ export default function CartItems() {
         {cart.map((item) => (
           <li
             key={item.id + item.season + item.category}
-            className='flex items-center justify-between rounded-md bg-white p-3'
+            className='flex flex-col gap-y-2 rounded-md bg-white p-3 sm:flex-row sm:items-center sm:justify-between'
           >
             <div className='flex gap-x-5'>
               <Link href={PAGES.public.product(item.id)}>
@@ -94,7 +94,7 @@ export default function CartItems() {
               {item.price} جنية
             </span>
 
-            <div className='flex gap-x-4 border-2 border-gray-400 p-0.5'>
+            <div className='flex w-fit gap-x-4 border-2 border-gray-400 p-0.5'>
               <Button
                 variant='none'
                 size='none'
@@ -128,7 +128,7 @@ export default function CartItems() {
         ))}
       </ul>
 
-      <div className='mt-7 flex justify-between'>
+      <div className='mt-7 flex flex-col justify-between gap-y-4 sm:flex-row'>
         {[
           {
             label: 'مواصلة التسوق',
@@ -144,6 +144,7 @@ export default function CartItems() {
           <Button
             key={label}
             asChild
+            variant={idx === 0 ? 'outline' : undefined}
             className='flex min-w-44 items-center justify-between py-5 text-lg'
           >
             <Link href={url}>

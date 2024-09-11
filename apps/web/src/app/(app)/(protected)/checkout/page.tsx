@@ -8,7 +8,7 @@ import CheckoutItemsSection from './_components/checkout-items-section'
 import CheckoutUserInfo from './_components/checkout-user-info'
 
 export const metadata: Metadata = {
-  title: 'إتمام عملية الشراء',
+  title: 'إتمام الشراء',
   description:
     'أكملى عملية شراء العبايات الخاصة بك. قومى بمراجعة تفاصيل طلبك ثم اختارى معلومات الشحن.',
 }

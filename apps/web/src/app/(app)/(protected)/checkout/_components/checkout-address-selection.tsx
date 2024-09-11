@@ -1,10 +1,10 @@
 'use client'
 
 import type { RouterOutputs } from '@repo/api'
-import type { Order } from '@repo/db/types'
 import { useRouter } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
 import { Suspense, useState } from 'react'
+import { FaCheckCircle } from 'react-icons/fa'
 import { useShallow } from 'zustand/react/shallow'
 
 import {
@@ -31,13 +31,7 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
   const { toast } = useToast()
   const [selectedAddress, setSelectedAddress] = useState<Address>(null)
 
-  const [dialog, setDialog] = useState<{
-    open: boolean
-    orderId: Order['id'] | null
-  }>({
-    open: false,
-    orderId: null,
-  })
+  const [isOpen, setOpen] = useState(false)
 
   const { cart, updateOverQuantities, resetCart } = useAppStore(
     useShallow(({ cart, updateOverQuantities, resetCart }) => ({
@@ -50,8 +44,8 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
   const router = useRouter()
 
   const createOrder = api.order.create.useMutation({
-    onSuccess: (orderId) => {
-      setDialog({ open: true, orderId })
+    onSuccess: () => {
+      setOpen(true)
     },
     onError: (error) => {
       toast({
@@ -105,28 +99,20 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
         </Button>
       </div>
 
-      <AlertDialog
-        open={dialog.open}
-        onOpenChange={() =>
-          setDialog((prevDialog) => ({ ...prevDialog, open: !prevDialog.open }))
-        }
-      >
+      <AlertDialog open={isOpen} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className='text-right'>
-              الطلب رقم{' '}
-              <span className='text-lg font-semibold text-primary'>
-                {dialog.orderId}
-              </span>{' '}
-              تم بنجاح
+            <AlertDialogTitle className='text-center'>
+              <FaCheckCircle className='mx-auto size-[4.5rem] text-green-700' />
+              <span className='mt-4 inline-block'>تم تأكيد الطلب بنجاح</span>
             </AlertDialogTitle>
-            <AlertDialogDescription className='text-right'>
-              ستصلك المنتجات قريباً
+            <AlertDialogDescription className='text-center'>
+              شكراً للتسوق معنا
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className='mx-auto'>
             <AlertDialogAction onClick={handlePurchaseSuccess}>
-              حسناً
+              تتبع الطلب
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -23,14 +23,12 @@ export const ordersRouter = {
           cause: { soldOutVariants },
         })
 
-      const orderId = await createOrder({
+      await createOrder({
         db: ctx.db,
         userId: ctx.session.user.id,
         address: input.address,
         cart: input.cart,
       })
-
-      return orderId
     }),
 
   // maybe permit canceling just for a certain duration

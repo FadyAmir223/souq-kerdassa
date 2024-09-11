@@ -107,7 +107,7 @@ export async function createOrder({
     }, 0)
 
     // careful with performance
-    return await db.$transaction(async (tx) => {
+    await db.$transaction(async (tx) => {
       const { id: addressId } = await tx.address.create({
         data: address,
         select: {
@@ -115,7 +115,7 @@ export async function createOrder({
         },
       })
 
-      const { id: orderId } = await tx.order.create({
+      await tx.order.create({
         data: {
           userId,
           addressId,
@@ -146,8 +146,6 @@ export async function createOrder({
             },
           },
         })
-
-      return orderId
     })
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)

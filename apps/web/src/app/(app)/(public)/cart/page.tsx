@@ -7,7 +7,6 @@ import deliveryIcon from '@/public/assets/images/icons/delivery.png'
 import paymentIcon from '@/public/assets/images/icons/payment.png'
 import qualityIcon from '@/public/assets/images/icons/quality.png'
 import returnIcon from '@/public/assets/images/icons/return.png'
-import { shippingCost } from '@/utils/constants'
 
 import CartItems from './_components/cart-items'
 
@@ -31,7 +30,7 @@ export default function CartPage() {
     <main className='container mb-10 mt-6'>
       <H1>عربة التسوق</H1>
 
-      <section className='flex flex-col gap-4 lg:flex-row'>
+      <section className='flex flex-col gap-x-4 gap-y-10 lg:flex-row'>
         <div className='flex-1'>
           <CartItems />
         </div>
@@ -41,24 +40,12 @@ export default function CartPage() {
             <div className='flex justify-between'>
               <span className=''>الإجمالى</span>
               <span className=''>
-                <CartTotalPrice /> جنية
-              </span>
-            </div>
-
-            <div className='flex justify-between'>
-              <span className=''>الشحن</span>
-              <span className=''>{shippingCost} جنية</span>
-            </div>
-
-            <div className='mt-2 flex justify-between border-t border-t-black pt-2'>
-              <span className=''>الإجمالى</span>
-              <span className=''>
-                <CartTotalPrice additionalCost={shippingCost} /> جنية
+                <CartTotalPrice /> جنية + الشحن
               </span>
             </div>
           </div>
 
-          <div className='mt-3 flex h-fit justify-between rounded-md bg-white p-3'>
+          <div className='mt-3 grid h-fit grid-cols-2 gap-y-4 rounded-md bg-white p-3 sm:grid-cols-4 sm:gap-y-0'>
             {iconsSection.map(({ image, label }, index) => (
               <div key={label} className='flex-1'>
                 <Image
