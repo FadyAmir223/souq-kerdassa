@@ -31,7 +31,7 @@ export const ordersRouter = {
       })
     }),
 
-  // maybe permit canceling just for a certain duration
+  // TODO: maybe permit canceling just for a certain duration
   cancel: protectedProcedure
     .input(cuidSchema)
     .mutation(async ({ ctx, input: orderId }) =>

@@ -16,13 +16,15 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <main className='container mt-32 min-h-screen'>
-          <Image src={notFound} alt='حدث خطأ' className='mx-auto max-w-52' />
-          <H1>حدث خطأ</H1>
+        <main className='mt-20 flex min-h-screen flex-col'>
+          <div className='container text-center'>
+            <Image src={notFound} alt='حدث خطأ' className='mx-auto mb-6 max-w-52' />
+            <H1>حدث خطأ</H1>
 
-          <Button variant='outline' onClick={() => reset()}>
-            حاول مجدداً
-          </Button>
+            <Button variant='outline' onClick={() => reset()}>
+              حاول مجدداً
+            </Button>
+          </div>
 
           <Footer />
         </main>

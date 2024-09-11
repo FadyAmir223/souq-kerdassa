@@ -4,7 +4,7 @@ import { immer } from 'zustand/middleware/immer'
 import { createStore } from 'zustand/vanilla'
 
 import { createCartSlice } from './slices/cart-slice'
-import { createReviewSlice } from './slices/review-slice'
+import { createUnpersistedSlice } from './slices/unpersisted-slice'
 import type { AppStore } from './types'
 
 export const createAppStore = () =>
@@ -13,7 +13,7 @@ export const createAppStore = () =>
       persist(
         immer((...a) => ({
           ...createCartSlice(...a),
-          ...createReviewSlice(...a),
+          ...createUnpersistedSlice(...a),
         })),
         {
           name: 'store',

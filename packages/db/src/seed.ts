@@ -1,4 +1,9 @@
-import type { Product, ProductVariant } from '@prisma/client'
+import type {
+  City,
+  CityCategoryPrice,
+  Product,
+  ProductVariant,
+} from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 
 const db = new PrismaClient()
@@ -203,7 +208,75 @@ const PRODUCTS = [
   },
 ] as const satisfies Partial<Product & { variants: Partial<ProductVariant>[] }>[]
 
+const CITY_CATEGORIES = [
+  { category: 'cairoGiza', price: 40, cities: ['القاهرة', 'الجيزة'] },
+  { category: 'alex', price: 50, cities: ['الإسكندرية'] },
+  {
+    category: 'deltaCanal',
+    price: 65,
+    cities: [
+      'الدقهلية',
+      'البحيرة',
+      'الغربية',
+      'الإسماعيلية',
+      'المنوفية',
+      'القليوبية',
+      'السويس',
+      'بورسعيد',
+      'دمياط',
+      'الشرقية',
+      'كفر الشيخ',
+    ],
+  },
+  {
+    category: 'redSeaSouth',
+    price: 70,
+    cities: [
+      'البحر الأحمر',
+      'الفيوم',
+      'المنيا',
+      'الوادي الجديد',
+      'أسوان',
+      'أسيوط',
+      'بني سويف',
+      'جنوب سيناء',
+      'مطروح',
+      'الأقصر',
+      'قنا',
+      'شمال سيناء',
+      'سوهاج',
+    ],
+  },
+] as const satisfies Partial<CityCategoryPrice & { cities: City['name'][] }>[]
+
 async function main() {
+  await Promise.all(
+    CITY_CATEGORIES.map(({ category, price, cities }) =>
+      db.cityCategoryPrice.upsert({
+        where: {
+          category,
+        },
+        update: {},
+        create: {
+          category,
+          price,
+          cities: {
+            connectOrCreate: cities.map((name) => ({
+              where: { name },
+              create: { name },
+            })),
+          },
+        },
+        select: {
+          id: true,
+        },
+      }),
+    ),
+  )
+
+  // eslint-disable-next-line no-restricted-properties
+  if (process.env.NODE_ENV === 'production') return
+
   await Promise.all(
     PRODUCTS.map(({ variants, ...product }) =>
       db.product.upsert({
@@ -217,7 +290,9 @@ async function main() {
             },
           },
         },
-        select: { id: true },
+        select: {
+          id: true,
+        },
       }),
     ),
   )

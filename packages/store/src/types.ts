@@ -1,6 +1,6 @@
 import type { CartSlice } from './slices/cart-slice'
-import type { ReviewSlice } from './slices/review-slice'
+import type { UnpersistedSlice } from './slices/unpersisted-slice'
 
-export type AppStore = CartSlice & ReviewSlice
+export type AppStore = CartSlice & UnpersistedSlice
 
 export type { CartItem } from './slices/cart-slice'

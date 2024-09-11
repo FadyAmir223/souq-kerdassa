@@ -55,20 +55,3 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
-
-model Address {
-  id String @id @default(cuid())
-
-  city     String
-  region   String
-  street   String
-  building String
-  mark     String?
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  order Order?
-
-  updatedAt DateTime @updatedAt
-}

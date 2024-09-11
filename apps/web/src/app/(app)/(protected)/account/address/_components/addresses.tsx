@@ -4,8 +4,8 @@ import { FaLocationDot } from 'react-icons/fa6'
 
 import { api } from '@/trpc/react'
 
+import ActionAddressForm from './action-address-form'
 import DeleteAddressForm from './delete-address-form'
-import EditAddressForm from './edit-address-form'
 
 /**
  * TODO: bug
@@ -17,7 +17,9 @@ import EditAddressForm from './edit-address-form'
  */
 
 export default function Addresses() {
-  const [addresses] = api.user.addresses.all.useSuspenseQuery()
+  const [addresses] = api.user.addresses.all.useSuspenseQuery(undefined, {
+    staleTime: Infinity,
+  })
 
   if (addresses.length === 0)
     return <p className='mt-6 text-center text-xl font-bold'>لا يوجد عنوان</p>
@@ -28,7 +30,7 @@ export default function Addresses() {
         <FaLocationDot size={20} />
 
         <div className='flex gap-x-3'>
-          <EditAddressForm address={address} />
+          <ActionAddressForm action='edit' address={address} />
           <div className='relative mx-1 before:absolute before:h-full before:w-[2.5px] before:bg-black' />
           <DeleteAddressForm addressId={address.id} />
         </div>
@@ -37,7 +39,7 @@ export default function Addresses() {
       <div className=''>
         <p className=''>
           <span className='ml-1 font-semibold'>المدينة: </span>
-          {address.city}
+          {address.city.name}
         </p>
         <p className=''>
           <span className='ml-1 font-semibold'>المنطقة: </span>

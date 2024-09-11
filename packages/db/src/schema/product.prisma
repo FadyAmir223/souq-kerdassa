@@ -7,7 +7,7 @@ model Product {
   price       Float
   variants    ProductVariant[]
 
-  rating       Float
+  rating       Float    @default(0)
   reviewsCount Int      @default(0)
   reviews      Review[]
 

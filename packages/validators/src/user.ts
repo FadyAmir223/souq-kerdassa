@@ -57,7 +57,7 @@ export const editProfileSchema = z.object({
 export type EditProfileSchema = z.infer<typeof editProfileSchema>
 
 export const addressSchema = z.object({
-  city: z.string().min(1, { message: 'المدينة مطلوبة' }),
+  cityId: z.number().min(0),
   region: z.string().min(1, { message: 'المنطقة مطلوبة' }),
   street: z.string().min(1, { message: 'الشارع مطلوب' }),
   building: z.string().min(1, { message: 'المبنى مطلوب' }),

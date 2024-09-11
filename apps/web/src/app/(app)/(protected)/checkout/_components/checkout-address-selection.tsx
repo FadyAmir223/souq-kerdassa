@@ -1,6 +1,5 @@
 'use client'
 
-import type { RouterOutputs } from '@repo/api'
 import { useRouter } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
 import { Suspense, useState } from 'react'
@@ -20,32 +19,45 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore } from '@/providers/app-store-provider'
 import { api } from '@/trpc/react'
-import { PAGES } from '@/utils/constants'
+import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
 import AddressSkeleton from '../../account/address/_components/address-skeleton'
 import CheckoutAddresses from './checkout-addresses'
 
-type Address = RouterOutputs['user']['addresses']['all'][number] | null | undefined
-
 export default function CheckoutAddressSelection({ children }: PropsWithChildren) {
-  const { toast } = useToast()
-  const [selectedAddress, setSelectedAddress] = useState<Address>(null)
-
   const [isOpen, setOpen] = useState(false)
-
-  const { cart, updateOverQuantities, resetCart } = useAppStore(
-    useShallow(({ cart, updateOverQuantities, resetCart }) => ({
-      cart,
-      updateOverQuantities,
-      resetCart,
-    })),
-  )
-
   const router = useRouter()
+  const utils = api.useUtils()
+  const { toast } = useToast()
+
+  const {
+    cart,
+    getCartTotalQuantity,
+    updateOverQuantities,
+    selectedAddress,
+    setSelectedAddress,
+  } = useAppStore(
+    useShallow(
+      ({
+        cart,
+        getCartTotalQuantity,
+        updateOverQuantities,
+        selectedAddress,
+        setSelectedAddress,
+      }) => ({
+        cart,
+        getCartTotalQuantity,
+        updateOverQuantities,
+        selectedAddress,
+        setSelectedAddress,
+      }),
+    ),
+  )
 
   const createOrder = api.order.create.useMutation({
     onSuccess: () => {
       setOpen(true)
+      setSelectedAddress(null)
     },
     onError: (error) => {
       toast({
@@ -69,9 +81,12 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
     })
   }
 
-  const handlePurchaseSuccess = () => {
-    resetCart()
-    router.replace(PAGES.protected.user.orders)
+  const handlePurchaseSuccess = async () => {
+    await utils.order.all.invalidate()
+
+    router.replace(
+      `${PAGES.protected.user.orders}?${SEARCH_PARAMS.redirectFrom}=${PAGES.protected.buy.checkout}`,
+    )
   }
 
   return (
@@ -81,22 +96,25 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
 
         <ul className='grid gap-4 md:grid-cols-2'>
           <Suspense fallback={<AddressSkeleton />}>
-            <CheckoutAddresses
-              selectedAddress={selectedAddress}
-              setSelectedAddress={setSelectedAddress}
-            />
+            <CheckoutAddresses />
           </Suspense>
         </ul>
       </section>
 
       <div className='text-center'>
-        <Button
-          className='min-w-32 text-lg'
-          onClick={handleCreateOrder}
-          disabled={createOrder.isPending}
-        >
-          شراء
-        </Button>
+        {getCartTotalQuantity() > 0 ? (
+          <Button
+            className='min-w-32 text-lg'
+            onClick={handleCreateOrder}
+            disabled={createOrder.isPending}
+          >
+            شراء
+          </Button>
+        ) : (
+          <p className='text-lg font-bold'>
+            عذراً لقد نفذت الكمية من كل المنتجات المطلوبة
+          </p>
+        )}
       </div>
 
       <AlertDialog open={isOpen} onOpenChange={setOpen}>

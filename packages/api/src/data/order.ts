@@ -1,6 +1,7 @@
 import type { DB, Order, Product, User } from '@repo/db/types'
 import type { CreateOrderSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
+
 export async function getOrders(db: DB, userId: User['id']) {
   await new Promise((r) => setTimeout(r, 2000))
   try {
@@ -35,7 +36,16 @@ export async function getOrders(db: DB, userId: User['id']) {
         },
         address: {
           select: {
-            city: true,
+            city: {
+              select: {
+                name: true,
+                cityCategoryPrice: {
+                  select: {
+                    price: true,
+                  },
+                },
+              },
+            },
             region: true,
             street: true,
             building: true,

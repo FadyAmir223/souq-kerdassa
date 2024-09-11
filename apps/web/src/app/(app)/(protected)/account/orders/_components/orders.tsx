@@ -9,7 +9,7 @@ import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
 import { api } from '@/trpc/react'
 import { cn } from '@/utils/cn'
-import { AR, PAGES, shippingCost } from '@/utils/constants'
+import { AR, PAGES } from '@/utils/constants'
 
 import CancelOrderButton from './cancel-order-button'
 
@@ -23,6 +23,8 @@ export default function Orders() {
 
   return orders.map((order, orderIndex) => {
     const status = order.status as Order['status']
+
+    const shippingCost = order.address.city.cityCategoryPrice?.price ?? 0
 
     const totalPrice =
       order.products.reduce(
@@ -90,7 +92,7 @@ export default function Orders() {
                 </div>
               </div>
 
-              <div className='w-fit sm:w-auto'>
+              <div className='w-fit text-[0.9375rem] sm:w-auto'>
                 <p className=''>
                   <span className='font-semibold'>الكمية: </span>
                   {item.quantity}
@@ -111,12 +113,14 @@ export default function Orders() {
         <div className='mt-4 flex justify-between border-t border-t-gray-400 pt-4'>
           {status === 'pending' && <CancelOrderButton orderId={order.id} />}
 
-          <span className='ms-auto font-semibold text-primary'>
-            {totalPrice} جنية
-          </span>
+          <div className='ms-auto flex flex-col'>
+            <span className='text-sm font-semibold'>الشحن: {shippingCost} جنية</span>
+            <span className='ms-auto font-semibold text-primary'>
+              المجموع: {totalPrice} جنية
+            </span>
+          </div>
 
           {/* TODO: arrival address ui ? */}
-          {/* TODO: tax ui ? */}
         </div>
       </li>
     )

@@ -2,12 +2,11 @@ import { auth } from '@repo/auth'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { api, HydrateClient } from '@/trpc/server'
+import { HydrateClient } from '@/trpc/server'
 
 import CheckoutAddressSelection from './checkout-address-selection'
 
 export default async function CheckoutUserInfo() {
-  void api.user.addresses.all.prefetch()
   const session = await auth()
 
   return (

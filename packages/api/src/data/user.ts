@@ -175,7 +175,12 @@ export async function getAddresses(db: DB, userId: User['id']) {
         addresses: {
           select: {
             id: true,
-            city: true,
+            city: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
             region: true,
             street: true,
             building: true,
@@ -211,7 +216,12 @@ export async function addAddress({
       },
       select: {
         id: true,
-        city: true,
+        city: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         region: true,
         street: true,
         building: true,

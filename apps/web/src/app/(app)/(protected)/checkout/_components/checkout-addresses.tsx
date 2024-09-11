@@ -1,29 +1,42 @@
 'use client'
 
-import type { RouterOutputs } from '@repo/api'
+import { useShallow } from 'zustand/react/shallow'
 
+import { useAppStore } from '@/providers/app-store-provider'
 import { api } from '@/trpc/react'
 import { cn } from '@/utils/cn'
 
-type Address = RouterOutputs['user']['addresses']['all'][number] | null | undefined
-
-type CheckoutAddressesProps = {
-  selectedAddress: Address
-  setSelectedAddress: (address: Address) => void
-}
-
-export default function CheckoutAddresses({
-  selectedAddress,
-  setSelectedAddress,
-}: CheckoutAddressesProps) {
+export default function CheckoutAddresses() {
   const [addresses] = api.user.addresses.all.useSuspenseQuery(undefined, {
     staleTime: Infinity,
   })
 
+  const { data: cities } = api.city.all.useQuery(undefined, {
+    staleTime: Infinity,
+  })
+
+  const { selectedAddress, setSelectedAddress } = useAppStore(
+    useShallow(({ selectedAddress, setSelectedAddress }) => ({
+      selectedAddress,
+      setSelectedAddress,
+    })),
+  )
+
   return addresses.map((address) => (
     <li
       key={address.id}
-      onClick={() => setSelectedAddress(address)}
+      onClick={() => {
+        setSelectedAddress({
+          id: address.id,
+          cityId: address.city.id,
+          region: address.region,
+          street: address.street,
+          building: address.building,
+          mark: address.mark,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+          price: (cities ?? []).find(({ id }) => id === address.city.id)?.price!,
+        })
+      }}
       className={cn(
         'cursor-pointer select-none rounded-md border-2 border-transparent bg-white px-4 py-5 shadow-md md:bg-secondary',
         {
@@ -34,7 +47,7 @@ export default function CheckoutAddresses({
     >
       <p>
         <span className='ml-1 font-semibold'>المدينة: </span>
-        {address.city}
+        {address.city.name}
       </p>
       <p>
         <span className='ml-1 font-semibold'>المنطقة: </span>

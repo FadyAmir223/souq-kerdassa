@@ -105,7 +105,7 @@ export default function AddToCart({ product }: AddToCartProps) {
       <Button
         onClick={handleAddCartItem}
         disabled={!(selectedCategory && selectedSeason)}
-        className='px-6 py-2 text-[1.0625rem]'
+        className='px-6 py-2'
         size='none'
       >
         اضف إلى عربة التسوق

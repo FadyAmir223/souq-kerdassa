@@ -1,0 +1,42 @@
+model Address {
+  id String @id @default(cuid())
+
+  cityId   Int
+  city     City    @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  region   String
+  street   String
+  building String
+  mark     String?
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  order Order?
+
+  updatedAt DateTime @updatedAt
+}
+
+model City {
+  id Int @id @default(autoincrement())
+
+  name                String             @unique
+  cityCategoryPriceId Int?
+  cityCategoryPrice   CityCategoryPrice? @relation(fields: [cityCategoryPriceId], references: [id])
+
+  addresses Address[]
+}
+
+model CityCategoryPrice {
+  id Int @id @default(autoincrement())
+
+  category CityCategory @unique
+  price    Int
+  cities   City[]
+}
+
+enum CityCategory {
+  cairoGiza
+  alex
+  deltaCanal
+  redSeaSouth
+}

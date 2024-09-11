@@ -3,13 +3,6 @@ import { PLACEHOLDER } from '@/utils/constants'
 export const addressInputFields = [
   {
     type: 'text',
-    label: 'المدينة',
-    name: 'city',
-    placeholder: PLACEHOLDER.address.city,
-    autoComplete: 'off',
-  },
-  {
-    type: 'text',
     label: 'المنطقة',
     name: 'region',
     placeholder: PLACEHOLDER.address.region,

@@ -5,14 +5,18 @@ import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
 import { useAppStore } from '@/providers/app-store-provider'
-import { PAGES, shippingCost } from '@/utils/constants'
+import { PAGES } from '@/utils/constants'
 
 import CheckoutCartItem from './checkout-cart-item'
 import CheckoutCartItemsSkeleton from './checkout-cart-items-skeleton'
 
 export default function CheckoutItemsSection() {
-  const { cart, getCartTotalPrice } = useAppStore(
-    useShallow(({ cart, getCartTotalPrice }) => ({ cart, getCartTotalPrice })),
+  const { cart, getCartTotalPrice, shippingCost } = useAppStore(
+    useShallow(({ cart, getCartTotalPrice, selectedAddress }) => ({
+      cart,
+      getCartTotalPrice,
+      shippingCost: selectedAddress?.price ?? 0,
+    })),
   )
 
   const [isHydrated, setHydrated] = useState(false)

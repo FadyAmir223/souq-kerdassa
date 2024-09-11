@@ -70,6 +70,8 @@ export default function RegisterForm() {
       )
     },
     onError: ({ message }) => {
+      // error.data?.zodError?.fieldErrors
+
       toast({
         variant: 'destructive',
         description: message,

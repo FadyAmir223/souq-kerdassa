@@ -1,4 +1,5 @@
 import { authRouter } from './routers/auth'
+import { cityRouter } from './routers/city'
 import { ordersRouter } from './routers/order'
 import { productRouter } from './routers/product'
 import { userRouter } from './routers/user'
@@ -9,6 +10,7 @@ export const appRouter = createTRPCRouter({
   auth: authRouter,
   user: userRouter,
   order: ordersRouter,
+  city: cityRouter,
 })
 
 export type AppRouter = typeof appRouter

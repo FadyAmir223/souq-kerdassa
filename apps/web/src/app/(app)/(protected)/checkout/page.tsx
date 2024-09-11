@@ -21,6 +21,8 @@ export default async function CheckoutPage() {
       `${PAGES.protected.user.address}?${SEARCH_PARAMS.redirectTo}=${PAGES.protected.buy.checkout}`,
     )
 
+  void Promise.all([api.user.addresses.all.prefetch(), api.city.all.prefetch()])
+
   return (
     <main className='min-h-[80dvh] md:-mb-16 md:-mt-7 md:bg-gradient-to-l md:from-white md:from-60% md:to-secondary md:to-60%'>
       <div className='container flex flex-col gap-y-6 md:my-0 md:flex-row md:gap-y-0'>

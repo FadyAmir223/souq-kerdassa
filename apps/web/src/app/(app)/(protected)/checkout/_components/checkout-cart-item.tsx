@@ -2,6 +2,7 @@ import type { CartItem } from '@repo/store/types'
 
 import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/utils/cn'
 import { AR } from '@/utils/constants'
 
 type CheckoutCartItemProps = {
@@ -10,7 +11,11 @@ type CheckoutCartItemProps = {
 
 export default function CheckoutCartItem({ item }: CheckoutCartItemProps) {
   return (
-    <li className='relative flex gap-x-3 rounded-md bg-white p-2.5 shadow-sm'>
+    <li
+      className={cn('relative flex gap-x-3 rounded-md bg-white p-2.5 shadow-sm', {
+        'select-none opacity-50': item.quantity === 0,
+      })}
+    >
       <div className='absolute right-0 top-0 z-10 grid size-[1.1875rem] place-items-center rounded-full bg-black text-[0.8125rem] font-semibold text-white'>
         {item.quantity}
       </div>

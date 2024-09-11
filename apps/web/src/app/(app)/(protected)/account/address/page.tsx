@@ -7,7 +7,7 @@ import { Suspense } from 'react'
 import H1 from '@/components/h1'
 import { api, HydrateClient } from '@/trpc/server'
 
-import AddAddressForm from './_components/add-address-form'
+import ActionAddressForm from './_components/action-address-form'
 import AddressSkeleton from './_components/address-skeleton'
 import Addresses from './_components/addresses'
 
@@ -26,14 +26,14 @@ export default async function AddressesPage() {
   const session = await auth()
   if (!session?.user) notFound()
 
-  void api.user.addresses.all.prefetch()
+  void Promise.all([api.user.addresses.all.prefetch(), api.city.all.prefetch()])
 
   return (
     <HydrateClient>
       <main className='flex-1'>
         <div className='flex justify-between'>
           <H1>عناوينى</H1>
-          <AddAddressForm />
+          <ActionAddressForm action='add' />
         </div>
 
         <ul className='grid gap-4 md:grid-cols-2'>

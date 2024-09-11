@@ -23,8 +23,6 @@ const iconsSection = [
   { image: paymentIcon, label: 'دفع آمن' },
 ]
 
-// TODO: responsive for _ screens
-
 export default function CartPage() {
   return (
     <main className='container mb-10 mt-6'>
