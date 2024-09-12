@@ -68,6 +68,8 @@ export default function RegisterForm() {
       router.push(
         searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect(),
       )
+
+      router.refresh()
     },
     onError: ({ message }) => {
       // error.data?.zodError?.fieldErrors

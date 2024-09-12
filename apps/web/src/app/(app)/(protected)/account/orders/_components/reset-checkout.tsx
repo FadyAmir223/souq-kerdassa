@@ -6,11 +6,15 @@ import { useEffect } from 'react'
 import { useAppStore } from '@/providers/app-store-provider'
 import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
-export default function ClearCart() {
+export default function ResetCheckout() {
   const resetCart = useAppStore((s) => s.resetCart)
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+
+  const { setSelectedAddress } = useAppStore(({ setSelectedAddress }) => ({
+    setSelectedAddress,
+  }))
 
   useEffect(() => {
     if (
@@ -20,6 +24,7 @@ export default function ClearCart() {
 
     router.replace(pathname)
     resetCart()
+    setSelectedAddress(null)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return null

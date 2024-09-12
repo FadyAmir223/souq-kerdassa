@@ -4,9 +4,9 @@ import { Suspense } from 'react'
 import H1 from '@/components/h1'
 import { api, HydrateClient } from '@/trpc/server'
 
-import ClearCart from './_components/clear-cart'
 import OrderSkeleton from './_components/order-skeleton'
 import Orders from './_components/orders'
+import ResetCheckout from './_components/reset-checkout'
 
 export const metadata: Metadata = {
   title: 'طلباتى',
@@ -32,7 +32,7 @@ export default function OrdersPage() {
         </ul>
       </section>
 
-      <ClearCart />
+      <ResetCheckout />
     </main>
   )
 }

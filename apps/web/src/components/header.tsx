@@ -27,7 +27,7 @@ export default async function Header() {
         <SearchField isHeader />
 
         <Link href={PAGES.public.search}>
-          <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed] sm:hidden'>
+          <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed] md:hidden'>
             <LuSearch className='size-5 md:size-[1.375rem]' />
           </div>
         </Link>

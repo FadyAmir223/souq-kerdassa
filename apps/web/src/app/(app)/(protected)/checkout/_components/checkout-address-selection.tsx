@@ -57,7 +57,6 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
   const createOrder = api.order.create.useMutation({
     onSuccess: () => {
       setOpen(true)
-      setSelectedAddress(null)
     },
     onError: (error) => {
       toast({
