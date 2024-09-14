@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { SessionProvider } from 'next-auth/react'
 import type { PropsWithChildren } from 'react'
 
-import Footer from '@/components/footer'
-import Header from '@/components/header'
+import Footer from '@/app/(app)/_components/footer'
+import Header from '@/app/(app)/_components/header'
 import { env } from '@/lib/env'
 
 const meta = {

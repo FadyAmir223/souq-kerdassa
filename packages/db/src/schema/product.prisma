@@ -11,6 +11,9 @@ model Product {
   reviewsCount Int      @default(0)
   reviews      Review[]
 
+  visible Boolean
+  sales   Int
+
   productOrder ProductOrder[]
 
   createdAt DateTime @default(now())

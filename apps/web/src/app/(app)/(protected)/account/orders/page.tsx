@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
-import H1 from '@/components/h1'
+import H1 from '@/app/(app)/_components/h1'
 import { api, HydrateClient } from '@/trpc/server'
 
 import OrderSkeleton from './_components/order-skeleton'

@@ -27,7 +27,6 @@ import CheckoutAddresses from './checkout-addresses'
 export default function CheckoutAddressSelection({ children }: PropsWithChildren) {
   const [isOpen, setOpen] = useState(false)
   const router = useRouter()
-  const utils = api.useUtils()
   const { toast } = useToast()
 
   const {
@@ -80,12 +79,12 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
     })
   }
 
-  const handlePurchaseSuccess = async () => {
-    await utils.order.all.invalidate()
-
+  const handlePurchaseSuccess = () => {
     router.replace(
       `${PAGES.protected.user.orders}?${SEARCH_PARAMS.redirectFrom}=${PAGES.protected.buy.checkout}`,
     )
+
+    router.refresh()
   }
 
   return (

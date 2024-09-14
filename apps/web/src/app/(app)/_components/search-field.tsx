@@ -9,7 +9,7 @@ import { useDebounce } from 'use-debounce'
 import { cn } from '@/utils/cn'
 import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
-import { Input } from './ui/input'
+import { Input } from '../../../components/ui/input'
 
 type SearchFieldProps = {
   isHeader?: boolean

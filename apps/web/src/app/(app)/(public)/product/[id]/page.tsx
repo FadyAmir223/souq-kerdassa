@@ -19,9 +19,12 @@ type ProductPageProps = {
 }
 
 export async function generateMetadata({
-  params: { id },
+  params: { id: _id },
 }: ProductPageProps): Promise<Metadata> {
-  const product = await api.product.byId(id)
+  const id = cuidSchema.safeParse(_id)
+  if (!id.success) notFound()
+
+  const product = await api.product.byId(id.data)
 
   return {
     title: product?.name,
@@ -29,11 +32,9 @@ export async function generateMetadata({
   }
 }
 
-export default function ProductPage({ params: { id: _id } }: ProductPageProps) {
-  const id = cuidSchema.safeParse(_id)
-  if (!id.success) notFound()
-  const productId = id.data
-
+export default function ProductPage({
+  params: { id: productId },
+}: ProductPageProps) {
   void Promise.all([
     api.product.review.some.prefetch({ productId, page: 1 }),
     api.user.getReviewStatus.prefetch(productId),

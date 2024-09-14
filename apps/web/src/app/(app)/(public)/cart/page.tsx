@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 
-import { CartTotalPrice } from '@/components/cart-info'
-import H1 from '@/components/h1'
+import { CartTotalPrice } from '@/app/(app)/_components/cart-info'
+import H1 from '@/app/(app)/_components/h1'
 import deliveryIcon from '@/public/assets/images/icons/delivery.png'
 import paymentIcon from '@/public/assets/images/icons/payment.png'
 import qualityIcon from '@/public/assets/images/icons/quality.png'

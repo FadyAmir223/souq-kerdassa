@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 
-import Footer from '@/components/footer'
-import H1 from '@/components/h1'
+import Footer from '@/app/(app)/_components/footer'
+import H1 from '@/app/(app)/_components/h1'
 import { Button } from '@/components/ui/button'
 import notFound from '@/public/assets/not-found_shopping_re_owap.svg'
 

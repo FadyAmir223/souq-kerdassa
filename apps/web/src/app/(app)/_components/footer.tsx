@@ -4,7 +4,7 @@ import Link from 'next/link'
 import logo from '@/public/assets/images/logo.png'
 import { PAGES } from '@/utils/constants'
 
-import { Button } from './ui/button'
+import { Button } from '../../../components/ui/button'
 
 const cols = [
   {

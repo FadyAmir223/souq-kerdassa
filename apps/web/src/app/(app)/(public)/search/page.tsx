@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import H1 from '@/components/h1'
-import SearchField from '@/components/search-field'
+import H1 from '@/app/(app)/_components/h1'
+import SearchField from '@/app/(app)/_components/search-field'
 
 import SearchResults from './_components/search-results'
 

@@ -9,7 +9,7 @@ import type { ButtonProps } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
 
-import LinkWithParams from '../link-with-params'
+import LinkWithParams from '../../app/(app)/_components/link-with-params'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav

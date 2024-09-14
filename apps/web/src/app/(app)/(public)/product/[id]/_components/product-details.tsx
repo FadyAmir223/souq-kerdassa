@@ -1,7 +1,7 @@
 import type { Product } from '@repo/db/types'
 import { notFound } from 'next/navigation'
 
-import H1 from '@/components/h1'
+import H1 from '@/app/(app)/_components/h1'
 import { api } from '@/trpc/server'
 
 import StarRating from '../../../_components/star-rating'

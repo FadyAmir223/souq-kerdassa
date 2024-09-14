@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 
-import LinkWithParams from '@/components/link-with-params'
+import LinkWithParams from '@/app/(app)/_components/link-with-params'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
 

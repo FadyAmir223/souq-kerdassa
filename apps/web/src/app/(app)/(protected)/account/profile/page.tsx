@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import H1 from '@/components/h1'
+import H1 from '@/app/(app)/_components/h1'
 
 import EditProfileForm from './_components/edit-profile-form'
 

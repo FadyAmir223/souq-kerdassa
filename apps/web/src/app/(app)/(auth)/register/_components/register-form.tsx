@@ -65,7 +65,7 @@ export default function RegisterForm() {
 
   const registerUser = api.auth.register.useMutation({
     onSuccess: () => {
-      router.push(
+      router.replace(
         searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect(),
       )
 

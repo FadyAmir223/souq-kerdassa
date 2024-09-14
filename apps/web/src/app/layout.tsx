@@ -72,7 +72,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn(
           roboto.className,
-          'flex min-h-screen flex-col overflow-x-hidden bg-neutral-200',
+          'flex min-h-dvh flex-col overflow-x-hidden bg-neutral-200',
           env.NODE_ENV === 'development' && 'debug-screens',
         )}
       >

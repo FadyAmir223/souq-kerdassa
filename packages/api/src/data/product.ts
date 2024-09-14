@@ -10,6 +10,8 @@ import type { CreateOrderSchema, ProductTypeSchema } from '@repo/validators'
 
 import type { ProductByQuerySchema } from '../validations/products'
 
+// TODO: cache products if possible
+
 const productCardSelections = {
   id: true,
   images: true,

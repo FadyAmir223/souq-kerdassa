@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-import H1 from '@/components/h1'
+import H1 from '@/app/(app)/_components/h1'
 import { api, HydrateClient } from '@/trpc/server'
 
 import ActionAddressForm from './_components/action-address-form'

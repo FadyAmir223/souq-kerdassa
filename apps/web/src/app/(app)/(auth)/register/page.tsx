@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import H1 from '@/components/h1'
-import LinkWithParams from '@/components/link-with-params'
+import H1 from '@/app/(app)/_components/h1'
+import LinkWithParams from '@/app/(app)/_components/link-with-params'
 import { Button } from '@/components/ui/button'
 import { PAGES } from '@/utils/constants'
 
