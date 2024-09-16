@@ -11,8 +11,8 @@ model Product {
   reviewsCount Int      @default(0)
   reviews      Review[]
 
-  visible Boolean
-  sales   Int
+  visibility VisibilityStatus @default(draft)
+  sales      Int              @default(0)
 
   productOrder ProductOrder[]
 
@@ -41,6 +41,11 @@ enum Season {
 enum Category {
   women
   children
+}
+
+enum VisibilityStatus {
+  active
+  draft
 }
 
 model Review {

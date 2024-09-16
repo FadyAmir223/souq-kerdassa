@@ -1,11 +1,16 @@
-const PER_PAGE = 10
-const NEIGHBORS = 3
-
-export function getTotalPages(totalItems: number) {
+export function getTotalPages(totalItems: number, PER_PAGE = 10) {
   return Math.ceil(totalItems / PER_PAGE)
 }
 
-export function getSectionRange(currPage: number, totalItems: number) {
+export function getSectionRange({
+  currPage,
+  totalItems,
+  NEIGHBORS = 3,
+}: {
+  currPage: number
+  totalItems: number
+  NEIGHBORS?: number
+}) {
   const totalPages = getTotalPages(totalItems)
   const perSection = Math.min(NEIGHBORS * 2 - 1, totalPages)
 

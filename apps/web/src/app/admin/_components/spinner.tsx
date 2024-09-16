@@ -1,7 +1,18 @@
-export default function spinner() {
+import { cn } from '@/utils/cn'
+
+type SpinnerProps = {
+  className?: string
+}
+
+export default function Spinner({ className }: SpinnerProps) {
   return (
-    <div className='grid place-items-center py-16'>
-      <div className='size-20 animate-[spin_1.5s_linear_infinite] rounded-full border-8 border-gray-500 border-r-transparent' />
+    <div className='grid h-full place-items-center'>
+      <div
+        className={cn(
+          'size-12 animate-[spin_1.5s_linear_infinite] rounded-full border-4 border-gray-500 border-r-transparent',
+          className,
+        )}
+      />
     </div>
   )
 }

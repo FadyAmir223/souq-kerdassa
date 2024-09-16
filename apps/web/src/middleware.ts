@@ -1,11 +1,30 @@
 import { auth } from '@repo/auth'
 import { uuidSchema } from '@repo/validators'
+import { NextResponse } from 'next/server'
+
+import { isAuthenticated } from '@/utils/is-authenticated'
 
 import { checkPublicRoute } from './utils/check-public-route'
 import { PAGES, SEARCH_PARAMS } from './utils/constants'
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req
+
+  if (nextUrl.pathname.startsWith('/admin')) {
+    const authHeaders =
+      req.headers.get('Authorization') ?? req.headers.get('authorization')
+
+    if ((await isAuthenticated(authHeaders)) === false)
+      return new NextResponse('Unauthorized', {
+        status: 401,
+        headers: { 'WWW-Authenticate': 'Basic' },
+      })
+
+    if (nextUrl.pathname === '/admin')
+      return NextResponse.redirect(new URL('/admin/dashboard', req.url))
+
+    return
+  }
 
   // req.auth doesn't support database strategy because dbs doesn't support edge
   // https://next-auth.js.org/configuration/nextjs#caveats
@@ -19,7 +38,7 @@ export default auth((req) => {
   if (isAuthRoute) {
     if (!isLoggedIn) return
 
-    return Response.redirect(
+    return NextResponse.redirect(
       new URL(
         nextUrl.searchParams.get(SEARCH_PARAMS.redirectTo) ??
           PAGES.defaultLoginRedirect(),
@@ -35,7 +54,7 @@ export default auth((req) => {
   if (nextUrl.search) redirectTo += nextUrl.search
   const encodedRedirectTo = encodeURIComponent(redirectTo)
 
-  return Response.redirect(
+  return NextResponse.redirect(
     new URL(
       `${PAGES.auth.login}?${SEARCH_PARAMS.redirectTo}=${encodedRedirectTo}`,
       nextUrl,

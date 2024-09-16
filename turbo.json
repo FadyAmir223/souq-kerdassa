@@ -38,6 +38,12 @@
       "persistent": true
     }
   },
-  "globalEnv": ["DATABASE_URL", "NEXT_PUBLIC_SITE_URL", "AUTH_SECRET"],
+  "globalEnv": [
+    "DATABASE_URL",
+    "NEXT_PUBLIC_SITE_URL",
+    "AUTH_SECRET",
+    "ADMIN_USERNAME",
+    "ADMIN_PASSWORD"
+  ],
   "globalPassThroughEnv": ["NODE_ENV", "SKIP_ENV_VALIDATION", "npm_lifecycle_event"]
 }

@@ -1,9 +1,20 @@
-import { cuidSchema, productsByFiltersSchema, reviewSchema } from '@repo/validators'
+import type { Product } from '@repo/db/types'
+import {
+  adminProductsSchema,
+  adminProductStatusSchema,
+  cuidSchema,
+  productsByFiltersSchema,
+  reviewSchema,
+} from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import {
+  changeProductStatus,
+  deleteAdminProduct,
+  getAdminProducts,
+  getAdminProductsCount,
   getAllProducts,
   getProductById,
   getProductIds,
@@ -13,7 +24,7 @@ import {
 } from '../data/product'
 import { addReview, deleteReview, getReviews } from '../data/review'
 import { getPurchaseStatus } from '../data/user'
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { adminProcedure, protectedProcedure, publicProcedure } from '../trpc'
 import { productByQuerySchema } from '../validations/products'
 
 export const productRouter = {
@@ -80,6 +91,44 @@ export const productRouter = {
       .input(cuidSchema)
       .mutation(async ({ ctx, input: productId }) =>
         deleteReview({ db: ctx.db, userId: ctx.session.user.id, productId }),
+      ),
+  } satisfies TRPCRouterRecord,
+
+  admin: {
+    count: adminProcedure
+      .input(adminProductStatusSchema)
+      .query(async ({ ctx, input: visibility }) =>
+        getAdminProductsCount(ctx.db, visibility !== 'all' ? visibility : undefined),
+      ),
+
+    all: adminProcedure.input(adminProductsSchema).query(async ({ ctx, input }) =>
+      getAdminProducts({
+        db: ctx.db,
+        limit: input.limit,
+        page: input.page,
+        visibility: input.visibility !== 'all' ? input.visibility : undefined,
+      }),
+    ),
+
+    changeStatus: adminProcedure
+      .input(
+        z.object({
+          productId: cuidSchema,
+          visibility: adminProductStatusSchema,
+        }),
+      )
+      .mutation(async ({ ctx, input }) =>
+        changeProductStatus({
+          db: ctx.db,
+          productId: input.productId,
+          visibility: input.visibility as Product['visibility'],
+        }),
+      ),
+
+    delete: adminProcedure
+      .input(cuidSchema)
+      .mutation(({ ctx, input: productId }) =>
+        deleteAdminProduct(ctx.db, productId),
       ),
   } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

@@ -7,8 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-
-import { getSectionRange, getTotalPages } from '../_utils/pagination'
+import { getSectionRange, getTotalPages } from '@/utils/pagination'
 
 type ProductsPaginationProps = {
   currPage: number
@@ -20,7 +19,7 @@ export default function ProductsPagination({
   totalItems,
 }: ProductsPaginationProps) {
   const totalPages = getTotalPages(totalItems)
-  const sectionRange = getSectionRange(currPage, totalItems)
+  const sectionRange = getSectionRange({ currPage, totalItems })
 
   if (totalPages < 2) return null
 

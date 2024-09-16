@@ -26,7 +26,7 @@ export default function ReviewsPagination({
   return (
     <Pagination className='mt-6'>
       <PaginationContent>
-        {reviewPage > 0 && (
+        {reviewPage > 1 && (
           <PaginationItem>
             <Button variant='ghost' onClick={() => setReviewPage(reviewPage - 1)}>
               <ChevronRightIcon className='size-4' />

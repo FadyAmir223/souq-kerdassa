@@ -5,8 +5,14 @@ import type {
   Product,
   ProductVariant,
   Season,
+  VisibilityStatus,
 } from '@repo/db/types'
-import type { CreateOrderSchema, ProductTypeSchema } from '@repo/validators'
+import type {
+  AdminProductsSchema,
+  CreateOrderSchema,
+  ProductsByFiltersSchema,
+} from '@repo/validators'
+import { TRPCError } from '@trpc/server'
 
 import type { ProductByQuerySchema } from '../validations/products'
 
@@ -25,6 +31,7 @@ export async function getAllProducts(db: DB) {
   try {
     const products = await db.product.findMany({
       where: {
+        visibility: 'active',
         variants: {
           every: {
             stock: {
@@ -58,6 +65,9 @@ export async function getAllProducts(db: DB) {
 export async function getProductIds(db: DB) {
   try {
     return await db.product.findMany({
+      where: {
+        visibility: 'active',
+      },
       select: {
         id: true,
       },
@@ -72,6 +82,7 @@ export async function getProductById(db: DB, id: Product['id']) {
     return await db.product.findUnique({
       where: {
         id,
+        visibility: 'active',
       },
       select: {
         id: true,
@@ -105,14 +116,15 @@ export async function getProductsByFilters({
   season,
 }: {
   db: DB
-  limit: number
-  page: number
-  type?: ProductTypeSchema
+  limit: ProductsByFiltersSchema['limit']
+  page: ProductsByFiltersSchema['page']
+  type?: ProductsByFiltersSchema['type']
   category?: Category
   season?: Season
 }) {
   const query = {
     where: {
+      visibility: 'active',
       variants: {
         some: {
           category,
@@ -163,6 +175,7 @@ export async function getProductsByQuery({
   try {
     const products = await db.product.findMany({
       where: {
+        visibility: 'active',
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
           { description: { contains: query, mode: 'insensitive' } },
@@ -194,6 +207,7 @@ export async function getSimilarProducts(db: DB, limit: number) {
   try {
     const products = await db.product.findMany({
       where: {
+        visibility: 'active',
         variants: {
           every: {
             stock: {
@@ -259,5 +273,127 @@ export async function getSoldOutVariants(
     return soldOutVariants
   } catch {
     return []
+  }
+}
+
+export async function getAdminProductsCount(
+  db: DB,
+  visibility?: Product['visibility'],
+) {
+  try {
+    return await db.product.count({
+      where: {
+        visibility,
+      },
+    })
+  } catch {
+    return 0
+  }
+}
+
+export async function getAdminProducts({
+  db,
+  limit,
+  page,
+  visibility,
+}: {
+  db: DB
+  limit: AdminProductsSchema['limit']
+  page: AdminProductsSchema['page']
+  visibility?: Product['visibility']
+}) {
+  try {
+    const products = await db.product.findMany({
+      where: {
+        visibility,
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        createdAt: true,
+        images: true,
+        visibility: true,
+        sales: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    console.log('##################### ', {
+      visibility,
+      products,
+    })
+
+    return products.map(({ images, ...attrs }) => ({
+      ...attrs,
+      image: images[0]!,
+    }))
+  } catch {
+    return []
+  }
+}
+
+export async function changeProductStatus({
+  db,
+  productId,
+  visibility,
+}: {
+  db: DB
+  productId: Product['id']
+  visibility: VisibilityStatus
+}) {
+  try {
+    await db.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        visibility,
+      },
+      select: {
+        id: true,
+      },
+    })
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error)
+      if (error.code === 'P2025')
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'المنتج غير موجود',
+        })
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'تعذر تغيير حالة المنتج',
+    })
+  }
+}
+
+export async function deleteAdminProduct(db: DB, productId: Product['id']) {
+  try {
+    await db.product.delete({
+      where: {
+        id: productId,
+      },
+      select: {
+        id: true,
+      },
+    })
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error)
+      if (error.code === 'P2025')
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'المنتج غير موجود',
+        })
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'تعذر حذف المنتج',
+    })
   }
 }

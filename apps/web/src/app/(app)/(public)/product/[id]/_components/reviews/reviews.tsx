@@ -1,5 +1,7 @@
 import StarRating from '@/app/(app)/(public)/_components/star-rating'
 
+// TODO: remove if not used
+
 export default function Reviews() {
   const reviews = [1, 2]
 

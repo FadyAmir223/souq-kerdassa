@@ -145,6 +145,21 @@ export async function createOrder({
         },
       })
 
+      for (const product of products)
+        await tx.product.update({
+          where: {
+            id: product.id,
+          },
+          data: {
+            sales: {
+              increment: groupedCartProducts[product.id],
+            },
+          },
+          select: {
+            id: true,
+          },
+        })
+
       for (const item of cart)
         await tx.productVariant.update({
           where: {
