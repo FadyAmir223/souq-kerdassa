@@ -74,6 +74,7 @@ export default function Orders() {
                       alt={item.name}
                       fill
                       sizes='5rem'
+                      className='object-cover'
                       priority={orderIndex === 0 && itemIndex < 3}
                     />
                   </div>

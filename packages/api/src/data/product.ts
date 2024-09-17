@@ -8,6 +8,7 @@ import type {
   VisibilityStatus,
 } from '@repo/db/types'
 import type {
+  AddProductImagePathsSchema,
   AdminProductsSchema,
   CreateOrderSchema,
   ProductsByFiltersSchema,
@@ -323,11 +324,6 @@ export async function getAdminProducts({
       take: limit,
     })
 
-    console.log('##################### ', {
-      visibility,
-      products,
-    })
-
     return products.map(({ images, ...attrs }) => ({
       ...attrs,
       image: images[0]!,
@@ -369,6 +365,37 @@ export async function changeProductStatus({
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'تعذر تغيير حالة المنتج',
+    })
+  }
+}
+
+export async function addAdminProduct(db: DB, product: AddProductImagePathsSchema) {
+  try {
+    await db.product.create({
+      data: {
+        name: product.name,
+        description: product.description,
+        images: product.imagePaths,
+        price: product.price,
+        visibility: product.visibility,
+        variants: {
+          createMany: {
+            data: product.variants.map((variant) => ({
+              stock: variant.stock,
+              season: variant.season,
+              category: variant.category,
+            })),
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    })
+  } catch {
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'تعذر إضافة المنتج',
     })
   }
 }

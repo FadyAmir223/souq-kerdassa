@@ -6,7 +6,13 @@ import { NextResponse } from 'next/server'
 import path from 'path'
 import sharp from 'sharp'
 
-import { ASSETS, SEARCH_PARAMS } from '@/utils/constants'
+import { SEARCH_PARAMS } from '@/utils/constants'
+
+/**
+ * saving absolute path
+ * pros: ability to migrate (to .eg s3)
+ * cons: storage
+ */
 
 export async function GET(request: NextRequest) {
   const assetPath = request.nextUrl.searchParams.get(SEARCH_PARAMS.path)
@@ -16,7 +22,7 @@ export async function GET(request: NextRequest) {
   if (!assetPath)
     return NextResponse.json({ error: 'Path is missing' }, { status: 400 })
 
-  const originalPath = `${ASSETS.path}/${assetPath}`
+  const originalPath = assetPath
 
   if (!existsSync(originalPath))
     return NextResponse.json({ error: 'Image not found' }, { status: 404 })
@@ -32,7 +38,7 @@ export async function GET(request: NextRequest) {
   const dirPath = path.dirname(assetPath)
   const imageName = path.parse(assetPath).name
 
-  const cachedPath = `${ASSETS.path}/${dirPath}/${imageName}-w${width}-q${quality}.webp`
+  const cachedPath = `${dirPath}/${imageName}-w${width}-q${quality}.webp`
 
   if (existsSync(cachedPath))
     // @ts-expect-error works

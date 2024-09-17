@@ -7,7 +7,7 @@ import NavLink from './nav-link'
 
 const navs = [
   { href: PAGES.dashboard, label: 'الرئيسية', icon: Home },
-  { href: PAGES.products, label: 'المنتجات', icon: Package },
+  { href: PAGES.products.root, label: 'المنتجات', icon: Package },
   { href: PAGES.orders, label: 'الطلبات', icon: ShoppingCart },
   { href: PAGES.customers, label: 'العملاء', icon: Users },
 ]

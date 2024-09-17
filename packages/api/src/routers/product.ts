@@ -1,5 +1,6 @@
 import type { Product } from '@repo/db/types'
 import {
+  addProductImagePathsSchema,
   adminProductsSchema,
   adminProductStatusSchema,
   cuidSchema,
@@ -11,6 +12,7 @@ import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import {
+  addAdminProduct,
   changeProductStatus,
   deleteAdminProduct,
   getAdminProducts,
@@ -123,6 +125,12 @@ export const productRouter = {
           productId: input.productId,
           visibility: input.visibility as Product['visibility'],
         }),
+      ),
+
+    add: adminProcedure
+      .input(addProductImagePathsSchema)
+      .mutation(async ({ ctx, input: newProduct }) =>
+        addAdminProduct(ctx.db, newProduct),
       ),
 
     delete: adminProcedure

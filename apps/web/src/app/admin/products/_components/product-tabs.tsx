@@ -2,6 +2,7 @@
 
 import type { AdminProductStatusSchema } from '@repo/validators'
 import { PlusCircle } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -27,6 +28,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/trpc/react'
 
+import { PAGES } from '../../_utils/constants'
 import AdminProductsPagination from './admin-products-pagination'
 import ProductItem from './product-item'
 
@@ -110,11 +112,13 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
               <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size='sm' className='h-7 gap-1'>
-            <PlusCircle className='size-3.5' />
-            <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
-              Add Product
-            </span>
+          <Button asChild size='sm' className='h-7 gap-1'>
+            <Link href={PAGES.products.add}>
+              <PlusCircle className='size-3.5' />
+              <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
+                Add Product
+              </span>
+            </Link>
           </Button>
         </div>
       </div>

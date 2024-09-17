@@ -16,7 +16,12 @@ export default function NotFound() {
   return (
     <div className='mb-5 mt-20'>
       <main className='container text-center'>
-        <Image src={notFound} alt='page not found' className='mx-auto max-w-52' />
+        <Image
+          src={notFound}
+          alt='page not found'
+          className='mx-auto max-w-52'
+          priority
+        />
         <p className='mb-3 mt-10 text-xl font-bold'>الصفحة غير موجودة</p>
         <Button asChild variant='outline'>
           <Link href={PAGES.public.main}>عودة للصفحة الرئيسية</Link>

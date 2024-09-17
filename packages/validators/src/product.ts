@@ -3,10 +3,14 @@ import { z } from 'zod'
 export const productTypeSchema = z.enum(['latest', 'top-rated'])
 export type ProductTypeSchema = z.infer<typeof productTypeSchema>
 
-export const productSeasonSchema = z.enum(['summer', 'winter'])
+export const productSeasonSchema = z.enum(['summer', 'winter'], {
+  message: 'يجب اختيار الموسم: صيفى او شتوى',
+})
 export type ProductSeasonSchema = z.infer<typeof productSeasonSchema>
 
-export const productCategorySchema = z.enum(['women', 'children'])
+export const productCategorySchema = z.enum(['women', 'children'], {
+  message: 'يجب اختيار النوع: نساء او اطفال',
+})
 export type ProductCategorySchema = z.infer<typeof productCategorySchema>
 
 const productsPaginationSchema = z.object({
@@ -30,3 +34,54 @@ export const adminProductsSchema = productsPaginationSchema.extend({
   visibility: adminProductStatusSchema,
 })
 export type AdminProductsSchema = z.infer<typeof adminProductsSchema>
+
+export const addProductNoImagesSchema = z.object({
+  name: z.string().min(1, { message: 'اسم المنتج مطلوب' }),
+  description: z.string().min(1, { message: 'وصف المنتج مطلوب' }),
+  price: z.coerce
+    .number({ message: 'يجب ان يكون رقم' })
+    .int({ message: 'يجب ان يكون رقم صحيح' })
+    .positive({ message: 'يجب ان يكون رقم موجب' }),
+  variants: z
+    .array(
+      z.object({
+        stock: z.coerce
+          .number({ message: 'يجب ان يكون رقم' })
+          .int({ message: 'يجب ان يكون رقم صحيح' })
+          .min(0, { message: 'اقل رقم 0' }),
+        season: productSeasonSchema,
+        category: productCategorySchema,
+      }),
+    )
+    .min(1, { message: 'اضف تفريع واحد على الاقل' })
+    .max(4, { message: 'اقصى عدد 4 تفريعات' }),
+  visibility: z.enum(['active', 'draft'], {
+    message: 'يجب اختيار الحالة: نشط او مخفى',
+  }),
+})
+
+export const addProductImagesSchema = z.object({
+  images: z
+    .array(
+      z
+        .instanceof(File, { message: 'الصورة مطلوبة' })
+        .refine((file) => file.size > 0, 'الصورة مطلوبة')
+        .refine(
+          (file) => file.size <= 10 * 1024 * 1024,
+          'اكبر حجم للصورة 10 ميجابايت',
+        )
+        .refine((file) => file.type.startsWith('image/'), 'صيغة صورة غير مدعمة'),
+    )
+    .min(1, { message: 'اضف صورة واحدة على الاقل' })
+    .max(4, { message: 'اقصى عدد 4 صور' }),
+})
+
+export const addProductSchema = addProductNoImagesSchema.merge(
+  addProductImagesSchema,
+)
+export type AddProductSchema = z.infer<typeof addProductSchema>
+
+export const addProductImagePathsSchema = addProductNoImagesSchema.extend({
+  imagePaths: z.array(z.string()),
+})
+export type AddProductImagePathsSchema = z.infer<typeof addProductImagePathsSchema>

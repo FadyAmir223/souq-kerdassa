@@ -86,12 +86,13 @@ const FormLabel = React.forwardRef<
   // @ts-expect-error shadcn fault
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField()
+  const { formItemId } = useFormField()
 
   return (
     <Label
       ref={ref}
-      className={cn(error && 'text-destructive', className)}
+      // className={cn(error && 'text-destructive', className)}
+      className={className}
       htmlFor={formItemId}
       {...props}
     />

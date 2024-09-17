@@ -12,15 +12,13 @@ import ReviewsSection from './_components/reviews/reviews-section'
 import ReviewsSectionSkeleton from './_components/reviews/reviews-section-skeleton'
 import SimilarProducts from './_components/similar-products'
 
-type ProductPageProps = {
-  params: {
-    id: string
-  }
+type generateMetadataArgs = {
+  params: Record<string, string | string[] | undefined>
 }
 
 export async function generateMetadata({
   params: { id: _id },
-}: ProductPageProps): Promise<Metadata> {
+}: generateMetadataArgs): Promise<Metadata> {
   const id = cuidSchema.safeParse(_id)
   if (!id.success) notFound()
 
@@ -29,6 +27,12 @@ export async function generateMetadata({
   return {
     title: product?.name,
     description: product?.description,
+  }
+}
+
+type ProductPageProps = {
+  params: {
+    id: string
   }
 }
 

@@ -4,10 +4,12 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
+import Image from 'next/image'
 import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
-import ImageApi from '@/components/image'
+import landing1 from '@/public/assets/images/landing/1.png'
+import landing2 from '@/public/assets/images/landing/2.png'
 
 export default function ImageSlider() {
   return (
@@ -17,18 +19,15 @@ export default function ImageSlider() {
       modules={[Autoplay]}
       speed={900}
     >
-      {[1, 2].map((i) => (
+      {[landing1, landing2].map((image, i) => (
         <SwiperSlide key={i}>
-          <div className='relative aspect-[3/1] overflow-hidden'>
-            <ImageApi
-              src={`/landing/${i}.png`}
-              alt='landing'
-              fill
-              sizes='100vw'
-              priority
-              className='object-cover'
-            />
-          </div>
+          <Image
+            src={image}
+            alt='landing'
+            sizes='100vw'
+            priority
+            className='object-cover'
+          />
         </SwiperSlide>
       ))}
     </Swiper>

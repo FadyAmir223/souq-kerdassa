@@ -18,7 +18,12 @@ export default function GlobalError({
       <body>
         <main className='mt-20 flex min-h-screen flex-col'>
           <div className='container text-center'>
-            <Image src={notFound} alt='حدث خطأ' className='mx-auto mb-6 max-w-52' />
+            <Image
+              src={notFound}
+              alt='حدث خطأ'
+              className='mx-auto mb-6 max-w-52'
+              priority
+            />
             <H1>حدث خطأ</H1>
 
             <Button variant='outline' onClick={() => reset()}>
