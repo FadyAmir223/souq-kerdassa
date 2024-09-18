@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { cuidSchema } from './id'
+
 export const productTypeSchema = z.enum(['latest', 'top-rated'])
 export type ProductTypeSchema = z.infer<typeof productTypeSchema>
 
@@ -36,8 +38,9 @@ export const adminProductsSchema = productsPaginationSchema.extend({
 export type AdminProductsSchema = z.infer<typeof adminProductsSchema>
 
 export const addProductNoImagesSchema = z.object({
+  id: cuidSchema.optional(),
   name: z.string().min(1, { message: 'اسم المنتج مطلوب' }),
-  description: z.string().min(1, { message: 'وصف المنتج مطلوب' }),
+  description: z.string(),
   price: z.coerce
     .number({ message: 'يجب ان يكون رقم' })
     .int({ message: 'يجب ان يكون رقم صحيح' })
@@ -45,6 +48,7 @@ export const addProductNoImagesSchema = z.object({
   variants: z
     .array(
       z.object({
+        id: cuidSchema.optional(),
         stock: z.coerce
           .number({ message: 'يجب ان يكون رقم' })
           .int({ message: 'يجب ان يكون رقم صحيح' })

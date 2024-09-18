@@ -5,7 +5,7 @@ export const PAGES = {
   products: {
     root: '/admin/products',
     add: '/admin/products/add',
-    edit: (id: Product['id']) => `/admin/products/${id}/edit`,
+    edit: (id: Product['id']) => `/admin/products/edit/${id}`,
   },
   orders: '/admin/orders',
   customers: '/admin/customers',

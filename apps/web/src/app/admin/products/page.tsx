@@ -1,20 +1,22 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
 import { api, HydrateClient } from '@/trpc/server'
 
 import Spinner from '../_components/spinner'
+import { defaultProductsQueryParams } from '../_utils/query'
 import ProductTabs from './_components/product-tabs'
 
-const defaultTab = 'all'
+export const metadata: Metadata = {
+  title: {
+    absolute: 'كل المنتجات',
+  },
+}
 
 export default function ProductsPage() {
   void Promise.all([
-    api.product.admin.count.prefetch(defaultTab),
-    api.product.admin.all.prefetch({
-      limit: 10,
-      page: 1,
-      visibility: defaultTab,
-    }),
+    api.product.admin.count.prefetch(defaultProductsQueryParams.visibility),
+    api.product.admin.all.prefetch(defaultProductsQueryParams),
   ])
 
   return (
@@ -24,7 +26,7 @@ export default function ProductsPage() {
 
         <HydrateClient>
           <Suspense fallback={<Spinner />}>
-            <ProductTabs defaultTab={defaultTab} />
+            <ProductTabs defaultTab={defaultProductsQueryParams.visibility} />
           </Suspense>
         </HydrateClient>
       </main>

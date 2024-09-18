@@ -3,6 +3,7 @@ import type { AdminProductStatusSchema } from '@repo/validators'
 import { format } from 'date-fns'
 import { ar } from 'date-fns/locale'
 import { MoreHorizontal } from 'lucide-react'
+import Link from 'next/link'
 
 import ImageApi from '@/components/image'
 import { Button } from '@/components/ui/button'
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { TableCell, TableRow } from '@/components/ui/table'
 
+import { PAGES } from '../../_utils/constants'
 import DeleteProductAdmin from './delete-product-admin'
 import EditProductStatusAdmin from './edit-product-status-admin'
 
@@ -74,8 +76,10 @@ export default function ProductItem({
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             <DropdownMenuItem>
-              <Button variant='none' className='block w-full px-2 py-1.5'>
-                تعديل
+              <Button asChild variant='none' className='block w-full px-2 py-1.5'>
+                <Link className='text-center' href={PAGES.products.edit(product.id)}>
+                  تعديل
+                </Link>
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem>

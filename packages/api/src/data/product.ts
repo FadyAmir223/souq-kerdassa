@@ -333,6 +333,34 @@ export async function getAdminProducts({
   }
 }
 
+export async function getAdminProductDetails(db: DB, productId: Product['id']) {
+  try {
+    return await db.product.findUnique({
+      where: {
+        id: productId,
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        images: true,
+        visibility: true,
+        variants: {
+          select: {
+            id: true,
+            stock: true,
+            season: true,
+            category: true,
+          },
+        },
+      },
+    })
+  } catch {
+    return null
+  }
+}
+
 export async function changeProductStatus({
   db,
   productId,
@@ -396,6 +424,73 @@ export async function addAdminProduct(db: DB, product: AddProductImagePathsSchem
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'تعذر إضافة المنتج',
+    })
+  }
+}
+
+export async function editAdminProduct(db: DB, product: AddProductImagePathsSchema) {
+  try {
+    await db.$transaction(async (tx) => {
+      const productVariants = await tx.product.update({
+        where: {
+          id: product.id,
+        },
+        data: {
+          name: product.name,
+          description: product.description,
+          images: product.imagePaths,
+          price: product.price,
+          visibility: product.visibility,
+        },
+        select: {
+          variants: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      })
+
+      const existingVariantIds = productVariants.variants.map(({ id }) => id)
+      const newVariantIds = product.variants.map(({ id }) => id)
+
+      await tx.productVariant.deleteMany({
+        where: {
+          id: {
+            in: existingVariantIds.filter((id) => !newVariantIds.includes(id)),
+          },
+        },
+      })
+
+      for (const variant of product.variants)
+        await tx.productVariant.upsert({
+          where: {
+            id: variant.id ?? '',
+          },
+          create: {
+            productId: product.id!,
+            season: variant.season,
+            category: variant.category,
+            stock: variant.stock,
+          },
+          update: {
+            season: variant.season,
+            category: variant.category,
+            stock: variant.stock,
+          },
+        })
+    })
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error)
+      if (error.code === 'P2025')
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'المنتج غير موجود',
+        })
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'تعذر تعديل المنتج',
     })
   }
 }

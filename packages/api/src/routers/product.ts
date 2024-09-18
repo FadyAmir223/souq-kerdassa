@@ -15,6 +15,8 @@ import {
   addAdminProduct,
   changeProductStatus,
   deleteAdminProduct,
+  editAdminProduct,
+  getAdminProductDetails,
   getAdminProducts,
   getAdminProductsCount,
   getAllProducts,
@@ -112,6 +114,12 @@ export const productRouter = {
       }),
     ),
 
+    detailsById: adminProcedure
+      .input(cuidSchema)
+      .query(async ({ ctx, input: productId }) =>
+        getAdminProductDetails(ctx.db, productId),
+      ),
+
     changeStatus: adminProcedure
       .input(
         z.object({
@@ -131,6 +139,12 @@ export const productRouter = {
       .input(addProductImagePathsSchema)
       .mutation(async ({ ctx, input: newProduct }) =>
         addAdminProduct(ctx.db, newProduct),
+      ),
+
+    edit: adminProcedure
+      .input(addProductImagePathsSchema)
+      .mutation(async ({ ctx, input: newProduct }) =>
+        editAdminProduct(ctx.db, newProduct),
       ),
 
     delete: adminProcedure

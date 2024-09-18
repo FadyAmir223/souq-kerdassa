@@ -116,7 +116,7 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
             <Link href={PAGES.products.add}>
               <PlusCircle className='size-3.5' />
               <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
-                Add Product
+                اضف منتج
               </span>
             </Link>
           </Button>

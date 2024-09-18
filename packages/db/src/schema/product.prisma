@@ -2,7 +2,7 @@ model Product {
   id String @id @default(cuid())
 
   name        String           @unique
-  description String?
+  description String           @default("")
   images      String[]
   price       Float
   variants    ProductVariant[]
