@@ -54,6 +54,7 @@ export default function Orders() {
                   'before:bg-yellow-500': status === 'pending',
                   'before:bg-green-500': status === 'completed',
                   'before:bg-gray-500': status === 'cancelled',
+                  'before:bg-orange-500': status === 'refunded',
                 },
               )}
             />

@@ -1,6 +1,7 @@
-import type { DB, Order, Product, User } from '@repo/db/types'
-import type { CreateOrderSchema } from '@repo/validators'
+import type { DB, Order, OrderStatus, Product, User } from '@repo/db/types'
+import type { AdminOrdersSchema, CreateOrderSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
+import { startOfMonth, startOfWeek, subMonths, subWeeks } from 'date-fns'
 
 export async function getOrders(db: DB, userId: User['id']) {
   await new Promise((r) => setTimeout(r, 2000))
@@ -220,6 +221,242 @@ export async function cancelOrder({
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'تعذر إلغاء الطلب',
+    })
+  }
+}
+
+export async function getAdminOrdersCount(db: DB, status?: OrderStatus) {
+  try {
+    return db.order.count({
+      where: {
+        status,
+      },
+    })
+  } catch {
+    return 0
+  }
+}
+
+export async function getAdminOrders({
+  db,
+  limit,
+  page,
+  status,
+}: {
+  db: DB
+  limit: AdminOrdersSchema['limit']
+  page: AdminOrdersSchema['page']
+  status?: OrderStatus
+}) {
+  try {
+    const orders = await db.order.findMany({
+      where: {
+        status,
+      },
+      select: {
+        id: true,
+        status: true,
+        createdAt: true,
+        totalPrice: true,
+        products: {
+          select: {
+            quantity: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            phone: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    return orders.map(({ products, ...order }) => ({
+      ...order,
+      quantity: products.reduce((acc, { quantity }) => acc + quantity, 0),
+    }))
+  } catch {
+    return []
+  }
+}
+
+export async function getAdminOrderDetails(db: DB, orderId: Order['id']) {
+  try {
+    const order = await db.order.findUnique({
+      where: {
+        id: orderId,
+      },
+      select: {
+        totalPrice: true,
+        status: true,
+        user: {
+          select: {
+            name: true,
+            phone: true,
+          },
+        },
+        products: {
+          select: {
+            quantity: true,
+            product: {
+              select: {
+                name: true,
+                price: true,
+                images: true,
+              },
+            },
+            productVariant: {
+              select: {
+                id: true,
+                season: true,
+                category: true,
+              },
+            },
+          },
+        },
+        address: {
+          select: {
+            city: {
+              select: {
+                name: true,
+                cityCategoryPrice: true,
+              },
+            },
+            region: true,
+            street: true,
+            building: true,
+            mark: true,
+          },
+        },
+        createdAt: true,
+      },
+    })
+
+    return {
+      totalPrice: order?.totalPrice ?? 0,
+      shipping: order?.address.city.cityCategoryPrice?.price ?? 0,
+      user: order?.user,
+      createdAt: order?.createdAt,
+      status: order?.status,
+      address: {
+        ...order?.address,
+        city: order?.address.city.name,
+      },
+      products: order?.products.map((product) => ({
+        id: product.productVariant.id,
+        quantity: product.quantity,
+        name: product.product.name,
+        price: product.product.price,
+        image: product.product.images[0]!,
+        season: product.productVariant.season,
+        category: product.productVariant.category,
+      })),
+    }
+  } catch {
+    return null
+  }
+}
+
+export async function getOrderStatistics(db: DB) {
+  try {
+    const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 6 })
+    const currentMonthStart = startOfMonth(new Date())
+    const previousMonthStart = subMonths(currentMonthStart, 1)
+    const twoMonthsAgoStart = subMonths(currentMonthStart, 2)
+
+    const orders = await db.order.findMany({
+      where: {
+        createdAt: {
+          gte: twoMonthsAgoStart,
+        },
+        status: 'completed',
+      },
+      select: {
+        createdAt: true,
+        totalPrice: true,
+      },
+    })
+
+    const { totalThisWeek, totalPreviousWeek, totalThisMonth, totalPreviousMonth } =
+      orders.reduce(
+        (acc, order) => {
+          const createdAt = order.createdAt.getTime()
+
+          if (createdAt >= currentWeekStart.getTime())
+            acc.totalThisWeek += order.totalPrice
+          else if (createdAt >= subWeeks(currentWeekStart, 1).getTime())
+            acc.totalPreviousWeek += order.totalPrice
+
+          if (createdAt >= currentMonthStart.getTime())
+            acc.totalThisMonth += order.totalPrice
+          else if (createdAt >= previousMonthStart.getTime())
+            acc.totalPreviousMonth += order.totalPrice
+
+          return acc
+        },
+        {
+          totalThisWeek: 0,
+          totalPreviousWeek: 0,
+          totalThisMonth: 0,
+          totalPreviousMonth: 0,
+        },
+      )
+
+    const weeklyPercentageChange =
+      totalPreviousWeek > 0 ? (totalThisWeek / totalPreviousWeek) * 100 : 100
+
+    const monthlyPercentageChange =
+      totalPreviousMonth > 0 ? (totalThisMonth / totalPreviousMonth) * 100 : 100
+
+    return {
+      totalThisWeek,
+      weeklyPercentageChange,
+      totalThisMonth,
+      monthlyPercentageChange,
+    }
+  } catch {
+    return {}
+  }
+}
+
+export async function changeOrderStatus({
+  db,
+  orderId,
+  status,
+}: {
+  db: DB
+  orderId: Order['id']
+  status: OrderStatus
+}) {
+  try {
+    await db.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        status,
+      },
+      select: {
+        id: true,
+      },
+    })
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error)
+      if (error.code === 'P2025')
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'الطلب غير موجود',
+        })
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'تعذر تغيير حالة الطلب',
     })
   }
 }

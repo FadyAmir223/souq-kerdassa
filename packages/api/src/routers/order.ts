@@ -1,10 +1,26 @@
-import { createOrderSchema, cuidSchema } from '@repo/validators'
+import type { OrderStatus } from '@repo/db/types'
+import {
+  adminOrdersSchema,
+  adminOrderStatusSchema,
+  createOrderSchema,
+  cuidSchema,
+} from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
-import { cancelOrder, createOrder, getOrders } from '../data/order'
+import {
+  cancelOrder,
+  changeOrderStatus,
+  createOrder,
+  getAdminOrderDetails,
+  getAdminOrders,
+  getAdminOrdersCount,
+  getOrders,
+  getOrderStatistics,
+} from '../data/order'
 import { getSoldOutVariants } from '../data/product'
-import { protectedProcedure } from '../trpc'
+import { adminProcedure, protectedProcedure } from '../trpc'
 
 export const ordersRouter = {
   all: protectedProcedure.query(async ({ ctx }) =>
@@ -41,4 +57,44 @@ export const ordersRouter = {
         orderId,
       }),
     ),
+
+  admin: {
+    count: adminProcedure
+      .input(adminOrderStatusSchema)
+      .query(async ({ ctx, input: status }) =>
+        getAdminOrdersCount(ctx.db, status !== 'all' ? status : undefined),
+      ),
+
+    all: adminProcedure.input(adminOrdersSchema).query(async ({ ctx, input }) =>
+      getAdminOrders({
+        db: ctx.db,
+        limit: input.limit,
+        page: input.page,
+        status: input.status !== 'all' ? input.status : undefined,
+      }),
+    ),
+
+    detailsById: adminProcedure
+      .input(cuidSchema)
+      .query(async ({ ctx, input: orderId }) =>
+        getAdminOrderDetails(ctx.db, orderId),
+      ),
+
+    statistics: adminProcedure.query(async ({ ctx }) => getOrderStatistics(ctx.db)),
+
+    changeStatus: adminProcedure
+      .input(
+        z.object({
+          orderId: cuidSchema,
+          status: adminOrderStatusSchema,
+        }),
+      )
+      .mutation(async ({ ctx, input }) =>
+        changeOrderStatus({
+          db: ctx.db,
+          orderId: input.orderId,
+          status: input.status as OrderStatus,
+        }),
+      ),
+  } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

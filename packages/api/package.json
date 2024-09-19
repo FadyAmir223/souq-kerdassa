@@ -23,6 +23,7 @@
     "@repo/validators": "workspace:*",
     "@trpc/server": "catalog:",
     "bcryptjs": "catalog:",
+    "date-fns": "catalog:",
     "next-auth": "catalog:",
     "superjson": "catalog:",
     "zod": "catalog:"

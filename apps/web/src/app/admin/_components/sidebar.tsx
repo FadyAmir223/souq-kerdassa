@@ -1,8 +1,7 @@
 import { Home, Package, ShoppingCart, Users } from 'lucide-react'
 
-import { Badge } from '@/components/ui/badge'
-
 import { PAGES } from '../_utils/constants'
+import ActiveOrdersCount from './active-orders-count'
 import NavLink from './nav-link'
 
 const navs = [
@@ -20,12 +19,7 @@ export default function Sidebar() {
           <NavLink key={nav.href} href={nav.href}>
             <nav.icon className='size-4' />
             {nav.label}
-
-            {nav.href === PAGES.orders && (
-              <Badge className='me-auto flex size-6 shrink-0 items-center justify-center rounded-full'>
-                6
-              </Badge>
-            )}
+            {nav.href === PAGES.orders && <ActiveOrdersCount />}
           </NavLink>
         ))}
       </nav>

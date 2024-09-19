@@ -7,7 +7,6 @@ import { addProductSchema } from '@repo/validators'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
-import { defaultProductsQueryParams } from '@/app/admin/_utils/query'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -119,7 +118,7 @@ export default function ActionProductForm({
         variant: 'success',
       })
 
-      void utils.product.admin.all.invalidate(defaultProductsQueryParams)
+      void utils.product.invalidate()
     },
     onError: ({ message }) => {
       toast({

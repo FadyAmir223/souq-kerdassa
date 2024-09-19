@@ -13,7 +13,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
 import { cn } from '@/utils/cn'
 
-import { tabs } from './product-tabs'
+import { tabs } from '../_utils/tabs'
 
 type EditProductStatusAdminProps = {
   product: {
@@ -33,18 +33,13 @@ export default function EditProductStatusAdmin({
   const utils = api.useUtils()
 
   const changeStatus = api.product.admin.changeStatus.useMutation({
-    onMutate: async () => {
+    onMutate: async ({ visibility }) => {
       await utils.product.admin.all.cancel()
       const filters = { limit: 10, page: currPage, visibility: activeTab }
       const oldProducts = utils.product.admin.all.getData(filters) ?? []
 
       const newProducts = oldProducts.map((_product) =>
-        _product.id === product.id
-          ? {
-              ..._product,
-              visibility: _product.visibility !== 'active' ? 'active' : 'draft',
-            }
-          : _product,
+        _product.id === product.id ? { ..._product, visibility } : _product,
       )
 
       utils.product.admin.all.setData(filters, newProducts)

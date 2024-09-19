@@ -28,8 +28,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/trpc/react'
 
+import AdminPagination from '../../_components/admin-pagination'
 import { PAGES } from '../../_utils/constants'
-import AdminProductsPagination from './admin-products-pagination'
+import { tabs } from '../_utils/tabs'
 import ProductItem from './product-item'
 
 /**
@@ -42,15 +43,6 @@ import ProductItem from './product-item'
 type ProductTabsProps = {
   defaultTab: AdminProductStatusSchema
 }
-
-export const tabs = [
-  { label: 'الكل', value: 'all' },
-  { label: 'نشط', value: 'active' },
-  { label: 'مخفى', value: 'draft' },
-] as const satisfies {
-  label: string
-  value: AdminProductStatusSchema
-}[]
 
 export default function ProductTabs({ defaultTab }: ProductTabsProps) {
   const [currPage, setCurrPage] = useState(1)
@@ -164,10 +156,10 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
               </Table>
             </CardContent>
 
-            <AdminProductsPagination
+            <AdminPagination
               currPage={currPage}
               setCurrPage={setCurrPage}
-              totalProducts={totalProducts}
+              totalItems={totalProducts}
             />
 
             <CardFooter>

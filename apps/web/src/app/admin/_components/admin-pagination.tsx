@@ -12,16 +12,16 @@ import { getSectionRange, getTotalPages } from '@/utils/pagination'
 type ProductsPaginationProps = {
   currPage: number
   setCurrPage: (newPage: number) => void
-  totalProducts: number
+  totalItems: number
 }
 
-export default function AdminProductsPagination({
+export default function AdminPagination({
   currPage,
   setCurrPage,
-  totalProducts,
+  totalItems,
 }: ProductsPaginationProps) {
-  const totalPages = getTotalPages(totalProducts)
-  const sectionRange = getSectionRange({ currPage, totalItems: totalProducts })
+  const totalPages = getTotalPages(totalItems)
+  const sectionRange = getSectionRange({ currPage, totalItems })
 
   if (totalPages < 2) return null
 

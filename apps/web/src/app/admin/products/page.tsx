@@ -1,22 +1,28 @@
+import type { AdminProductsSchema } from '@repo/validators'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
 import { api, HydrateClient } from '@/trpc/server'
 
 import Spinner from '../_components/spinner'
-import { defaultProductsQueryParams } from '../_utils/query'
 import ProductTabs from './_components/product-tabs'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'كل المنتجات',
+    absolute: 'المنتجات',
   },
 }
 
+const defaultQueryParams = {
+  limit: 10,
+  page: 1,
+  visibility: 'all',
+} satisfies AdminProductsSchema
+
 export default function ProductsPage() {
   void Promise.all([
-    api.product.admin.count.prefetch(defaultProductsQueryParams.visibility),
-    api.product.admin.all.prefetch(defaultProductsQueryParams),
+    api.product.admin.count.prefetch(defaultQueryParams.visibility),
+    api.product.admin.all.prefetch(defaultQueryParams),
   ])
 
   return (
@@ -26,7 +32,7 @@ export default function ProductsPage() {
 
         <HydrateClient>
           <Suspense fallback={<Spinner />}>
-            <ProductTabs defaultTab={defaultProductsQueryParams.visibility} />
+            <ProductTabs defaultTab={defaultQueryParams.visibility} />
           </Suspense>
         </HydrateClient>
       </main>

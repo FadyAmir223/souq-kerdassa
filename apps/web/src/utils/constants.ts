@@ -77,7 +77,8 @@ export const AR = {
     pending: 'جارى الوصول',
     completed: 'تم الوصول',
     cancelled: 'ملغى',
+    refunded: 'مسترد',
   },
-}
+} as const
 
 export const bcryptSalt = 10

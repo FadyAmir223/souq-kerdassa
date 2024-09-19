@@ -5,6 +5,7 @@ model Product {
   description String           @default("")
   images      String[]
   price       Float
+  // TODO: original price
   variants    ProductVariant[]
 
   rating       Float    @default(0)
