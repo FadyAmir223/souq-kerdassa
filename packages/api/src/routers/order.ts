@@ -16,6 +16,7 @@ import {
   getAdminOrderDetails,
   getAdminOrders,
   getAdminOrdersCount,
+  getOrderAllTimeStatistics,
   getOrders,
   getOrderStatistics,
 } from '../data/order'
@@ -81,6 +82,10 @@ export const ordersRouter = {
       ),
 
     statistics: adminProcedure.query(async ({ ctx }) => getOrderStatistics(ctx.db)),
+
+    allTimeStatistics: adminProcedure.query(async ({ ctx }) =>
+      getOrderAllTimeStatistics(ctx.db),
+    ),
 
     changeStatus: adminProcedure
       .input(

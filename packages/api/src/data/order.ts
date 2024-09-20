@@ -460,3 +460,39 @@ export async function changeOrderStatus({
     })
   }
 }
+
+export async function getOrderAllTimeStatistics(db: DB) {
+  try {
+    const result = await db.order.groupBy({
+      by: ['status'],
+      where: {
+        status: {
+          in: ['completed', 'pending'],
+        },
+      },
+      _sum: {
+        totalPrice: true,
+      },
+    })
+
+    return result.reduce(
+      (acc, curr) => {
+        if (curr.status === 'completed')
+          acc.totalAllTime += curr._sum.totalPrice ?? 0
+        if (curr.status === 'pending')
+          acc.pendingAllTime += curr._sum.totalPrice ?? 0
+
+        return acc
+      },
+      {
+        totalAllTime: 0,
+        pendingAllTime: 0,
+      },
+    )
+  } catch {
+    return {
+      totalAllTime: 0,
+      pendingAllTime: 0,
+    }
+  }
+}
