@@ -3,6 +3,7 @@ import {
   addressSchemaWithId,
   cuidSchema,
   editProfileSchema,
+  paginationSchema,
 } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 
@@ -12,9 +13,12 @@ import {
   editAddress,
   editUserProfile,
   getAddresses,
+  getAdminUsers,
+  getAdminUsersCount,
   getPurchaseAndReviewStatus,
+  getUserStatistics,
 } from '../data/user'
-import { protectedProcedure, publicProcedure } from '../trpc'
+import { adminProcedure, protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = {
   editProfile: protectedProcedure
@@ -65,5 +69,19 @@ export const userRouter = {
       .mutation(async ({ ctx, input: addressId }) =>
         deleteAddress({ db: ctx.db, userId: ctx.session.user.id, addressId }),
       ),
+  } satisfies TRPCRouterRecord,
+
+  admin: {
+    count: adminProcedure.query(async ({ ctx }) => getAdminUsersCount(ctx.db)),
+
+    all: adminProcedure.input(paginationSchema).query(async ({ ctx, input }) =>
+      getAdminUsers({
+        db: ctx.db,
+        limit: input.limit,
+        page: input.page,
+      }),
+    ),
+
+    statistics: adminProcedure.query(async ({ ctx }) => getUserStatistics(ctx.db)),
   } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

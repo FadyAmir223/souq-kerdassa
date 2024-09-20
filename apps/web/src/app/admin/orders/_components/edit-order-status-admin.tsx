@@ -50,14 +50,15 @@ export default function EditOrderStatusAdmin({
       // inconvenient cache invalidation
       // void utils.order.admin.invalidate()
 
+      const hasCompleted = oldStatus === 'completed' || newStatus === 'completed'
+      const hasPending = oldStatus === 'pending' || newStatus === 'pending'
+
       void Promise.all([
         // statistics only if order was or became completed
-        oldStatus === 'completed' || newStatus === 'completed'
-          ? utils.order.admin.statistics.invalidate()
-          : Promise.resolve(),
+        hasCompleted ? utils.order.admin.statistics.invalidate() : Promise.resolve(),
 
         // pending count only if order was or became pending
-        oldStatus === 'pending' || newStatus === 'pending'
+        hasPending
           ? utils.order.admin.count.invalidate('pending')
           : Promise.resolve(),
 
@@ -66,6 +67,11 @@ export default function EditOrderStatusAdmin({
 
         // controls { limit, status } but can't control page
         utils.order.admin.all.invalidate(),
+
+        // for totalPaid and totalPending
+        hasCompleted || hasPending
+          ? utils.user.admin.all.invalidate()
+          : Promise.resolve(),
       ])
     },
     onError: ({ message }, _, ctx) => {

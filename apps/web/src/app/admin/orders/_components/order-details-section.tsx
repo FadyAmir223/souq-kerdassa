@@ -6,6 +6,7 @@ import { keepPreviousData } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ar } from 'date-fns/locale'
 
+import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -79,8 +80,16 @@ export default function OrderDetailsSection({ orderId }: OrderDetailsSectionProp
           <ul className='grid gap-3'>
             {orderDetails.products?.map((product) => (
               <li key={product.id} className='flex items-center justify-between'>
+                <div className='relative aspect-[83/100] w-12'>
+                  <ImageApi
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    sizes='3rem'
+                  />
+                </div>
                 <span className='text-muted-foreground'>
-                  {product.name} <span>{product.quantity}</span>
+                  {product.name} x <span>{product.quantity}</span>
                 </span>
                 <span>{product.price}</span>
               </li>

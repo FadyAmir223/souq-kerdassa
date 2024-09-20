@@ -8,5 +8,5 @@ export const PAGES = {
     edit: (id: Product['id']) => `/admin/products/edit/${id}`,
   },
   orders: '/admin/orders',
-  customers: '/admin/customers',
+  customers: '/admin/users',
 }

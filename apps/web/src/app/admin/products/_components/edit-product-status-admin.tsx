@@ -46,6 +46,9 @@ export default function EditProductStatusAdmin({
 
       return { oldProducts }
     },
+    onSuccess: () => {
+      void utils.product.admin.all.invalidate()
+    },
     onError: ({ message }, _, ctx) => {
       utils.product.admin.all.setData(
         { limit: 10, page: currPage, visibility: activeTab },

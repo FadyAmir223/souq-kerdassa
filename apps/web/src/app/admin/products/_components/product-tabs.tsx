@@ -44,6 +44,12 @@ type ProductTabsProps = {
   defaultTab: AdminProductStatusSchema
 }
 
+const filterTitle = {
+  all: 'كل المنتجات',
+  active: 'المنتجات الظاهرة',
+  draft: 'المنتجات المخفية',
+} as const
+
 export default function ProductTabs({ defaultTab }: ProductTabsProps) {
   const [currPage, setCurrPage] = useState(1)
   const [activeTab, setActiveTab] = useState<AdminProductStatusSchema>(defaultTab)
@@ -119,7 +125,7 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
         <TabsContent key={value} dir='rtl' value={value}>
           <Card>
             <CardHeader>
-              <CardTitle className='text-start'>كل المنتجات</CardTitle>
+              <CardTitle className='text-start'>{filterTitle[value]}</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -166,7 +172,8 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
               <div className='text-xs text-muted-foreground'>
                 يعرض{' '}
                 <strong>
-                  {(currPage - 1) * 10 + 1}-{Math.min(currPage * 10, totalProducts)}
+                  {(currPage - 1) * 10 + 1} إلى{' '}
+                  {Math.min(currPage * 10, totalProducts)}
                 </strong>{' '}
                 من <strong>{totalProducts}</strong> منتج
               </div>

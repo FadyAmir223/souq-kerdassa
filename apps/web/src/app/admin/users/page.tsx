@@ -1,38 +1,41 @@
-import type { AdminProductsSchema } from '@repo/validators'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
 import { api, HydrateClient } from '@/trpc/server'
 
 import Spinner from '../_components/spinner'
-import ProductTabs from './_components/product-tabs'
+import UsersList from './_components/users-list'
+import UserStatistics from './user-statistics'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'المنتجات',
+    absolute: 'العملاء',
   },
 }
 
 const defaultQueryParams = {
   limit: 10,
   page: 1,
-  visibility: 'all',
-} satisfies AdminProductsSchema
+}
 
-export default function ProductsPage() {
+// search can be done
+
+export default function UsersPage() {
   void Promise.all([
-    api.product.admin.count.prefetch(defaultQueryParams.visibility),
-    api.product.admin.all.prefetch(defaultQueryParams),
+    api.user.admin.count.prefetch(),
+    api.user.admin.all.prefetch(defaultQueryParams),
   ])
 
   return (
     <div className='flex flex-1 flex-col sm:gap-4 sm:py-4 lg:pe-14'>
       <main className='grid items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8'>
-        <h1 className='text-lg font-semibold md:text-2xl'>المنتجات</h1>
+        <h1 className='text-lg font-semibold md:text-2xl'>العملاء</h1>
+
+        <UserStatistics />
 
         <HydrateClient>
           <Suspense fallback={<Spinner />}>
-            <ProductTabs defaultTab={defaultQueryParams.visibility} />
+            <UsersList />
           </Suspense>
         </HydrateClient>
       </main>

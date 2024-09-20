@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { cuidSchema } from './id'
+import { cuidSchema } from './utils'
 
 const isProduction = process.env.NODE_ENV === 'production'
 

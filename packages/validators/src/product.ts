@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { cuidSchema } from './id'
+import { cuidSchema, paginationSchema } from './utils'
 
 export const productTypeSchema = z.enum(['latest', 'top-rated'])
 export type ProductTypeSchema = z.infer<typeof productTypeSchema>
@@ -15,12 +15,7 @@ export const productCategorySchema = z.enum(['women', 'children'], {
 })
 export type ProductCategorySchema = z.infer<typeof productCategorySchema>
 
-const productsPaginationSchema = z.object({
-  limit: z.coerce.number().default(10),
-  page: z.coerce.number().default(1),
-})
-
-export const productsByFiltersSchema = productsPaginationSchema.extend({
+export const productsByFiltersSchema = paginationSchema.extend({
   type: productTypeSchema.optional(),
   season: productSeasonSchema.optional(),
   category: productCategorySchema.optional(),
@@ -32,7 +27,7 @@ export const adminProductStatusSchema = z
   .default('all')
 export type AdminProductStatusSchema = z.infer<typeof adminProductStatusSchema>
 
-export const adminProductsSchema = productsPaginationSchema.extend({
+export const adminProductsSchema = paginationSchema.extend({
   visibility: adminProductStatusSchema,
 })
 export type AdminProductsSchema = z.infer<typeof adminProductsSchema>

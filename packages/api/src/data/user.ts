@@ -1,6 +1,11 @@
 import type { Address, DB, Product, User } from '@repo/db/types'
-import type { AddressSchema, AddressSchemaWithId } from '@repo/validators'
+import type {
+  AddressSchema,
+  AddressSchemaWithId,
+  PaginationSchema,
+} from '@repo/validators'
 import { TRPCError } from '@trpc/server'
+import { startOfMonth } from 'date-fns'
 
 export async function createUser(
   db: DB,
@@ -311,5 +316,104 @@ export async function deleteAddress({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'تعذر مسح العنوان',
     })
+  }
+}
+
+export async function getAdminUsersCount(db: DB) {
+  try {
+    return await db.user.count()
+  } catch {
+    return 0
+  }
+}
+
+export async function getAdminUsers({
+  db,
+  limit,
+  page,
+}: {
+  db: DB
+  limit: PaginationSchema['limit']
+  page: PaginationSchema['page']
+}) {
+  try {
+    const users = await db.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        addresses: {
+          select: {
+            city: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          take: 1,
+        },
+        orders: {
+          where: {
+            status: {
+              in: ['pending', 'completed'],
+            },
+          },
+          select: {
+            totalPrice: true,
+            status: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    return users.map((user) => {
+      const { totalPending, totalPaid } = user.orders.reduce(
+        (acc, order) => {
+          if (order.status === 'pending') acc.totalPending += order.totalPrice
+          if (order.status === 'completed') acc.totalPaid += order.totalPrice
+          return acc
+        },
+        { totalPending: 0, totalPaid: 0 },
+      )
+
+      return {
+        id: user.id,
+        name: user.name,
+        phone: user.phone,
+        city: user.addresses[0]?.city.name,
+        orderCount: user.orders.length,
+        totalPending,
+        totalPaid,
+      }
+    })
+  } catch {
+    return []
+  }
+}
+
+export async function getUserStatistics(db: DB) {
+  const currentMonthStart = startOfMonth(new Date())
+
+  try {
+    const totalThisMonth = await db.user.count({
+      where: {
+        createdAt: {
+          gte: currentMonthStart,
+        },
+      },
+    })
+
+    return {
+      totalThisMonth,
+    }
+  } catch {
+    return {
+      totalThisMonth: 0,
+    }
   }
 }

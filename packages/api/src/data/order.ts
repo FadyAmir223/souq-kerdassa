@@ -364,12 +364,12 @@ export async function getAdminOrderDetails(db: DB, orderId: Order['id']) {
 }
 
 export async function getOrderStatistics(db: DB) {
-  try {
-    const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 6 })
-    const currentMonthStart = startOfMonth(new Date())
-    const previousMonthStart = subMonths(currentMonthStart, 1)
-    const twoMonthsAgoStart = subMonths(currentMonthStart, 2)
+  const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 6 })
+  const currentMonthStart = startOfMonth(new Date())
+  const previousMonthStart = subMonths(currentMonthStart, 1)
+  const twoMonthsAgoStart = subMonths(currentMonthStart, 2)
 
+  try {
     const orders = await db.order.findMany({
       where: {
         createdAt: {

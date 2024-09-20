@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { cuidSchema } from './id'
+import { cuidSchema } from './utils'
 
 export const cartItemSchema = z.object({
   id: cuidSchema,
