@@ -92,7 +92,12 @@ export default function CitiesPricing() {
           {categories.map(({ id, category }, index) => (
             <li key={id} className='flex flex-col gap-2 md:flex-row md:items-center'>
               <Label className='w-32'>{labels[category as CityCategory]}</Label>
-              <Input type='number' min={1} {...register(`categories.${index}`)} />
+              <Input
+                type='number'
+                min={1}
+                {...register(`categories.${index}`)}
+                className='ring-1 ring-black/50'
+              />
             </li>
           ))}
         </ul>

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
 import { api, HydrateClient } from '@/trpc/server'
+import { ASSETS, SEARCH_PARAMS } from '@/utils/constants'
 
 import ProductDetails from './_components/product-details'
 import ProductDetailsSkeleton from './_components/product-details-skeleton'
@@ -27,6 +28,25 @@ export async function generateMetadata({
   return {
     title: product?.name,
     description: product?.description,
+
+    openGraph: {
+      title: product?.name,
+      description: product?.description,
+      images: product?.images.map((image) => ({
+        url: `${ASSETS.images}?${SEARCH_PARAMS.path}=${image}&${SEARCH_PARAMS.width}=256`,
+        alt: `${product.name} preview`,
+      })),
+    },
+
+    twitter: {
+      title: product?.name,
+      description: product?.description,
+      images: product?.images.map(
+        (image) =>
+          `${ASSETS.images}?${SEARCH_PARAMS.path}=${image}&${SEARCH_PARAMS.width}=256`,
+      ),
+      card: 'summary_large_image',
+    },
   }
 }
 

@@ -11,9 +11,9 @@ export default function UserItem({ user }: UserItemProps) {
       <TableCell className='font-medium'>{user.name}</TableCell>
       <TableCell>{user.phone}</TableCell>
       <TableCell>{user.city}</TableCell>
-      <TableCell className='hidden md:table-cell'>{user.orderCount}</TableCell>
+      <TableCell>{user.orderCount}</TableCell>
       <TableCell className='hidden md:table-cell'>{user.totalPending}</TableCell>
-      <TableCell className='hidden md:table-cell'>{user.totalPaid}</TableCell>
+      <TableCell>{user.totalPaid}</TableCell>
     </TableRow>
   )
 }

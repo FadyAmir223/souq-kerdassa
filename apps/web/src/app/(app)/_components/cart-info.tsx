@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useAppStore, useMainStore } from '@/providers/app-store-provider'
 
 /**
- * createStoes doesn't have .persist attached to it
+ * createStore doesn't have .persist attached to it
  * workaround: call it yourself once every page
  * header exists in every page so...
  * https://github.com/pmndrs/zustand/discussions/2350#discussioncomment-10249137

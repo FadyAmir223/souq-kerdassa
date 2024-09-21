@@ -12,7 +12,7 @@ export default function ActiveOrdersCount() {
   return (
     <Badge
       className={cn(
-        'me-auto hidden size-6 shrink-0 items-center justify-center rounded-full',
+        'absolute bottom-0 left-0 me-auto hidden size-4 shrink-0 -translate-y-1/4 translate-x-1/2 items-center justify-center rounded-full p-0 md:static md:size-5 md:translate-x-0 md:translate-y-0 md:px-2.5 md:py-0.5 md:text-[0.8125rem]',
         { flex: count },
       )}
     >

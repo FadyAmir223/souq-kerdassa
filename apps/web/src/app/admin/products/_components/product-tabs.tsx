@@ -92,7 +92,11 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
   }
 
   return (
-    <Tabs defaultValue='all' onValueChange={handleTabChange}>
+    <Tabs
+      defaultValue='all'
+      onValueChange={handleTabChange}
+      className='overflow-x-auto'
+    >
       <div dir='rtl' className='flex items-center'>
         <TabsList>
           {tabs.map(({ label, value }) => (
@@ -137,7 +141,7 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
                     <TableHead>الإسم</TableHead>
                     <TableHead>الحالة</TableHead>
                     <TableHead>السعر</TableHead>
-                    <TableHead className='hidden md:table-cell'>المبيعات</TableHead>
+                    <TableHead>المبيعات</TableHead>
                     <TableHead className='hidden md:table-cell'>
                       تم الإنشاء
                     </TableHead>

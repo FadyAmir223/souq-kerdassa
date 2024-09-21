@@ -18,6 +18,19 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'souqkerdassa.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+  },
+
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.plugins = [...config.plugins, new PrismaPlugin()]

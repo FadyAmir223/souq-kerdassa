@@ -30,7 +30,7 @@ export default function UsersList() {
   )
 
   return (
-    <Card>
+    <Card className='overflow-x-auto'>
       <CardContent>
         <Table>
           <TableHeader>
@@ -39,7 +39,7 @@ export default function UsersList() {
               <TableHead>التليفون</TableHead>
               <TableHead>المحافظة</TableHead>
               <TableHead>الطلبات</TableHead>
-              <TableHead>المعلق</TableHead>
+              <TableHead className='hidden md:table-cell'>المعلق</TableHead>
               <TableHead>المدفوع</TableHead>
             </TableRow>
           </TableHeader>

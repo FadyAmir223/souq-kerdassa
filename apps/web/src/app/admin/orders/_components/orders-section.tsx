@@ -61,19 +61,19 @@ export default function OrdersSection({
     return <h3 className='mt-3 text-center font-semibold'>لا يوجد طلبات</h3>
 
   return (
-    <Card>
+    <Card className='overflow-x-auto'>
       <CardHeader className='px-7'>
         <CardTitle>الطلبات</CardTitle>
         <CardDescription>اخر الطلبات من متجرك</CardDescription>
       </CardHeader>
-      <CardContent>
-        <Table>
+      <CardContent className='overflow-x-auto'>
+        <Table className='overflow-x-auto'>
           <TableHeader>
             <TableRow>
               <TableHead />
               <TableHead>العميل</TableHead>
-              <TableHead className='hidden sm:table-cell'>الكمية</TableHead>
-              <TableHead className='hidden sm:table-cell'>الحالة</TableHead>
+              <TableHead>الكمية</TableHead>
+              <TableHead>الحالة</TableHead>
               <TableHead className='text-right'>السعر</TableHead>
               <TableHead className='hidden md:table-cell'>التاريخ</TableHead>
             </TableRow>
@@ -93,10 +93,8 @@ export default function OrdersSection({
                     {order.user.phone}
                   </div>
                 </TableCell>
-                <TableCell className='hidden sm:table-cell'>
-                  {order.quantity}
-                </TableCell>
-                <TableCell className='hidden sm:table-cell'>
+                <TableCell>{order.quantity}</TableCell>
+                <TableCell>
                   <EditOrderStatusAdmin
                     order={{
                       id: order.id,

@@ -17,11 +17,13 @@ type UnpersistedState = {
       }
     | null
     | undefined
+  isSidebarOpen: boolean
 }
 
 type UnpersistedActions = {
   setReviewing: (isReviewing: UnpersistedState['isReviewing']) => void
   setSelectedAddress: (selectedAddress: UnpersistedState['selectedAddress']) => void
+  toggleSidebar: () => void
 }
 
 export type UnpersistedSlice = UnpersistedState & UnpersistedActions
@@ -29,6 +31,7 @@ export type UnpersistedSlice = UnpersistedState & UnpersistedActions
 const initialState: UnpersistedState = {
   isReviewing: false,
   selectedAddress: null,
+  isSidebarOpen: false,
 }
 
 export const createUnpersistedSlice: StateCreator<
@@ -42,4 +45,6 @@ export const createUnpersistedSlice: StateCreator<
   setReviewing: (isReviewing) => set({ isReviewing }),
 
   setSelectedAddress: (selectedAddress) => set({ selectedAddress }),
+
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
 })
