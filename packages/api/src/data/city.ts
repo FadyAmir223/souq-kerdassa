@@ -15,9 +15,7 @@ export async function getAllCities(db: DB) {
         },
       },
       orderBy: {
-        cityCategoryPrice: {
-          price: 'asc',
-        },
+        order: 'asc',
       },
     })
 

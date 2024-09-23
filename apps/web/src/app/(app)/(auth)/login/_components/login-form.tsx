@@ -32,8 +32,8 @@ const inputs = [
 
 export default function LoginForm() {
   const { toast } = useToast()
-
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const {
     register,
@@ -47,16 +47,13 @@ export default function LoginForm() {
     },
   })
 
-  const searchParams = useSearchParams()
-
   const loginUser = api.auth.login.useMutation({
     onSuccess: () => {
-      const redirectTo = searchParams.get(SEARCH_PARAMS.redirectTo)
-      router.replace(redirectTo ?? PAGES.defaultLoginRedirect(), {
-        scroll: !redirectTo,
-      })
-
       router.refresh()
+
+      const redirectTo =
+        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect()
+      router.replace(redirectTo, { scroll: !redirectTo })
     },
     onError: ({ message }) => {
       toast({
@@ -77,7 +74,7 @@ export default function LoginForm() {
       className='space-y-3'
     >
       {inputs.map(({ name, label, ...props }) => (
-        <div key={name} className=''>
+        <div key={name}>
           <Label>{label}</Label>
           <Input {...register(name)} {...props} className='border-black' />
           <p className='h-[1.21875rem] text-[0.8rem] font-medium text-destructive'>

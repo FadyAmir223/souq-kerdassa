@@ -19,7 +19,9 @@ model Address {
 model City {
   id Int @id @default(autoincrement())
 
-  name                String             @unique
+  name  String @unique
+  order Int
+
   cityCategoryPriceId Int?
   cityCategoryPrice   CityCategoryPrice? @relation(fields: [cityCategoryPriceId], references: [id])
 

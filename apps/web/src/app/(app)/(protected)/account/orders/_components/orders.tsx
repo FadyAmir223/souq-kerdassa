@@ -35,7 +35,7 @@ export default function Orders() {
     return (
       <li key={order.id} className='rounded-md bg-white p-4 shadow-md'>
         <div className='mb-4 flex justify-between border-b border-b-gray-400 pb-4'>
-          <div className=''>
+          <div>
             <span className='font-semibold'>وقت الطلب</span>
             <span className='ms-3 inline-block text-sm text-black/80'>
               {formatDistanceToNow(order.createdAt, {
@@ -81,12 +81,12 @@ export default function Orders() {
                   </div>
                 </Link>
 
-                <div className=''>
-                  <p className=''>{item.name}</p>
+                <div>
+                  <p>{item.name}</p>
                   <div className='mb-1'>
                     <Badge>{AR.season[item.season as Season]}</Badge>
                   </div>
-                  <div className=''>
+                  <div>
                     <Badge className='bg-sky-500 hover:bg-sky-500/80'>
                       {AR.category[item.category as Category]}
                     </Badge>
@@ -95,11 +95,11 @@ export default function Orders() {
               </div>
 
               <div className='w-fit text-[0.9375rem] sm:w-auto'>
-                <p className=''>
+                <p>
                   <span className='font-semibold'>الكمية: </span>
                   {item.quantity}
                 </p>
-                <p className=''>
+                <p>
                   <span className='font-semibold'>السعر: </span>
                   {item.price}
                 </p>
@@ -117,7 +117,7 @@ export default function Orders() {
 
           <div className='ms-auto flex flex-col'>
             <span className='text-sm font-semibold'>الشحن: {shippingCost} جنية</span>
-            <span className='ms-auto font-semibold text-primary'>
+            <span className='text-sm font-semibold text-primary'>
               المجموع: {totalPrice} جنية
             </span>
           </div>

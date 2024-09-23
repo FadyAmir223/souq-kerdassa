@@ -6,7 +6,7 @@ import { useAppStore } from '@/providers/app-store-provider'
 import { cn } from '@/utils/cn'
 
 export default function SidebarWrapper({ children }: PropsWithChildren) {
-  const isSidebarOpen = useAppStore(({ isSidebarOpen }) => isSidebarOpen)
+  const isSidebarOpen = useAppStore((s) => s.isSidebarOpen)
 
   return (
     <div

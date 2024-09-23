@@ -1,12 +1,5 @@
 import { Home, Package, ShoppingCart, Users } from 'lucide-react'
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-
 import { PAGES } from '../../_utils/constants'
 import ActiveOrdersCount from '../active-orders-count'
 import NavLink from './nav-link'
@@ -23,16 +16,8 @@ export default function Sidebar() {
     <nav className='grid items-start px-2 text-sm font-medium lg:px-4'>
       {navs.map(({ href, label, icon: Icon }) => (
         <NavLink key={href} href={href} className='relative'>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Icon className='size-6 md:size-4' />
-              </TooltipTrigger>
-              <TooltipContent className='md:hidden'>
-                <p>{label}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Icon className='size-6 md:size-4' />
+
           <span className='hidden md:block'>{label}</span>
           {href === PAGES.orders && <ActiveOrdersCount />}
         </NavLink>

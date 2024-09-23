@@ -80,7 +80,14 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
             <p className='text-sm text-muted-foreground'>
               تستطيع ان تبدأ البيع بمجرد ان تضيف منتج
             </p>
-            <Button className='mt-4'>اضف منتج</Button>
+            <Button asChild className='mt-7 gap-x-2'>
+              <Link href={PAGES.products.add}>
+                <PlusCircle className='size-3.5' />
+                <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
+                  اضف منتج
+                </span>
+              </Link>
+            </Button>
           </div>
         </div>
       </main>
@@ -125,66 +132,70 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
         </div>
       </div>
 
-      {tabs.map(({ value }) => (
-        <TabsContent key={value} dir='rtl' value={value}>
-          <Card>
-            <CardHeader>
-              <CardTitle className='text-start'>{filterTitle[value]}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className='hidden w-[100px] sm:table-cell'>
-                      <span className='sr-only'>الصورة</span>
-                    </TableHead>
-                    <TableHead>الإسم</TableHead>
-                    <TableHead>الحالة</TableHead>
-                    <TableHead>السعر</TableHead>
-                    <TableHead>المبيعات</TableHead>
-                    <TableHead className='hidden md:table-cell'>
-                      تم الإنشاء
-                    </TableHead>
-                    <TableHead>
-                      <span className='sr-only'>الافعال</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {products.map((product, index) => (
-                    <ProductItem
-                      key={product.id}
-                      product={product}
-                      currPage={currPage}
-                      setCurrPage={setCurrPage}
-                      activeTab={activeTab}
-                      totalProducts={totalProducts}
-                      index={index}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
+      {products.length === 0 ? (
+        <h3 className='mt-6 text-center text-xl font-semibold'>لا يوجد منتجات</h3>
+      ) : (
+        tabs.map(({ value }) => (
+          <TabsContent key={value} dir='rtl' value={value}>
+            <Card>
+              <CardHeader>
+                <CardTitle className='text-start'>{filterTitle[value]}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className='hidden w-[100px] sm:table-cell'>
+                        <span className='sr-only'>الصورة</span>
+                      </TableHead>
+                      <TableHead>الإسم</TableHead>
+                      <TableHead>الحالة</TableHead>
+                      <TableHead>السعر</TableHead>
+                      <TableHead>المبيعات</TableHead>
+                      <TableHead className='hidden md:table-cell'>
+                        تم الإنشاء
+                      </TableHead>
+                      <TableHead>
+                        <span className='sr-only'>الافعال</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {products.map((product, index) => (
+                      <ProductItem
+                        key={product.id}
+                        product={product}
+                        currPage={currPage}
+                        setCurrPage={setCurrPage}
+                        activeTab={activeTab}
+                        totalProducts={totalProducts}
+                        index={index}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
 
-            <AdminPagination
-              currPage={currPage}
-              setCurrPage={setCurrPage}
-              totalItems={totalProducts}
-            />
+              <AdminPagination
+                currPage={currPage}
+                setCurrPage={setCurrPage}
+                totalItems={totalProducts}
+              />
 
-            <CardFooter>
-              <div className='text-xs text-muted-foreground'>
-                يعرض{' '}
-                <strong>
-                  {(currPage - 1) * 10 + 1} إلى{' '}
-                  {Math.min(currPage * 10, totalProducts)}
-                </strong>{' '}
-                من <strong>{totalProducts}</strong> منتج
-              </div>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-      ))}
+              <CardFooter>
+                <div className='text-xs text-muted-foreground'>
+                  يعرض{' '}
+                  <strong>
+                    {(currPage - 1) * 10 + 1} إلى{' '}
+                    {Math.min(currPage * 10, totalProducts)}
+                  </strong>{' '}
+                  من <strong>{totalProducts}</strong> منتج
+                </div>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        ))
+      )}
     </Tabs>
   )
 }

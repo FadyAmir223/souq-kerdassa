@@ -11,7 +11,7 @@ export default function SidebarCollapseButton() {
   return (
     <Button
       size='sm'
-      className='h-7 active:scale-[0.97] md:hidden'
+      className='h-7 transition-transform active:scale-[0.97] md:hidden'
       onClick={toggleSidebar}
     >
       <ListCollapse className='size-3.5' />

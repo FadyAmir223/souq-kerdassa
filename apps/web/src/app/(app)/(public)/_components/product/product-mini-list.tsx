@@ -35,7 +35,7 @@ export default function ProductMiniList({ filter }: ProductMiniListProps) {
 }
 
 async function Products({ filter }: ProductMiniListProps) {
-  const { products } = await api.product.byFilter({ limit: 6, ...filter })
+  const { products } = await api.product.byFilter({ ...filter, limit: 6 })
 
   return products.map((product) => (
     <Link

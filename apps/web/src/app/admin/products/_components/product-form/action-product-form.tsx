@@ -1,12 +1,15 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { Category, Season, VisibilityStatus } from '@repo/db/types'
+import type { Category, Product, Season, VisibilityStatus } from '@repo/db/types'
 import type { AddProductSchema } from '@repo/validators'
 import { addProductSchema } from '@repo/validators'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
+import SidebarCollapseButton from '@/app/admin/_components/sidebar-collapse-button'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -33,7 +36,6 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
-import type { RouterOutputs } from '@/trpc/react'
 import { api } from '@/trpc/react'
 
 import { PAGES } from '../../../_utils/constants'
@@ -90,28 +92,44 @@ const defaultValues = {
   ],
 }
 
-type ActionProductFormProps = {
-  productDetails?: RouterOutputs['product']['admin']['detailsById']
+export type ImageMeta = {
+  name: string
+  size: number
+  lastModified: number
 }
 
-export default function ActionProductForm({
-  productDetails,
-}: ActionProductFormProps) {
-  const actionType = productDetails ? 'edit' : 'add'
+type ActionProductFormProps = {
+  productId: Product['id']
+}
+
+export default function ActionProductForm({ productId }: ActionProductFormProps) {
+  const { data: productDetails, isFetched } = api.product.admin.detailsById.useQuery(
+    productId,
+    { enabled: !!productId },
+  )
+
+  if (productId && isFetched && !productDetails) notFound()
+
+  const actionType = productId ? 'edit' : 'add'
   const labels = labelsType[actionType]
 
   const { toast } = useToast()
+  const imagesMetaRef = useRef<ImageMeta[]>([])
 
   const form = useForm<AddProductSchema>({
     resolver: zodResolver(addProductSchema),
-    defaultValues: productDetails ? productDetails : defaultValues,
+    defaultValues,
+    // @ts-expect-error preview section sets it to File
+    values: productDetails
+      ? { ...productDetails, images: undefined }
+      : defaultValues,
   })
 
   const utils = api.useUtils()
 
   const actionProduct = api.product.admin[actionType].useMutation({
     onSuccess: () => {
-      form.reset(defaultValues)
+      if (actionType === 'add') form.reset(defaultValues)
 
       toast({
         description: labels.message,
@@ -136,30 +154,100 @@ export default function ActionProductForm({
   const onSubmit = async (_formData: AddProductSchema) => {
     const { images, ...formData } = _formData
 
-    const form = new FormData()
-    images.forEach((image, index) => {
-      form.append(`images.${index}`, image as Blob)
-    })
-
-    const uploadRes = await uploadImages(form)
-    if (uploadRes.error)
-      return toast({
-        description: uploadRes.error,
-        variant: 'destructive',
+    if (actionType === 'add') {
+      const imagesForm = new FormData()
+      images.forEach((image, index) => {
+        imagesForm.append(`images.${index}`, image as Blob)
       })
 
-    actionProduct.mutate({
-      // @ts-expect-error ts can't know when id is required
-      id: actionType === 'edit' ? productDetails.id : undefined,
-      imagePaths: uploadRes.imagePaths!,
-      ...formData,
-    })
+      const uploadRes = await uploadImages({ formData: imagesForm, action: 'add' })
+      if (uploadRes.error)
+        return toast({
+          description: uploadRes.error,
+          variant: 'destructive',
+        })
+
+      actionProduct.mutate({
+        imagePaths: uploadRes.imagePaths!,
+        ...formData,
+      })
+    } else {
+      const addedImages = images.filter(
+        (newItem) =>
+          !imagesMetaRef.current.some(
+            (mainItem) =>
+              mainItem.size === newItem.size &&
+              mainItem.lastModified === newItem.lastModified,
+          ),
+      )
+
+      const projectPath =
+        productDetails?.images[0]!.substring(
+          0,
+          productDetails.images[0]!.lastIndexOf('/'),
+        ) ?? ''
+
+      const deletedImages = imagesMetaRef.current
+        .filter(
+          (mainItem) =>
+            !images.some(
+              (newItem) =>
+                mainItem.size === newItem.size &&
+                mainItem.lastModified === newItem.lastModified,
+            ),
+        )
+        .map((mainItem) => mainItem.name)
+
+      const imagesForm = new FormData()
+      addedImages.forEach((image, index) => {
+        imagesForm.append(`images.${index}`, image as Blob)
+      })
+
+      let uploadRes: Awaited<ReturnType<typeof uploadImages>> | undefined
+
+      if (addedImages.length > 0 || deletedImages.length > 0) {
+        uploadRes = await uploadImages({
+          formData: imagesForm,
+          projectPath,
+          deletedImages,
+          action: 'edit',
+        })
+
+        if (uploadRes.error)
+          return toast({
+            description: uploadRes.error,
+            variant: 'destructive',
+          })
+      }
+
+      const unchangedImages = imagesMetaRef.current
+        .filter((mainItem) =>
+          images.some(
+            (newItem) =>
+              mainItem.size === newItem.size &&
+              mainItem.lastModified === newItem.lastModified,
+          ),
+        )
+        .map((image) => `${projectPath}/${image.name}`)
+
+      actionProduct.mutate({
+        id: productDetails!.id,
+        imagePaths: uploadRes
+          ? [...unchangedImages, ...uploadRes.imagePaths!]
+          : undefined,
+        ...formData,
+      })
+    }
   }
 
   return (
     <main className='flex flex-col sm:gap-4 sm:py-4 sm:pl-14'>
       <div className='grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8'>
-        <h1 className='text-lg font-semibold md:text-2xl'>{labels.title}</h1>
+        <div className='flex items-center justify-between'>
+          <h1 className='text-lg font-semibold md:text-2xl'>{labels.title}</h1>
+          <SidebarCollapseButton />
+        </div>
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -260,7 +348,10 @@ export default function ActionProductForm({
                   </CardContent>
                 </Card>
 
-                <UploadImagesSection previousImages={productDetails?.images} />
+                <UploadImagesSection
+                  imagesMetaRef={imagesMetaRef}
+                  previousImages={productDetails?.images}
+                />
               </div>
             </div>
             <div className='flex items-center justify-center gap-2 md:hidden'>

@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import type { PropsWithChildren } from 'react'
-import { Suspense, useState } from 'react'
+import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -18,13 +18,21 @@ import {
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore } from '@/providers/app-store-provider'
+import type { RouterOutputs } from '@/trpc/react'
 import { api } from '@/trpc/react'
 import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
-import AddressSkeleton from '../../account/address/_components/address-skeleton'
 import CheckoutAddresses from './checkout-addresses'
 
-export default function CheckoutAddressSelection({ children }: PropsWithChildren) {
+type CheckoutAddressSelectionProps = {
+  children: ReactNode
+  addresses: RouterOutputs['user']['addresses']['all']
+}
+
+export default function CheckoutAddressSelection({
+  children,
+  addresses,
+}: CheckoutAddressSelectionProps) {
   const [isOpen, setOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -92,11 +100,7 @@ export default function CheckoutAddressSelection({ children }: PropsWithChildren
       <section className='mb-16'>
         {children}
 
-        <ul className='grid gap-4 md:grid-cols-2'>
-          <Suspense fallback={<AddressSkeleton />}>
-            <CheckoutAddresses />
-          </Suspense>
-        </ul>
+        <CheckoutAddresses addresses={addresses} />
       </section>
 
       <div className='text-center'>

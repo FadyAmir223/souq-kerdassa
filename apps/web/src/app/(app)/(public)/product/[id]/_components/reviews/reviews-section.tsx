@@ -42,7 +42,7 @@ export default function ReviewsSection({ productId }: ReviewsSectionProps) {
   return (
     <>
       <div className='flex items-center justify-between'>
-        <div className=''>
+        <div>
           <div className='mb-1 flex items-center gap-x-10'>
             <h4 className='text-2xl font-bold'>{reviewsDetails.rating} من 5</h4>
             <StarRating rating={reviewsDetails.rating} scale='lg' />
@@ -73,7 +73,7 @@ export default function ReviewsSection({ productId }: ReviewsSectionProps) {
               </span>
             </div>
 
-            <p className=''>{review.message}</p>
+            <p>{review.message}</p>
           </li>
         ))}
       </ul>

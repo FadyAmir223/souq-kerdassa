@@ -9,4 +9,4 @@ export const PAGES = {
   },
   orders: '/admin/orders',
   customers: '/admin/users',
-}
+} as const

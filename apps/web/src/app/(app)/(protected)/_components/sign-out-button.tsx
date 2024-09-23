@@ -13,11 +13,8 @@ export default function SignOutButton() {
     <Button
       variant='none'
       size='none'
-      className='block w-full rounded-md bg-destructive px-3 py-1 text-start text-lg transition-colors hover:bg-destructive/90'
+      className='block w-full rounded-md bg-destructive px-3 py-1 text-start text-lg transition-[transform,colors] hover:bg-destructive/90 active:scale-[0.99]'
       formAction={async () => {
-        // CSRF issue but it works
-        // maybe because of misconfiguration or
-        // using session instead of jwt for credentials
         await signOut({ callbackUrl: PAGES.public.main })
       }}
       disabled={pending}

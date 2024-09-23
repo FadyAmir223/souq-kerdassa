@@ -30,7 +30,7 @@ export default function FilterDrawer({ hasParams }: FilterDrawerProps) {
             className='flex w-fit items-center gap-x-2.5 font-semibold md:hidden'
             variant='secondary'
           >
-            <span className=''>فلتر</span>
+            <span>فلتر</span>
             <MdFilterAlt size={18} />
           </Button>
         </DrawerTrigger>

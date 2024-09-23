@@ -22,20 +22,18 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           alt={name}
           fill
           sizes='
-            (max-width: 480px) 100vw,
-            (max-width: 768px) 50vw,
-            (max-width: 967px) 25vw,
-            16.67vw
+            (max-width: 967px) 100vw,
+            20rem
           '
           className='object-cover'
         />
       </div>
 
       <div className='bg-white p-2'>
-        <h4 className=''>{name}</h4>
+        <h4>{name}</h4>
         <div className='my-1 flex justify-center gap-x-2'>
           <StarRating rating={rating} />
-          <span className=''>({reviewsCount})</span>
+          <span>({reviewsCount})</span>
         </div>
         <p className='font-bold text-primary'>{price} جنية</p>
       </div>

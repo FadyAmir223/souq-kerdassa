@@ -81,6 +81,6 @@ export const addProductSchema = addProductNoImagesSchema.merge(
 export type AddProductSchema = z.infer<typeof addProductSchema>
 
 export const addProductImagePathsSchema = addProductNoImagesSchema.extend({
-  imagePaths: z.array(z.string()),
+  imagePaths: z.array(z.string()).optional(),
 })
 export type AddProductImagePathsSchema = z.infer<typeof addProductImagePathsSchema>

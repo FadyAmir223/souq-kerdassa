@@ -68,6 +68,7 @@ export default function CartItems() {
                     src={item.image}
                     alt={item.name}
                     fill
+                    // may pass index to preload only first 3
                     priority
                     sizes='6rem'
                     className='object-cover'
@@ -81,7 +82,7 @@ export default function CartItems() {
                   <div className='mb-1'>
                     <Badge>{AR.season[item.season]}</Badge>
                   </div>
-                  <div className=''>
+                  <div>
                     <Badge className='bg-sky-500 hover:bg-sky-500/80'>
                       {AR.category[item.category]}
                     </Badge>

@@ -24,7 +24,7 @@ export default async function Ad() {
           className='mt-6 text-xl font-bold hover:bg-secondary/90'
           size='lg'
         >
-          <Link href={`${PAGES.public.products}/${product.id}`}>اشترى الآن</Link>
+          <Link href={PAGES.public.product(product.id)}>اشترى الآن</Link>
         </Button>
       </div>
     </div>

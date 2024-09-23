@@ -3,6 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { AddressSchema } from '@repo/validators'
 import { addressSchema } from '@repo/validators'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaEdit } from 'react-icons/fa'
@@ -35,13 +37,14 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import type { RouterOutputs } from '@/trpc/react'
 import { api } from '@/trpc/react'
+import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
 import { addressInputFields } from '../_constants/address-input-fields'
 import { areEqualShallow } from '../_utils/object-equal-shallow'
 
 const labels = {
   add: {
-    title: 'اضافة عنوان جديد',
+    title: 'اضافة عنوان',
     description: 'سجل عنوانك حتى يصل إليك طلبك بكل سهولة',
     submit: 'اضف العنوان',
   },
@@ -70,6 +73,8 @@ export default function ActionAddressForm({
   const [isOpen, setOpen] = useState(false)
   const utils = api.useUtils()
   const { toast } = useToast()
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const { data: cities } = api.city.all.useQuery(undefined, {
     staleTime: Infinity,
@@ -123,6 +128,9 @@ export default function ActionAddressForm({
         newAddress,
         ...(newAddresses ?? []).slice(1),
       ])
+
+      const redirectTo = searchParams.get(SEARCH_PARAMS.redirectTo)
+      if (redirectTo === PAGES.protected.buy.checkout) router.refresh()
     },
     onError: ({ message }, _, ctx) => {
       utils.user.addresses.all.setData(undefined, ctx?.oldAddresses)

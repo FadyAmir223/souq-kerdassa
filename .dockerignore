@@ -1,8 +1,9 @@
 node_modules/
 
+.vscode/
 .husky/
 .turbo/
-.vscode/
+
 apps/web/.next/
 apps/mobile/.expo/
 
@@ -18,3 +19,5 @@ commitlint.config.ts
 
 README.md
 _local/
+
+apps/web/uploads/

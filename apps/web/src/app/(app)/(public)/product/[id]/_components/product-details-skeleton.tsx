@@ -6,7 +6,7 @@ export default function ProductDetailsSkeleton() {
         <div className='mb-[1.375rem] h-5 w-[9.5rem] rounded-md bg-neutral-500/50' />
         <div className='mb-7 h-6 w-[7.5rem] rounded-md bg-neutral-500/50' />
 
-        <div className=''>
+        <div>
           {[1, 2].map((i) => (
             <div key={i} className='flex gap-x-6 first:mb-5'>
               <div className='mb-3.5 h-[1.375rem] w-14 rounded-md bg-neutral-500/50' />

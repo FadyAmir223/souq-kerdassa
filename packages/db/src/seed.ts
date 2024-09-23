@@ -211,45 +211,63 @@ const PRODUCTS = [
 ] as const satisfies Partial<Product & { variants: Partial<ProductVariant>[] }>[]
 
 const CITY_CATEGORIES = [
-  { category: 'cairoGiza', price: 40, cities: ['القاهرة', 'الجيزة'] },
-  { category: 'alex', price: 50, cities: ['الإسكندرية'] },
+  {
+    category: 'cairoGiza',
+    price: 40,
+    cities: [
+      { name: 'القاهرة', order: 1 },
+      { name: 'الجيزة', order: 2 },
+    ],
+  },
+  {
+    category: 'alex',
+    price: 50,
+    cities: [{ name: 'الإسكندرية', order: 3 }],
+  },
   {
     category: 'deltaCanal',
     price: 65,
     cities: [
-      'الدقهلية',
-      'البحيرة',
-      'الغربية',
-      'الإسماعيلية',
-      'المنوفية',
-      'القليوبية',
-      'السويس',
-      'بورسعيد',
-      'دمياط',
-      'الشرقية',
-      'كفر الشيخ',
+      { name: 'الشرقية', order: 4 },
+      { name: 'الدقهلية', order: 5 },
+      { name: 'البحيرة', order: 6 },
+      { name: 'الغربية', order: 7 },
+      { name: 'القليوبية', order: 8 },
+      { name: 'المنوفية', order: 9 },
+      { name: 'كفر الشيخ', order: 10 },
+      { name: 'دمياط', order: 11 },
+      { name: 'الإسماعيلية', order: 12 },
+      { name: 'بورسعيد', order: 13 },
+      { name: 'السويس', order: 14 },
     ],
   },
   {
     category: 'redSeaSouth',
     price: 70,
     cities: [
-      'البحر الأحمر',
-      'الفيوم',
-      'المنيا',
-      'الوادي الجديد',
-      'أسوان',
-      'أسيوط',
-      'بني سويف',
-      'جنوب سيناء',
-      'مطروح',
-      'الأقصر',
-      'قنا',
-      'شمال سيناء',
-      'سوهاج',
+      { name: 'الفيوم', order: 15 },
+      { name: 'المنيا', order: 16 },
+      { name: 'أسيوط', order: 17 },
+      { name: 'سوهاج', order: 18 },
+      { name: 'بني سويف', order: 19 },
+      { name: 'قنا', order: 20 },
+      { name: 'أسوان', order: 21 },
+      { name: 'الأقصر', order: 22 },
+      { name: 'البحر الأحمر', order: 23 },
+      { name: 'مطروح', order: 24 },
+      { name: 'جنوب سيناء', order: 25 },
+      { name: 'شمال سيناء', order: 26 },
+      { name: 'الوادي الجديد', order: 27 },
     ],
   },
-] as const satisfies Partial<CityCategoryPrice & { cities: City['name'][] }>[]
+] as const satisfies Partial<
+  CityCategoryPrice & {
+    cities: {
+      name: City['name']
+      order: number
+    }[]
+  }
+>[]
 
 async function main() {
   await Promise.all(
@@ -263,9 +281,14 @@ async function main() {
           category,
           price,
           cities: {
-            connectOrCreate: cities.map((name) => ({
-              where: { name },
-              create: { name },
+            connectOrCreate: cities.map(({ name, order }) => ({
+              where: {
+                name,
+              },
+              create: {
+                name,
+                order,
+              },
             })),
           },
         },
@@ -282,7 +305,9 @@ async function main() {
   await Promise.all(
     PRODUCTS.map(({ variants, ...product }) =>
       db.product.upsert({
-        where: { name: product.name },
+        where: {
+          name: product.name,
+        },
         update: {},
         create: {
           ...product,

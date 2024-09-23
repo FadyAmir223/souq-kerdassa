@@ -29,6 +29,9 @@ export default function UsersList() {
     { staleTime: 3 * 60 * 1000 },
   )
 
+  if (users.length === 0)
+    return <h3 className='mt-6 text-center text-xl font-semibold'>لا يوجد عملاء</h3>
+
   return (
     <Card className='overflow-x-auto'>
       <CardContent>

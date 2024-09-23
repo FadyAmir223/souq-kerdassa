@@ -27,7 +27,7 @@ export default async function ProductDetails({ productId }: ProductDetailsProps)
         </div>
         <p className='mb-5 text-3xl font-bold text-primary'>{product.price} جنية</p>
 
-        <div className=''>
+        <div>
           <AddToCart product={product} />
         </div>
 
@@ -35,7 +35,7 @@ export default async function ProductDetails({ productId }: ProductDetailsProps)
           <h3 className='mb-3 mt-10 text-2xl font-bold text-primary md:mt-0'>
             الوصف
           </h3>
-          <p className=''>{product.description}</p>
+          <p>{product.description}</p>
         </div>
       </section>
 

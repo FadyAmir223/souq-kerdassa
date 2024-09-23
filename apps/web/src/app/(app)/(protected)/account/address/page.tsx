@@ -11,16 +11,16 @@ import ActionAddressForm from './_components/action-address-form'
 import AddressSkeleton from './_components/address-skeleton'
 import Addresses from './_components/addresses'
 
+const RedirectToCheckoutButton = dynamic(
+  () => import('./_components/redirect-to-checkout-button'),
+  { ssr: false },
+)
+
 export const metadata: Metadata = {
   title: 'عناوينى',
   description:
     'قومى بإضافة و تحديث عناوين الشحن الخاصة بك. سهّلى عملية الشراء بإدارة عناوينك بشكل مريح وفعال.',
 }
-
-const RedirectToCheckoutButton = dynamic(
-  () => import('./_components/redirect-to-checkout-button'),
-  { ssr: false },
-)
 
 export default async function AddressesPage() {
   const session = await auth()

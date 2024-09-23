@@ -6,7 +6,7 @@ import { PAGES } from '@/utils/constants'
 
 import Ad from './_components/ad'
 import ImageSlider from './_components/image-slider'
-import ProductMiniList from './_components/product/product-list'
+import ProductMiniList from './_components/product/product-mini-list'
 
 const seasonProducts = [
   // @ts-expect-error page & limit has default

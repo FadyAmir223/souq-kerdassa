@@ -25,9 +25,7 @@ export const authRouter = {
 
   login: publicProcedure.input(loginFormSchema).mutation(async ({ ctx, input }) => {
     if (ctx.token) return { success: false }
-    const { phone, password } = input
-
-    await credentialSignIn({ phone, password })
+    await credentialSignIn(input)
     return { success: true }
   }),
 

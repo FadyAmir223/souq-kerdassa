@@ -8,6 +8,7 @@ WORKDIR /app
 COPY . .
 RUN npx turbo prune web --docker
 
+
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
 RUN apk update && \
@@ -46,29 +47,25 @@ RUN --mount=type=secret,id=SECRET_ENVS,required \
       DATABASE_URL=$DATABASE_URL \
     pnpm turbo build --filter=web...
 
+
 FROM base AS runner
 WORKDIR /app
 
-RUN npm install -g pnpm && \
-    # Don't run production as root
-    addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+RUN npm install -g pnpm
 
-USER nextjs
+USER node
 
 COPY --from=installer /app/apps/web/next.config.mjs .
 COPY --from=installer /app/apps/web/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone .
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static apps/web/.next/static
+COPY --from=installer --chown=node:node /app/apps/web/.next/standalone .
+COPY --from=installer --chown=node:node /app/apps/web/.next/static apps/web/.next/static
 
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public apps/web/public
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/uploads apps/web/uploads
+COPY --from=installer --chown=node:node /app/apps/web/public apps/web/public
 
-COPY --from=builder --chown=nextjs:nodejs /app/out/full/packages/db/src packages/db/src
-
+COPY --from=builder --chown=node:node /app/out/full/packages/db/src packages/db/src
 COPY --from=installer /app/apps/web/start.sh .
 
 ENV PORT=3000 \

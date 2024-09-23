@@ -23,7 +23,7 @@
     "db:migrate:dev:env": "pnpm with-env:dev prisma migrate dev --name",
     "db:seed:dev:env": "pnpm with-env:dev prisma db seed",
     "db:reset:dev:env": "pnpm with-env:dev prisma migrate reset dev",
-    "db:studio:dev:env": "pnpm with-env:dev prisma studio",
+    "db:studio:dev:env": "pnpm with-env:dev prisma studio --port 5556",
     "with-env:stage": "dotenv -e ../../apps/web/.env.staging.build.local --",
     "db:generate:stage": "pnpm with-env:stage prisma generate",
     "db:migrate:stage": "pnpm with-env:stage db:migrate:prod",

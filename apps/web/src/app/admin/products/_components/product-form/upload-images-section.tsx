@@ -1,9 +1,8 @@
-'use client'
-
 import type { Product } from '@repo/db/types'
 import type { AddProductSchema } from '@repo/validators'
 import { Upload } from 'lucide-react'
 import Image from 'next/image'
+import type { MutableRefObject } from 'react'
 import { useEffect, useState } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { IoClose } from 'react-icons/io5'
@@ -20,6 +19,9 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/utils/cn'
 import { ASSETS, SEARCH_PARAMS } from '@/utils/constants'
 
+import { useResponsiveImageSize } from '../../_hooks/use-responsive-image-size'
+import type { ImageMeta } from './action-product-form'
+
 function readFile(data: File | Blob): Promise<string | ArrayBuffer | null> {
   return new Promise((resolve) => {
     const reader = new FileReader()
@@ -28,18 +30,20 @@ function readFile(data: File | Blob): Promise<string | ArrayBuffer | null> {
   })
 }
 
-async function urlToFile(url: string): Promise<File> {
+async function urlToFile(url: string, filename: string): Promise<File> {
   const response = await fetch(url)
   const blob = await response.blob()
-  return new File([blob], '_.webp', { type: 'image/webp' })
+  return new File([blob], filename, { type: 'image/webp' })
 }
 
 type UploadImagesSectionProps = {
   previousImages?: Product['images']
+  imagesMetaRef: MutableRefObject<ImageMeta[]>
 }
 
 export default function UploadImagesSection({
   previousImages,
+  imagesMetaRef,
 }: UploadImagesSectionProps) {
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
 
@@ -50,14 +54,20 @@ export default function UploadImagesSection({
     control: form.control,
   })
 
+  const imageSize = useResponsiveImageSize()
+
   useEffect(() => {
     if (!previousImages) return
 
     void (async () => {
       const files = await Promise.all(
-        previousImages.map(async (imageUrl) =>
-          urlToFile(`${ASSETS.images}?${SEARCH_PARAMS.path}=${imageUrl}`),
-        ),
+        previousImages.map(async (imageUrl) => {
+          const filename = imageUrl.split('/').pop() ?? ''
+          return urlToFile(
+            `${ASSETS.images}?${SEARCH_PARAMS.path}=${imageUrl}&${SEARCH_PARAMS.width}=${imageSize}`,
+            filename,
+          )
+        }),
       )
 
       const images = await Promise.all(files.map((file) => readFile(file!)))
@@ -65,6 +75,12 @@ export default function UploadImagesSection({
 
       // @ts-expect-error mixing between browser and node File class?
       form.setValue('images', files)
+
+      imagesMetaRef.current = files.map(({ name, size, lastModified }) => ({
+        name,
+        size,
+        lastModified,
+      }))
     })()
   }, [previousImages]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -96,7 +112,7 @@ export default function UploadImagesSection({
       <CardContent>
         <div className='grid gap-2'>
           <div className='grid gap-2'>
-            <div className='grid grid-cols-2 gap-2'>
+            <div className='grid gap-2 sm:grid-cols-2'>
               {imagesInputs.fields.map((field, fieldIndex) => (
                 <FormField
                   key={field.id}

@@ -38,12 +38,12 @@ export default function CheckoutCartItem({ item }: CheckoutCartItemProps) {
       </div>
 
       <div className='flex flex-1 items-center justify-between'>
-        <div className=''>
-          <p className=''>{item.name}</p>
+        <div>
+          <p>{item.name}</p>
           <div className='mb-1'>
             <Badge>{AR.season[item.season]}</Badge>
           </div>
-          <div className=''>
+          <div>
             <Badge className='bg-sky-500 hover:bg-sky-500/80'>
               {AR.category[item.category]}
             </Badge>

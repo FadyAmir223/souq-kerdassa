@@ -19,7 +19,7 @@ export default function OrderSkeleton() {
             <div className='flex items-center gap-x-4'>
               <div className='aspect-[83/100] w-20 rounded-md bg-neutral-500/50' />
 
-              <div className=''>
+              <div>
                 <div className='mb-[0.4375rem] h-5 w-20 rounded-md bg-neutral-500/50' />
                 <div className='mb-2 h-[1.3125rem] w-12 rounded-md bg-neutral-500/50' />
                 <div className='mb-1.5 h-[1.3125rem] w-12 rounded-md bg-neutral-500/50' />

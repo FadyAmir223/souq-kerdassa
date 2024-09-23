@@ -33,6 +33,7 @@ type CartActions = {
       remaining: CartItem['quantity']
     }[],
   ) => void
+  resetOverQuantities: () => void
 }
 
 export type CartSlice = CartState & CartActions
@@ -56,9 +57,9 @@ export const createCartSlice: StateCreator<
       ({ variantId }) => variantId === item.variantId,
     )
 
-    set((state) => {
-      if (itemIndex !== -1) state.cart[itemIndex]!.quantity += 1
-      else state.cart.push({ ...item, quantity: 1 })
+    set(({ cart }) => {
+      if (itemIndex !== -1) cart[itemIndex]!.quantity += 1
+      else cart.push({ ...item, quantity: 1 })
     })
   },
 
@@ -67,9 +68,9 @@ export const createCartSlice: StateCreator<
       ({ variantId }) => variantId === itemVariantId,
     )
 
-    set((state) => {
+    set(({ cart }) => {
       if (itemIndex === -1) return
-      state.cart[itemIndex]!.quantity += 1
+      cart[itemIndex]!.quantity += 1
     })
   },
 
@@ -78,10 +79,10 @@ export const createCartSlice: StateCreator<
       ({ variantId }) => variantId === itemVariantId,
     )
 
-    set((state) => {
+    set(({ cart }) => {
       if (itemIndex === -1) return
-      if (state.cart[itemIndex]!.quantity > 1) state.cart[itemIndex]!.quantity -= 1
-      else state.cart.splice(itemIndex, 1)
+      if (cart[itemIndex]!.quantity > 1) cart[itemIndex]!.quantity -= 1
+      else cart.splice(itemIndex, 1)
     })
   },
 
@@ -97,17 +98,22 @@ export const createCartSlice: StateCreator<
     get().cart.reduce((acc, { quantity }) => acc + quantity, 0),
 
   updateOverQuantities: (overQuantities) => {
-    set((state) => {
+    set(({ cart }) => {
       overQuantities.forEach(({ variantId, remaining }) => {
-        const itemIndex = state.cart.findIndex(
-          (item) => item.variantId === variantId,
-        )
+        const itemIndex = cart.findIndex((item) => item.variantId === variantId)
         if (itemIndex === -1) return
 
-        const itemExists = state.cart[itemIndex]!
+        const itemExists = cart[itemIndex]!
         itemExists.overQuantity = itemExists.quantity
         itemExists.quantity = remaining
       })
     })
   },
+
+  resetOverQuantities: () =>
+    set((state) => {
+      state.cart = state.cart.map((item) =>
+        item.overQuantity ? { ...item, overQuantity: undefined } : item,
+      )
+    }),
 })

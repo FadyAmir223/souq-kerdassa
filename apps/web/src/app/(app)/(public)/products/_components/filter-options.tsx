@@ -45,14 +45,14 @@ export default function FilterOptions({ hasParams }: FilterOptionsProps) {
           replace
           className='mb-3 mr-auto flex w-fit items-center gap-x-2 text-sm text-destructive'
         >
-          <span className=''>مسح الفلتر</span>
+          <span>مسح الفلتر</span>
           <IoClose className='size-5' />
         </Link>
       )}
 
       <div className='space-y-4'>
         {filters.map((filter) => (
-          <div key={filter.key} className=''>
+          <div key={filter.key}>
             <p className='mb-2 font-semibold'>{filter.title}</p>
             <div className='flex flex-wrap gap-x-2.5'>
               {filter.options.map(({ label, value }) => (

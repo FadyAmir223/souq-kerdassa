@@ -36,22 +36,23 @@ export default function CartPage() {
         <div className='w-full lg:w-1/3'>
           <div className='h-fit rounded-md bg-white p-3'>
             <div className='flex justify-between'>
-              <span className=''>الإجمالى</span>
-              <span className=''>
+              <span>الإجمالى</span>
+              <span>
                 <CartTotalPrice /> جنية + الشحن
               </span>
             </div>
           </div>
 
           <div className='mt-3 grid h-fit grid-cols-2 gap-y-4 rounded-md bg-white p-3 sm:grid-cols-4 sm:gap-y-0'>
-            {iconsSection.map(({ image, label }, index) => (
+            {iconsSection.map(({ image, label }) => (
               <div key={label} className='flex-1'>
                 <Image
                   src={image}
                   alt={label}
                   className='mx-auto w-14'
                   sizes='3.5 rem'
-                  priority={index < 2}
+                  // TODO: convert to client component to preload only for desktop
+                  // priority={isDesktop}
                 />
                 <p className='text-center text-[0.8125rem]'>{label}</p>
               </div>

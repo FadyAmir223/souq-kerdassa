@@ -9,6 +9,8 @@ import {
 } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
+import { rm } from 'fs/promises'
+import path from 'path'
 import { z } from 'zod'
 
 import {
@@ -149,8 +151,10 @@ export const productRouter = {
 
     delete: adminProcedure
       .input(cuidSchema)
-      .mutation(({ ctx, input: productId }) =>
-        deleteAdminProduct(ctx.db, productId),
-      ),
+      .mutation(async ({ ctx, input: productId }) => {
+        const imagePath = await deleteAdminProduct(ctx.db, productId)
+        const imagesDir = path.dirname(imagePath)
+        await rm(imagesDir, { recursive: true, force: true })
+      }),
   } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

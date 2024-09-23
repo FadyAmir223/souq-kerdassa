@@ -10,8 +10,6 @@ export const env = createEnv({
       process.env.NODE_ENV === 'production'
         ? z.string().min(1)
         : z.string().min(1).optional(),
-    AUTH_GOOGLE_ID: z.string().min(1),
-    AUTH_GOOGLE_SECRET: z.string().min(1),
   },
   client: {},
   experimental__runtimeEnv: {},

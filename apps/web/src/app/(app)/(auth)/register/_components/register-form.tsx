@@ -65,15 +65,13 @@ export default function RegisterForm() {
 
   const registerUser = api.auth.register.useMutation({
     onSuccess: () => {
-      router.replace(
-        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect(),
-      )
+      const redirectTo =
+        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect()
+      router.replace(redirectTo, { scroll: !redirectTo })
 
       router.refresh()
     },
     onError: ({ message }) => {
-      // error.data?.zodError?.fieldErrors
-
       toast({
         variant: 'destructive',
         description: message,
@@ -92,7 +90,7 @@ export default function RegisterForm() {
       className='space-y-3'
     >
       {inputs.map(({ name, label, ...props }) => (
-        <div key={name} className=''>
+        <div key={name}>
           <Label>{label}</Label>
           <Input {...register(name)} {...props} className='border-black' />
           <p className='h-[1.21875rem] text-[0.8rem] font-medium text-destructive'>

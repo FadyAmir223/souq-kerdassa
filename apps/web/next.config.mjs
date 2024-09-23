@@ -8,8 +8,8 @@ const nextConfig = {
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     '@repo/db',
-    '@repo/auth',
     '@repo/api',
+    '@repo/auth',
     '@repo/validators',
     '@repo/store',
   ],
@@ -21,12 +21,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'souqkerdassa.com',
-      },
-      {
         protocol: 'http',
         hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'souqkerdassa.com',
       },
     ],
   },

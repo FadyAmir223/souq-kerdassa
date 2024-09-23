@@ -497,14 +497,16 @@ export async function editAdminProduct(db: DB, product: AddProductImagePathsSche
 
 export async function deleteAdminProduct(db: DB, productId: Product['id']) {
   try {
-    await db.product.delete({
+    const product = await db.product.delete({
       where: {
         id: productId,
       },
       select: {
-        id: true,
+        images: true,
       },
     })
+
+    return product.images[0] ?? ''
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)
       if (error.code === 'P2025')

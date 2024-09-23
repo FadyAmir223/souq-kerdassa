@@ -62,7 +62,7 @@ export const PAGES = {
   },
   defaultLoginRedirect: () => PAGES.protected.user.profile,
   authRoutes: () => Object.values(PAGES.auth),
-}
+} as const
 
 export const AR = {
   season: {

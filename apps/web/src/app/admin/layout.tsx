@@ -8,8 +8,6 @@ import PageWrapper from './_components/page-wrapper'
 import Sidebar from './_components/sidebar/sidebar'
 import SidebarWrapper from './_components/sidebar/sidebar-wrapper'
 
-// TODO: breadcrumb may be used
-
 export default function AdminLayout({ children }: PropsWithChildren) {
   return (
     <div className='min-h-dvh w-full'>

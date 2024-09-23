@@ -2,11 +2,18 @@ import { auth } from '@repo/auth'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import type { RouterOutputs } from '@/trpc/react'
 import { HydrateClient } from '@/trpc/server'
 
 import CheckoutAddressSelection from './checkout-address-selection'
 
-export default async function CheckoutUserInfo() {
+type CheckoutUserInfoProps = {
+  addresses: RouterOutputs['user']['addresses']['all']
+}
+
+export default async function CheckoutUserInfo({
+  addresses,
+}: CheckoutUserInfoProps) {
   const session = await auth()
 
   return (
@@ -23,7 +30,7 @@ export default async function CheckoutUserInfo() {
               className='border-black'
             />
           </div>
-          <div className=''>
+          <div>
             <Label>رقم التليفون</Label>
             <Input
               type='text'
@@ -35,7 +42,7 @@ export default async function CheckoutUserInfo() {
         </div>
       </section>
 
-      <CheckoutAddressSelection>
+      <CheckoutAddressSelection addresses={addresses}>
         <h3 className='mb-3 text-xl font-bold'>اختر عنوان التوصيل</h3>
       </CheckoutAddressSelection>
     </HydrateClient>

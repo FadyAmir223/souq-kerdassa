@@ -1,13 +1,37 @@
 'use server'
 
 import { existsSync } from 'fs'
-import { mkdir, writeFile } from 'fs/promises'
+import { mkdir, readdir, unlink, writeFile } from 'fs/promises'
 import path from 'path'
 
 import { ASSETS } from '@/utils/constants'
 
-export async function uploadImages(formData: unknown) {
+export async function uploadImages(props: {
+  action: 'add'
+  formData: FormData
+}): Promise<{ imagePaths?: string[]; error?: string }>
+
+export async function uploadImages(props: {
+  action: 'edit'
+  formData: FormData
+  projectPath: string
+  deletedImages: string[]
+}): Promise<{ imagePaths?: string[]; error?: string }>
+
+export async function uploadImages({
+  formData,
+  projectPath,
+  deletedImages,
+  action,
+}: {
+  formData: FormData
+  projectPath?: string
+  deletedImages?: string[]
+  action: 'add' | 'edit'
+}) {
   try {
+    // TODO: check if admin
+
     if (!(formData instanceof FormData)) return { error: 'بيانات غير صحيحة' }
 
     const formDataEntries = Object.fromEntries(formData)
@@ -22,13 +46,16 @@ export async function uploadImages(formData: unknown) {
       imageFiles[index] = formDataEntries[key] as File
     })
 
-    const imagesPath = `${ASSETS.path}/models/${crypto.randomUUID()}`
+    const imagesPath =
+      action === 'edit'
+        ? projectPath
+        : `${ASSETS.path}/models/${crypto.randomUUID()}`
 
-    if (!existsSync(imagesPath)) await mkdir(imagesPath, { recursive: true })
+    if (!existsSync(imagesPath!)) await mkdir(imagesPath!, { recursive: true })
 
     const imagePaths = imageFiles.map(
-      ({ name }, index) =>
-        `${imagesPath}/${index}${path.extname(name).toLowerCase()}`,
+      ({ name }) =>
+        `${imagesPath}/${Math.floor(Math.random() * 10000)}${path.extname(name).toLowerCase()}`,
     )
 
     await Promise.all(
@@ -36,6 +63,23 @@ export async function uploadImages(formData: unknown) {
         writeFile(imagePaths[index]!, Buffer.from(await image.arrayBuffer())),
       ),
     )
+
+    if (deletedImages)
+      await Promise.all(
+        deletedImages.map(async (imagePath) => {
+          const imageName = imagePath.substring(0, imagePath.lastIndexOf('.'))
+          const files = await readdir(projectPath!)
+
+          await Promise.all(
+            files
+              .filter((file) => file.startsWith(path.basename(imageName)))
+              .map((file) => {
+                const x = path.join(projectPath!, file)
+                return unlink(x)
+              }),
+          )
+        }),
+      )
 
     return { imagePaths }
   } catch {

@@ -17,16 +17,17 @@ export const createTRPCContext = async (opts: {
   session: Session | null
 }) => {
   const authToken = opts.headers.get('Authorization') ?? null
+  // TODO: remove after migrating admin to next-auth
+  const token = authToken?.startsWith('Basic') ? null : authToken
+
   const session = await isomorphicGetSession(opts.headers)
 
-  const source = opts.headers.get('x-trpc-source') ?? 'unknown'
-  console.log('>>> tRPC Request from', source, 'by', session?.user)
-
-  return {
-    session,
-    db,
-    token: authToken,
+  if (process.env.NODE_ENV === 'development') {
+    const source = opts.headers.get('x-trpc-source') ?? 'unknown'
+    console.log('>>> tRPC Request from', source, 'by', session?.user)
   }
+
+  return { session, db, token }
 }
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
@@ -83,7 +84,7 @@ export const protectedProcedure = t.procedure
  *   cons: next.js middleware can't access role from db session on the edge
  *
  * TODO:
- *   during login set isAdmin cookie which next.js middleware can check
+ *   during next-auth login set isAdmin cookie which next.js middleware can check
  */
 
 export const adminProcedure = t.procedure.use(timingMiddleware).use(({ next }) => {

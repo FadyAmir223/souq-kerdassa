@@ -13,11 +13,11 @@ export default function ProductSidebar() {
       <div className='h-fit space-y-6 rounded-lg bg-white p-4'>
         <div className='flex items-center gap-x-2'>
           <Image src={qualityImage} alt='quality' className='w-8' />
-          <span className=''>سياسة الإرجاع لمدة 7 ايام</span>
+          <span>سياسة الإرجاع لمدة 7 ايام</span>
         </div>
         <div className='flex items-center gap-x-2'>
           <Image src={returnImage} alt='return' className='w-8' />
-          <span className=''>منتجات اصلية 100%</span>
+          <span>منتجات اصلية 100%</span>
         </div>
       </div>
 

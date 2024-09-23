@@ -36,24 +36,24 @@ export default function Addresses() {
         </div>
       </div>
 
-      <div className=''>
-        <p className=''>
+      <div>
+        <p>
           <span className='ml-1 font-semibold'>المدينة: </span>
           {address.city.name}
         </p>
-        <p className=''>
+        <p>
           <span className='ml-1 font-semibold'>المنطقة: </span>
           {address.region}
         </p>
-        <p className=''>
+        <p>
           <span className='ml-1 font-semibold'>الشارع: </span>
           {address.street}
         </p>
-        <p className=''>
+        <p>
           <span className='ml-1 font-semibold'>المبنى: </span>
           {address.building}
         </p>
-        <p className=''>
+        <p>
           <span className='ml-1 font-semibold'>علامة مميزة: </span>
           {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
           {address.mark || 'لا يوجد'}

@@ -5,8 +5,8 @@ import { api, HydrateClient } from '@/trpc/server'
 
 import SidebarCollapseButton from '../_components/sidebar-collapse-button'
 import Spinner from '../_components/spinner'
+import UserStatistics from './_components/user-statistics'
 import UsersList from './_components/users-list'
-import UserStatistics from './user-statistics'
 
 export const metadata: Metadata = {
   title: {
@@ -14,12 +14,14 @@ export const metadata: Metadata = {
   },
 }
 
+export const dynamic = 'force-dynamic'
+
 const defaultQueryParams = {
   limit: 10,
   page: 1,
 }
 
-// search can be done
+// search by name or phone can be done
 
 export default function UsersPage() {
   void Promise.all([
