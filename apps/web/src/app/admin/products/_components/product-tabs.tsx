@@ -33,13 +33,6 @@ import { PAGES } from '../../_utils/constants'
 import { tabs } from '../_utils/tabs'
 import ProductItem from './product-item'
 
-/**
- * TODO:
- * pagination
- * delete
- * toggle status
- */
-
 type ProductTabsProps = {
   defaultTab: AdminProductStatusSchema
 }

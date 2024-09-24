@@ -89,7 +89,7 @@ export default function CheckoutAddressSelection({
 
   const handlePurchaseSuccess = () => {
     router.replace(
-      `${PAGES.protected.user.orders}?${SEARCH_PARAMS.redirectFrom}=${PAGES.protected.buy.checkout}`,
+      `${PAGES.protected.user.orders}?${SEARCH_PARAMS.redirectedFrom}=${PAGES.protected.buy.checkout}`,
     )
 
     router.refresh()

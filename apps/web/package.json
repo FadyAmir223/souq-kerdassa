@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
-    "@prisma/nextjs-monorepo-workaround-plugin": "^5.19.1",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^5.20.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",

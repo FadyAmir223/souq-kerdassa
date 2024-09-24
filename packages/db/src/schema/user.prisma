@@ -8,11 +8,6 @@ model User {
   addresses Address[]
   reviews   Review[]
 
-  // TODO: oauth
-  // email         String?   @unique
-  // emailVerified DateTime?
-  // image         String?
-
   sessions Session[]
   accounts Account[]
   orders   Order[]

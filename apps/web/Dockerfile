@@ -23,14 +23,15 @@ COPY --from=builder /app/out/full/packages/db packages/db
 COPY --from=builder /app/out/full/tooling/eslint tooling/eslint
 COPY --from=builder /app/out/full/tooling/prettier tooling/prettier
 COPY --from=builder /app/out/full/tooling/typescript tooling/typescript
-COPY --from=builder /app/out/full/apps/web/.env.development.local apps/web
+COPY --from=builder /app/out/full/apps/web/envs/staging/.env.staging.local apps/web
+COPY --from=builder /app/out/full/apps/web/envs/production/.env.production.local apps/web
 
 RUN --mount=type=cache,id=pnmcache,target=/pnpm_store \
     npm install -g pnpm && \
     pnpm config set store-dir /pnpm_store && \
     pnpm config set package-import-method copy && \
     pnpm install --prefer-offline --ignore-scripts --frozen-lockfile && \
-    pnpm -F @repo/db db:generate:dev:env && \
+    pnpm -F @repo/db db:generate:dev && \
     pnpm -F @repo/db build
 
 # Build the project

@@ -1,7 +1,7 @@
 services:
   app-prod:
     image: fadyamir/app-prod
-    container_name: app-prod # compose
+    # container_name: app-prod
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
@@ -13,8 +13,8 @@ services:
     volumes:
       - ./apps/web/uploads:/app/apps/web/uploads
     env_file:
-      - ./apps/web/.env.production
-      - ./apps/web/.env.production.local
+      - ./apps/envs/production/web/.env.production
+      - ./apps/envs/production/web/.env.production.local
     networks:
       - proxy
     depends_on:
@@ -94,7 +94,7 @@ networks:
 
 secrets:
   SECRET_ENVS:
-    file: ./apps/web/.env.production.build.local
+    file: ./apps/web/envs/production/.env.production.build.local
   postgres_user:
     file: ./apps/web/secrets/production/postgres-user.txt
   postgres_password:

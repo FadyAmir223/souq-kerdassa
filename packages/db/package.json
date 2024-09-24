@@ -18,13 +18,13 @@
     "dev": "tsc -w",
     "build": "tsc",
     "with-env:dev": "dotenv -e ../../apps/web/.env.development.local --",
-    "db:generate:dev:env": "pnpm with-env:dev prisma generate",
-    "db:push:dev:env": "pnpm with-env:dev prisma db push",
-    "db:migrate:dev:env": "pnpm with-env:dev prisma migrate dev --name",
-    "db:seed:dev:env": "pnpm with-env:dev prisma db seed",
-    "db:reset:dev:env": "pnpm with-env:dev prisma migrate reset dev",
-    "db:studio:dev:env": "pnpm with-env:dev prisma studio --port 5556",
-    "with-env:stage": "dotenv -e ../../apps/web/.env.staging.build.local --",
+    "db:generate:dev": "pnpm with-env:dev prisma generate",
+    "db:push:dev": "pnpm with-env:dev prisma db push",
+    "db:migrate:dev": "pnpm with-env:dev prisma migrate dev --name",
+    "db:seed:dev": "pnpm with-env:dev prisma db seed",
+    "db:reset:dev": "pnpm with-env:dev prisma migrate reset dev",
+    "db:studio:dev": "pnpm with-env:dev prisma studio --port 5556",
+    "with-env:stage": "dotenv -e ../../apps/web/envs/staging/.env.staging.build.local --",
     "db:generate:stage": "pnpm with-env:stage prisma generate",
     "db:migrate:stage": "pnpm with-env:stage db:migrate:prod",
     "db:seed:stage": "pnpm with-env:stage prisma db seed",
@@ -35,7 +35,7 @@
     "clean": "rm -rf .turbo dist node_modules"
   },
   "dependencies": {
-    "@prisma/client": "^5.19.1"
+    "@prisma/client": "^5.20.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -45,7 +45,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prisma": "^5.19.1",
+    "prisma": "^5.20.0",
     "tsc-files": "catalog:",
     "typescript": "catalog:"
   },

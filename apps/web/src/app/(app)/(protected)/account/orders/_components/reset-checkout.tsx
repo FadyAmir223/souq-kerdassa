@@ -8,7 +8,7 @@ import { useAppStore } from '@/providers/app-store-provider'
 import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
 export default function ResetCheckout() {
-  const redirectFrom = useSearchParams().get(SEARCH_PARAMS.redirectFrom)
+  const redirectedFrom = useSearchParams().get(SEARCH_PARAMS.redirectedFrom)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -24,7 +24,7 @@ export default function ResetCheckout() {
   useEffect(() => {
     for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
 
-    if (redirectFrom !== PAGES.protected.buy.checkout) return
+    if (redirectedFrom !== PAGES.protected.buy.checkout) return
 
     router.replace(pathname)
     resetCart()

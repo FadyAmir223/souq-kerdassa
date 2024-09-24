@@ -82,6 +82,10 @@ export const authConfig = {
 
       return { id: session?.sessionToken }
     },
+
+    // TODO: try redirection to be deterministic (redirectTo!!)
+    // redirect(params) {
+    // },
   },
 
   jwt: {

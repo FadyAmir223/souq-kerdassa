@@ -15,8 +15,8 @@ services:
     volumes:
       - ./apps/web/uploads:/app/apps/web/uploads
     env_file:
-      - ./apps/web/.env.staging
-      - ./apps/web/.env.staging.local
+      - ./apps/web/envs/staging/.env.staging
+      - ./apps/web/envs/staging/.env.staging.local
     networks:
       - internal-stage
     depends_on:
@@ -51,7 +51,7 @@ networks:
 
 secrets:
   SECRET_ENVS:
-    file: ./apps/web/.env.staging.build.local
+    file: ./apps/web/envs/staging/.env.staging.build.local
   postgres_user:
     file: ./apps/web/secrets/staging/postgres-user.txt
   postgres_password:

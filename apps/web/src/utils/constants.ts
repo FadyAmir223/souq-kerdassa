@@ -11,7 +11,7 @@ export const SEARCH_PARAMS = {
   quality: 'q',
   query: 'query',
   redirectTo: 'redirectTo',
-  redirectFrom: 'redirectFrom',
+  redirectedFrom: 'redirectedFrom',
 } as const
 
 export const PLACEHOLDER = {
