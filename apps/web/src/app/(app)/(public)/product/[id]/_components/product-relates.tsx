@@ -25,7 +25,7 @@ export default async function ProductRelates() {
       </div>
 
       <div className='flex-1 px-2 py-3.5'>
-        <h5 className='mb-1'>{product.name}</h5>
+        <span className='mb-1 block'>{product.name}</span>
 
         <div className='my-1 flex gap-x-2'>
           <StarRating rating={product.rating} />

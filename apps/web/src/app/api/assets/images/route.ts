@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
 
   const headers = new Headers(request.headers)
   headers.set('Content-Type', mimeType)
+  headers.set('Cache-Control', 'public, max-age=31536000, immutable') // 2592000
 
   const dirPath = path.dirname(assetPath)
   const imageName = path.parse(assetPath).name

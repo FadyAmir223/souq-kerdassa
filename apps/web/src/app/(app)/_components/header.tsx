@@ -26,7 +26,7 @@ export default async function Header() {
         {/* downside: only executable code on /search dragged everywhere */}
         <SearchField isHeader />
 
-        <Link href={PAGES.public.search}>
+        <Link href={PAGES.public.search} aria-label='البحث'>
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed] md:hidden'>
             <LuSearch className='size-5 md:size-[1.375rem]' />
           </div>
@@ -35,6 +35,7 @@ export default async function Header() {
         <Link
           href={session?.user ? PAGES.defaultLoginRedirect() : PAGES.auth.login}
           className={cn({ 'flex gap-x-3': session?.user })}
+          aria-label='لوحة التحكم'
         >
           <div className='grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>
             <FaRegUser className='size-5 md:size-[1.375rem]' />
@@ -48,7 +49,11 @@ export default async function Header() {
           )}
         </Link>
 
-        <Link href={PAGES.public.cart} className='flex gap-x-3'>
+        <Link
+          href={PAGES.public.cart}
+          className='flex gap-x-3'
+          aria-label='عربة التسوق'
+        >
           <div className='relative grid size-10 place-items-center rounded-full bg-[#e4e6ed]'>
             <BsCart className='size-5 md:size-[1.375rem]' />
             <div className='absolute right-0 top-0 grid size-[1.125rem] translate-x-[4px] translate-y-[-4px] place-items-center rounded-full bg-black text-xs text-white'>

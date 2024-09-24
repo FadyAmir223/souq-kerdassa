@@ -19,9 +19,11 @@ export default function AccountSidebar() {
           </li>
         ))}
 
-        <form>
-          <SignOutButton />
-        </form>
+        <li>
+          <form>
+            <SignOutButton />
+          </form>
+        </li>
       </ul>
     </aside>
   )

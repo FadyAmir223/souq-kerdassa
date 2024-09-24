@@ -5,7 +5,7 @@ import StarRating from '@/app/(app)/(public)/_components/star-rating'
 export default function Reviews() {
   const reviews = [1, 2]
 
-  if (reviews.length === 0) return <h5>لا يوجد مراجعات</h5>
+  if (reviews.length === 0) return <p>لا يوجد مراجعات</p>
 
   return (
     <ul>

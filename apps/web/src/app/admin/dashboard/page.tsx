@@ -1,13 +1,19 @@
-import { Suspense } from 'react'
+import type { Metadata } from 'next'
 
 import { HydrateClient } from '@/trpc/server'
 
 import SidebarCollapseButton from '../_components/sidebar-collapse-button'
-import Spinner from '../_components/spinner'
 import CitiesPricing from './_component/cities-pricing'
 import GeneralStatistics from './_component/general-statistics'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: {
+    absolute: 'الرئيسية',
+  },
+  description: 'نبذة عن اهم الاحصائيات',
+}
 
 export default function Dashboard() {
   return (
@@ -21,9 +27,7 @@ export default function Dashboard() {
         <GeneralStatistics />
 
         <HydrateClient>
-          <Suspense fallback={<Spinner />}>
-            <CitiesPricing />
-          </Suspense>
+          <CitiesPricing />
         </HydrateClient>
       </main>
     </div>

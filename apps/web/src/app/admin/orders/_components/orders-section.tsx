@@ -85,6 +85,7 @@ export default function OrdersSection({
                   <Checkbox
                     checked={selectedOrderId === order.id}
                     onCheckedChange={() => setSelectedOrderId(order.id)}
+                    aria-label={`اختر طلب ${order.user.name}`}
                   />
                 </TableCell>
                 <TableCell>

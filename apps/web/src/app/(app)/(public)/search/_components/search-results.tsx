@@ -58,7 +58,8 @@ export default function SearchResults() {
       {(
         data as unknown as RouterOutputs['product']['byQuery'] | undefined
       )?.products.map((product, idx) => (
-        <Link
+        <li
+          key={product.id}
           ref={
             idx ===
             (data as unknown as RouterOutputs['product']['byQuery']).products
@@ -67,12 +68,12 @@ export default function SearchResults() {
               ? ref
               : null
           }
-          key={product.id}
-          href={PAGES.public.product(product.id)}
           className='transition-transform hover:scale-[1.03]'
         >
-          <ProductCard product={product} />
-        </Link>
+          <Link href={PAGES.public.product(product.id)}>
+            <ProductCard product={product} />
+          </Link>
+        </li>
       ))}
 
       {query &&

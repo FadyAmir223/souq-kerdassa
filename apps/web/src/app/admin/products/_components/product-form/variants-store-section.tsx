@@ -156,6 +156,7 @@ export default function VariantsStoreSection() {
                     onClick={() => variantsInputs.remove(fieldIndex)}
                     type='button'
                     disabled={variantsInputs.fields.length === 1}
+                    aria-label='امسح التفريعة'
                   >
                     <FaTrashCan className='text-destructive' size={16} />
                   </Button>

@@ -33,7 +33,7 @@ export default function ReviewsSection({ productId }: ReviewsSectionProps) {
   if (!reviewsDetails || reviewsDetails.reviewsCount === 0)
     return (
       <div className='space-y-3 text-center'>
-        <h4 className='text-lg font-bold'>لا يوجد مراجعات</h4>
+        <p className='text-lg font-bold'>لا يوجد مراجعات</p>
         <ReviewButton productId={productId} reviewPage={reviewPage} />
         <AddReviewForm productId={productId} setReviewPage={setReviewPage} />
       </div>

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: {
     absolute: 'المنتجات',
   },
+  description: 'اطلع على منتجاتك',
 }
 
 export const dynamic = 'force-dynamic'

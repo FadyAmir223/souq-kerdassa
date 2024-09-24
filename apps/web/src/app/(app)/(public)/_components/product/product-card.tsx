@@ -30,7 +30,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
       </div>
 
       <div className='bg-white p-2'>
-        <h4>{name}</h4>
+        <span className='block'>{name}</span>
         <div className='my-1 flex justify-center gap-x-2'>
           <StarRating rating={rating} />
           <span>({reviewsCount})</span>

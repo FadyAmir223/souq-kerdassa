@@ -99,7 +99,7 @@ export type ImageMeta = {
 }
 
 type ActionProductFormProps = {
-  productId: Product['id']
+  productId?: Product['id']
 }
 
 export default function ActionProductForm({ productId }: ActionProductFormProps) {

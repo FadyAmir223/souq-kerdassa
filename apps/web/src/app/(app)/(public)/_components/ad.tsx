@@ -14,7 +14,9 @@ export default async function Ad() {
 
   return (
     <div className='h-fit rounded-md bg-primary p-6 md:min-w-full lg:min-w-80'>
-      <h4 className='my-8 text-center text-3xl font-bold text-white'>منتج مقترح</h4>
+      <span className='my-8 block text-center text-3xl font-bold text-white'>
+        منتج مقترح
+      </span>
       <ProductCard product={product} className='bg-white p-6' />
 
       <div className='text-center'>

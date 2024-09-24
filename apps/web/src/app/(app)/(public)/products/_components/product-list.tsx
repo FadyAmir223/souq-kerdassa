@@ -23,13 +23,14 @@ export default async function ProductList({ searchParams }: ProductListProps) {
     <section className='flex-1'>
       <ul className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
         {products.map((product) => (
-          <Link
-            key={product.id}
-            href={PAGES.public.product(product.id)}
-            className='transition-transform hover:scale-[1.03]'
-          >
-            <ProductCard key={product.id} product={product} />
-          </Link>
+          <li key={product.id}>
+            <Link
+              href={PAGES.public.product(product.id)}
+              className='transition-transform hover:scale-[1.03]'
+            >
+              <ProductCard key={product.id} product={product} />
+            </Link>
+          </li>
         ))}
       </ul>
 

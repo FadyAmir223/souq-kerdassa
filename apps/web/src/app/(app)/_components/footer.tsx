@@ -59,9 +59,9 @@ export default function Footer() {
 
         {cols.map((row) => (
           <div key={row.title}>
-            <h6 className='mb-2.5 mt-6 text-lg font-bold text-white md:mb-4 md:mt-0'>
+            <span className='mb-2.5 mt-6 block text-lg font-bold text-white md:mb-4 md:mt-0'>
               {row.title}
-            </h6>
+            </span>
 
             <ul>
               {row.rows.map(({ label, url }) => (

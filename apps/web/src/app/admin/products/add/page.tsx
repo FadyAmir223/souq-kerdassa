@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: {
     absolute: 'إضافة منتج',
   },
+  description: 'اضف منتج جديد',
 }
 
 export default function AddProductPage() {

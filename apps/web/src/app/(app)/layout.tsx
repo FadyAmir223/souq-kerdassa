@@ -48,17 +48,18 @@ export const metadata: Metadata = {
     images: meta.image,
     card: 'summary_large_image',
   },
-  alternates: {
-    canonical: env.NEXT_PUBLIC_SITE_URL,
-    languages: {
-      'ar-EG': env.NEXT_PUBLIC_SITE_URL,
-    },
-  },
   verification: {
     google: 'google',
     yandex: 'yandex',
     yahoo: 'yahoo',
   },
+  // i18n (for each page)
+  // alternates: {
+  //   canonical: env.NEXT_PUBLIC_SITE_URL,
+  //   languages: {
+  //     'ar-EG': env.NEXT_PUBLIC_SITE_URL,
+  //   },
+  // },
 }
 
 export default async function AppLayout({ children }: PropsWithChildren) {

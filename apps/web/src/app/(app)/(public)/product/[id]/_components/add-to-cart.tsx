@@ -63,7 +63,7 @@ export default function AddToCart({ product }: AddToCartProps) {
   return (
     <>
       <div className='mb-4 flex gap-x-4'>
-        <h4 className='mb-3 min-w-16 text-lg font-semibold'>الموسم</h4>
+        <span className='mb-3 min-w-16 text-lg font-semibold'>الموسم</span>
         {seasons.map((season) => (
           <Button
             key={season}
@@ -88,7 +88,7 @@ export default function AddToCart({ product }: AddToCartProps) {
       </div>
 
       <div className='mb-4 flex gap-x-4'>
-        <h4 className='mb-3 min-w-16 text-lg font-semibold'>النوع</h4>
+        <span className='mb-3 min-w-16 text-lg font-semibold'>النوع</span>
         {variants.map(({ category }) => (
           <Button
             key={category}

@@ -140,6 +140,7 @@ export default function UploadImagesSection({
                                 className='absolute left-4 top-4 grid size-6 place-items-center rounded-full bg-black text-white lg:left-2 lg:top-2 lg:size-4'
                                 onClick={() => handleRemoveImage(fieldIndex)}
                                 type='button'
+                                aria-label='امسح الصورة'
                               >
                                 <IoClose className='size-4 lg:size-3' />
                               </button>

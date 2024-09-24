@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: {
     absolute: 'تعديل منتج',
   },
+  description: 'عدل على المنتج',
 }
 
 type AddProductPageProps = {

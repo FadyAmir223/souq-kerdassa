@@ -38,12 +38,10 @@ async function Products({ filter }: ProductMiniListProps) {
   const { products } = await api.product.byFilter({ ...filter, limit: 6 })
 
   return products.map((product) => (
-    <Link
-      key={product.id}
-      href={PAGES.public.product(product.id)}
-      className='transition-transform hover:scale-[1.03]'
-    >
-      <ProductCard product={product} />
-    </Link>
+    <li key={product.id} className='transition-transform hover:scale-[1.03]'>
+      <Link href={PAGES.public.product(product.id)}>
+        <ProductCard product={product} />
+      </Link>
+    </li>
   ))
 }

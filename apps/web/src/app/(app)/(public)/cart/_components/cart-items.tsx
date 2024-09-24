@@ -77,7 +77,9 @@ export default function CartItems() {
               </Link>
 
               <div className='self-center'>
-                <h5 className='mb-2.5 text-lg font-semibold'>{item.name}</h5>
+                <span className='mb-2.5 block text-lg font-semibold'>
+                  {item.name}
+                </span>
                 <div className='space-x-5'>
                   <div className='mb-1'>
                     <Badge>{AR.season[item.season]}</Badge>
@@ -101,6 +103,7 @@ export default function CartItems() {
                 size='none'
                 className='grid size-5 place-items-center text-gray-400'
                 onClick={() => incrementCartItem(item.variantId)}
+                aria-label={`زيادة كمية ${item.name}`}
               >
                 <FaPlus />
               </Button>
@@ -112,6 +115,7 @@ export default function CartItems() {
                 size='none'
                 className='grid size-5 place-items-center text-gray-400'
                 onClick={() => decrementCartItem(item.variantId)}
+                aria-label={`تقليل كمية ${item.name}`}
               >
                 <FaMinus />
               </Button>
@@ -122,6 +126,7 @@ export default function CartItems() {
               size='icon'
               className='text-destructive'
               onClick={() => deleteCartItem(item.variantId)}
+              aria-label={`إزالة ${item.name} من السلة`}
             >
               <IoClose size={30} />
             </Button>

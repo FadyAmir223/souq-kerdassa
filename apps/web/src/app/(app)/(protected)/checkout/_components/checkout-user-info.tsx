@@ -22,8 +22,9 @@ export default async function CheckoutUserInfo({
         <h3 className='mb-3 text-xl font-bold'>معلومات التواصل</h3>
         <div className='flex flex-col gap-x-5 sm:flex-row'>
           <div className='flex-1'>
-            <Label>الإسم</Label>
+            <Label htmlFor='name'>الإسم</Label>
             <Input
+              id='name'
               type='text'
               value={session?.user.name ?? ''}
               readOnly
@@ -31,8 +32,9 @@ export default async function CheckoutUserInfo({
             />
           </div>
           <div>
-            <Label>رقم التليفون</Label>
+            <Label htmlFor='phone'>رقم التليفون</Label>
             <Input
+              id='phone'
               type='text'
               value={session?.user.phone ?? ''}
               readOnly

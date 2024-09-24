@@ -75,9 +75,9 @@ export default function ProductPage({
       </div>
 
       <section className='mt-24'>
-        <h3 className='mb-4 text-center text-2xl font-bold text-primary'>
+        <h2 className='mb-4 text-center text-2xl font-bold text-primary'>
           المراجعات
-        </h3>
+        </h2>
 
         <HydrateClient>
           <Suspense fallback={<ReviewsSectionSkeleton />}>
