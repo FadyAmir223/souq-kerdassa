@@ -1,5 +1,4 @@
 {
   "*.{js,jsx,ts,tsx,json,yml,css,md}": ["pnpm format:fix", "pnpm format"],
-  "*.{js,jsx,ts,tsx}": ["pnpm lint:fix", "pnpm lint"],
-  "*.{ts,tsx}": "pnpm type-check --"
+  "*.{js,jsx,ts,tsx}": ["pnpm lint:fix", "pnpm lint"]
 }

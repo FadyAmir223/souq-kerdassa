@@ -8,9 +8,16 @@ import superjson from 'superjson'
 import { getBaseUrl } from './base-url'
 import { getToken } from './session-store'
 
+/**
+ * A set of typesafe hooks for consuming your API.
+ */
 export const api = createTRPCReact<AppRouter>()
 export { type RouterInputs, type RouterOutputs } from '@repo/api'
 
+/**
+ * A wrapper for your app that provides the TRPC context.
+ * Use only in _app.tsx
+ */
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
   const [trpcClient] = useState(() =>

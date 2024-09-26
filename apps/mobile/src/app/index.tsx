@@ -1,26 +1,157 @@
-import { Stack } from 'expo-router'
-import { Text, View } from 'react-native'
+import { FlashList } from '@shopify/flash-list'
+import { Link, Stack } from 'expo-router'
+import { useState } from 'react'
+import { Button, Pressable, Text, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import AuthShowcase from '@/components/auth-showcase'
-import CreateTodo from '@/components/create.todo'
-import ZustandShowcase from '@/components/zustand-showcase'
+import type { RouterOutputs } from '@/utils/api'
 import { api } from '@/utils/api'
+import { useSignIn, useSignOut, useUser } from '@/utils/auth'
+
+function PostCard({
+  post,
+  onDelete,
+}: {
+  post: RouterOutputs['post']['all'][number]
+  onDelete: () => void
+}) {
+  return (
+    <View className='flex flex-row rounded-lg bg-muted p-4'>
+      <View className='grow'>
+        <Link
+          asChild
+          href={{
+            pathname: '/post/[id]',
+            params: { id: post.id },
+          }}
+        >
+          <Pressable className=''>
+            <Text className='text-xl font-semibold text-primary'>{post.title}</Text>
+            <Text className='mt-2 text-foreground'>{post.content}</Text>
+          </Pressable>
+        </Link>
+      </View>
+      <Pressable onPress={onDelete}>
+        <Text className='font-bold uppercase text-primary'>Delete</Text>
+      </Pressable>
+    </View>
+  )
+}
+
+function CreatePost() {
+  const utils = api.useUtils()
+
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+
+  const { mutate, error } = api.post.create.useMutation({
+    async onSuccess() {
+      setTitle('')
+      setContent('')
+      await utils.post.all.invalidate()
+    },
+  })
+
+  return (
+    <View className='mt-4 flex gap-2'>
+      <TextInput
+        className='items-center rounded-md border border-input bg-background px-3 text-lg leading-tight text-foreground'
+        value={title}
+        onChangeText={setTitle}
+        placeholder='Title'
+      />
+      {error?.data?.zodError?.fieldErrors.title && (
+        <Text className='mb-2 text-destructive'>
+          {error.data.zodError.fieldErrors.title}
+        </Text>
+      )}
+      <TextInput
+        className='items-center rounded-md border border-input bg-background px-3 text-lg leading-tight text-foreground'
+        value={content}
+        onChangeText={setContent}
+        placeholder='Content'
+      />
+      {error?.data?.zodError?.fieldErrors.content && (
+        <Text className='mb-2 text-destructive'>
+          {error.data.zodError.fieldErrors.content}
+        </Text>
+      )}
+      <Pressable
+        className='flex items-center rounded bg-primary p-2'
+        onPress={() => {
+          mutate({
+            title,
+            content,
+          })
+        }}
+      >
+        <Text className='text-foreground'>Create</Text>
+      </Pressable>
+      {error?.data?.code === 'UNAUTHORIZED' && (
+        <Text className='mt-2 text-destructive'>
+          You need to be logged in to create a post
+        </Text>
+      )}
+    </View>
+  )
+}
+
+function MobileAuth() {
+  const user = useUser()
+  const signIn = useSignIn()
+  const signOut = useSignOut()
+
+  return (
+    <>
+      <Text className='pb-2 text-center text-xl font-semibold text-white'>
+        {user?.name ?? 'Not logged in'}
+      </Text>
+      <Button
+        onPress={() => (user ? signOut() : signIn())}
+        title={user ? 'Sign Out' : 'Sign In With Discord'}
+        color={'#5B65E9'}
+      />
+    </>
+  )
+}
 
 export default function Index() {
-  const todoQuery = api.todo.get.useQuery()
+  const utils = api.useUtils()
+
+  const postQuery = api.post.all.useQuery()
+
+  const deletePostMutation = api.post.delete.useMutation({
+    onSettled: () => utils.post.all.invalidate(),
+  })
 
   return (
     <SafeAreaView className='bg-background'>
+      {/* Changes page title visible on the header */}
       <Stack.Screen options={{ title: 'Home Page' }} />
       <View className='size-full bg-background p-4'>
-        <ZustandShowcase />
-        <AuthShowcase />
+        <Text className='pb-2 text-center text-5xl font-bold text-foreground'>
+          Create <Text className='text-primary'>T3</Text> Turbo
+        </Text>
 
-        <CreateTodo />
+        <MobileAuth />
+
         <View className='py-2'>
-          {todoQuery.data?.map(({ id, task }) => <Text key={id}>{task}</Text>)}
+          <Text className='font-semibold italic text-primary'>Press on a post</Text>
         </View>
+
+        <FlashList
+          data={postQuery.data}
+          estimatedItemSize={20}
+          ItemSeparatorComponent={() => <View className='h-2' />}
+          renderItem={(p) => (
+            <PostCard
+              post={p.item}
+              onDelete={() => deletePostMutation.mutate(p.item.id)}
+            />
+          )}
+        />
+
+        <CreatePost />
       </View>
     </SafeAreaView>
   )
