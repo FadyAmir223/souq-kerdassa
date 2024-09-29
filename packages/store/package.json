@@ -23,9 +23,9 @@
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "1.24.0",
     "@redux-devtools/extension": "^3.3.0",
     "@repo/db": "workspace:*",
+    "expo-secure-store": "catalog:",
     "immer": "^10.1.1",
     "zustand": "catalog:"
   },

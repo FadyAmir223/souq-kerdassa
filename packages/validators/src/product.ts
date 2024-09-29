@@ -34,8 +34,8 @@ export type AdminProductsSchema = z.infer<typeof adminProductsSchema>
 
 export const addProductNoImagesSchema = z.object({
   id: cuidSchema.optional(),
-  name: z.string().min(1, { message: 'اسم المنتج مطلوب' }),
-  description: z.string(),
+  name: z.string().trim().min(1, { message: 'اسم المنتج مطلوب' }),
+  description: z.string().trim(),
   price: z.coerce
     .number({ message: 'يجب ان يكون رقم' })
     .int({ message: 'يجب ان يكون رقم صحيح' })
@@ -81,6 +81,6 @@ export const addProductSchema = addProductNoImagesSchema.merge(
 export type AddProductSchema = z.infer<typeof addProductSchema>
 
 export const addProductImagePathsSchema = addProductNoImagesSchema.extend({
-  imagePaths: z.array(z.string()).optional(),
+  imagePaths: z.array(z.string().trim()).optional(),
 })
 export type AddProductImagePathsSchema = z.infer<typeof addProductImagePathsSchema>

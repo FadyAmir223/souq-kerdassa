@@ -91,7 +91,6 @@ export async function getProductById(db: DB, id: Product['id']) {
         description: true,
         price: true,
         images: true,
-        rating: true,
         variants: {
           select: {
             id: true,
@@ -100,7 +99,6 @@ export async function getProductById(db: DB, id: Product['id']) {
             stock: true,
           },
         },
-        reviewsCount: true,
       },
     })
   } catch {

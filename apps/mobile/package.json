@@ -11,13 +11,14 @@
     "ios": "expo run:ios",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc-files --noEmit",
     "clean": "git clean -xdf .cache .expo .turbo android ios node_modules"
   },
   "dependencies": {
     "@bacons/text-decoder": "^0.0.0",
     "@expo/metro-config": "^0.18.11",
-    "@shopify/flash-list": "1.7.1",
+    "@hookform/resolvers": "catalog:",
+    "@repo/store": "workspace:*",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
     "@trpc/react-query": "catalog:",
@@ -34,13 +35,15 @@
     "nativewind": "~4.0.36",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
+    "react-hook-form": "catalog:",
     "react-native": "~0.74.5",
     "react-native-css-interop": "~0.0.34",
     "react-native-gesture-handler": "~2.16.2",
     "react-native-reanimated": "~3.10.1",
     "react-native-safe-area-context": "~4.10.8",
     "react-native-screens": "~3.31.1",
-    "superjson": "catalog:"
+    "superjson": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

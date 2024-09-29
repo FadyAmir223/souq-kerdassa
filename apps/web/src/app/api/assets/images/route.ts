@@ -14,6 +14,14 @@ import { SEARCH_PARAMS } from '@/utils/constants'
  * cons: storage
  */
 
+// TODO: @repo/constants
+const config = {
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+} as const
+
+const SIZES = [...config.imageSizes, ...config.deviceSizes]
+
 export async function GET(request: NextRequest) {
   const assetPath = request.nextUrl.searchParams.get(SEARCH_PARAMS.path)
   const width = +(request.nextUrl.searchParams.get(SEARCH_PARAMS.width) ?? 0)
@@ -21,6 +29,9 @@ export async function GET(request: NextRequest) {
 
   if (!assetPath)
     return NextResponse.json({ error: 'Path is missing' }, { status: 400 })
+
+  if (SIZES.findIndex((size) => size === width) === -1)
+    return NextResponse.json({ error: 'Invalid Width' }, { status: 400 })
 
   const originalPath = assetPath
 

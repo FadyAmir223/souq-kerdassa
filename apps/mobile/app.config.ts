@@ -1,32 +1,46 @@
 import type { ConfigContext, ExpoConfig } from 'expo/config'
 
+const bundleId = (() => {
+  if (process.env.APP_VARIANT === 'production') return 'com.fadyamir.souqkerdassa'
+  if (process.env.APP_VARIANT === 'preview')
+    return 'com.fadyamir.souqkerdassa.preview'
+  return 'com.fadyamir.souqkerdassa.dev'
+})()
+
+const appName = (() => {
+  if (process.env.APP_VARIANT === 'production') return 'Souq Kerdassa'
+  if (process.env.APP_VARIANT === 'preview') return 'Souq Kerdassa (preview)'
+  return 'Souq Kerdassa (dev)'
+})()
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: 'Souq Kerdassa',
+  name: appName,
   slug: 'souq-kerdassa',
   scheme: 'expo',
   version: '1.0.0',
   orientation: 'portrait',
-  icon: './assets/icon.png',
+  icon: './assets/icons/icon.png',
   userInterfaceStyle: 'automatic',
   splash: {
-    image: './assets/icon.png',
+    image: './assets/icons/splash.png',
     resizeMode: 'contain',
-    backgroundColor: '#1F104A',
+    backgroundColor: '#ffffff',
   },
   updates: {
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
   ios: {
-    bundleIdentifier: 'your.bundle.identifier',
+    bundleIdentifier: bundleId,
     supportsTablet: true,
   },
   android: {
-    package: 'your.bundle.identifier',
+    package: bundleId,
     adaptiveIcon: {
-      foregroundImage: './assets/icon.png',
-      backgroundColor: '#1F104A',
+      foregroundImage: './assets/icons/adaptive-icon/foreground.png',
+      backgroundImage: './assets/icons/adaptive-icon/background.png',
+      backgroundColor: '#ffffff',
     },
   },
   extra: {

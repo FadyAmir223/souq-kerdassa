@@ -1,5 +1,6 @@
 import type { Product } from '@repo/db/types'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 import H1 from '@/app/(app)/_components/h1'
 import { api } from '@/trpc/server'
@@ -7,6 +8,7 @@ import { api } from '@/trpc/server'
 import StarRating from '../../../_components/star-rating'
 import AddToCart from './add-to-cart'
 import ImageViewer from './image-viewer'
+import { ReviewsCount, ReviewsRating } from './reviews-info'
 
 type ProductDetailsProps = {
   productId: Product['id']
@@ -21,10 +23,21 @@ export default async function ProductDetails({ productId }: ProductDetailsProps)
     <>
       <section className='order-2 flex flex-col md:order-none'>
         <H1>{product.name}</H1>
-        <div className='mb-3 flex items-center gap-x-9'>
-          <span className='text-lg text-primary'>{product.reviewsCount}</span>
-          <StarRating rating={product.rating} scale='lg' />
-        </div>
+        <Suspense
+          fallback={
+            <div className='mb-3 flex items-center gap-x-9'>
+              <span className='text-lg text-primary'>0</span>
+              <StarRating rating={5} scale='lg' />
+            </div>
+          }
+        >
+          <div className='mb-3 flex items-center gap-x-9'>
+            <span className='text-lg text-primary'>
+              <ReviewsCount productId={productId} />
+            </span>
+            <ReviewsRating productId={productId} />
+          </div>
+        </Suspense>
         <p className='mb-5 text-3xl font-bold text-primary'>{product.price} جنية</p>
 
         <div>

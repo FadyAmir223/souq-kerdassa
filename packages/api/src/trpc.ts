@@ -70,23 +70,7 @@ export const protectedProcedure = t.procedure
     })
   })
 
-/**
- * adminProcedure is currently not secure
- * if we added an admin split link and added an isAdmin: true cookie
- * it would be noticed by reading the bundle code although it's a big filter
- *
- * basic auth:
- *   pros: accessible from next.js middleware
- *   cons: not accessible from the browser (via react-query)
- *
- * next-auth:
- *   pros: accessible from trpc middleware
- *   cons: next.js middleware can't access role from db session on the edge
- *
- * TODO:
- *   during next-auth login set isAdmin cookie which next.js middleware can check
- */
-
+// TODO: secure me
 export const adminProcedure = t.procedure.use(timingMiddleware).use(({ next }) => {
   return next()
 })

@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as SecureStore from 'expo-secure-store'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -9,9 +9,9 @@ import type { AppStore } from './types'
 
 export const mobileStorage = {
   setItem: async (key: string, value: string) =>
-    await AsyncStorage.setItem(key, value),
-  getItem: async (key: string) => await AsyncStorage.getItem(key),
-  removeItem: async (key: string) => await AsyncStorage.removeItem(key),
+    await SecureStore.setItemAsync(key, value),
+  getItem: async (key: string) => await SecureStore.getItemAsync(key),
+  removeItem: async (key: string) => await SecureStore.deleteItemAsync(key),
 }
 
 export const useCombinedStore = create<AppStore>()(

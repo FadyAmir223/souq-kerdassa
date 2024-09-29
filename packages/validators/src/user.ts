@@ -8,15 +8,18 @@ const phoneField = {
   phone: isProduction
     ? z
         .string()
+        .trim()
         .min(1, { message: 'رقم التليفون مطلوب' })
         .length(11, { message: 'يجب ان يكون 11 رقم' })
-    : z.string().min(1, { message: 'رقم التليفون مطلوب' }),
+        .regex(/^01[0125][0-9]{8}$/, { message: 'رقم تليفون غير صالح' })
+    : z.string().trim().min(1, { message: 'رقم التليفون مطلوب' }),
 }
 
 const nameField = {
   name: isProduction
     ? z
         .string()
+        .trim()
         .min(1, { message: 'الإسم مطلوب' })
         .min(4, { message: 'حد ادنى 4 احرف' })
     : z.string().min(1, { message: 'الإسم مطلوب' }),
@@ -58,10 +61,10 @@ export type EditProfileSchema = z.infer<typeof editProfileSchema>
 
 export const addressSchema = z.object({
   cityId: z.number().min(0),
-  region: z.string().min(1, { message: 'المنطقة مطلوبة' }),
-  street: z.string().min(1, { message: 'الشارع مطلوب' }),
-  building: z.string().min(1, { message: 'المبنى مطلوب' }),
-  mark: z.string().nullable(),
+  region: z.string().trim().min(1, { message: 'المنطقة مطلوبة' }),
+  street: z.string().trim().min(1, { message: 'الشارع مطلوب' }),
+  building: z.string().trim().min(1, { message: 'المبنى مطلوب' }),
+  mark: z.string().trim().nullable(),
 })
 
 export type AddressSchema = z.infer<typeof addressSchema>
