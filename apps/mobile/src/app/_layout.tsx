@@ -1,8 +1,13 @@
+import '../styles.css'
+
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { I18nManager } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import { TRPCProvider } from '@/utils/api'
+
+I18nManager.forceRTL(true)
 
 export default function RootLayout() {
   return (

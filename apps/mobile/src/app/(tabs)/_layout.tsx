@@ -5,8 +5,9 @@ export default function TabsNavigation() {
   return (
     <Tabs
       screenOptions={{
-        tabBarInactiveTintColor: '#000000',
-        tabBarLabelStyle: { fontSize: 12, fontWeight: '500' },
+        tabBarActiveTintColor: '#c82d2d',
+        tabBarInactiveTintColor: '#333333',
+        tabBarLabelStyle: { fontSize: 14, fontWeight: '700' },
         tabBarStyle: {
           position: 'absolute',
           borderTopLeftRadius: 20,
@@ -17,8 +18,9 @@ export default function TabsNavigation() {
       }}
     >
       <Tabs.Screen
-        name='home'
+        name='index'
         options={{
+          tabBarLabel: 'الرئيسية',
           tabBarIcon: ({ color, size }) => (
             <Entypo name='home' color={color} size={size} />
           ),
@@ -27,6 +29,7 @@ export default function TabsNavigation() {
       <Tabs.Screen
         name='cart'
         options={{
+          tabBarLabel: 'العربة',
           tabBarIcon: ({ color, size }) => (
             <Entypo name='shopping-cart' color={color} size={size} />
           ),
@@ -35,6 +38,7 @@ export default function TabsNavigation() {
       <Tabs.Screen
         name='search'
         options={{
+          tabBarLabel: 'البحث',
           tabBarIcon: ({ color, size }) => (
             <Entypo name='magnifying-glass' color={color} size={size} />
           ),
@@ -43,6 +47,7 @@ export default function TabsNavigation() {
       <Tabs.Screen
         name='(account)'
         options={{
+          tabBarLabel: 'الحساب',
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Entypo name='user' color={color} size={size} />
