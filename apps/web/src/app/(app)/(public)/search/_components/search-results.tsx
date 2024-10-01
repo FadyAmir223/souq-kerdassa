@@ -48,26 +48,19 @@ export default function SearchResults() {
     if (inView && hasNextPage) void fetchNextPage()
   }, [fetchNextPage, hasNextPage, inView])
 
-  if (!data && !isFetching)
+  const products = data as RouterOutputs['product']['byQuery'] | undefined
+
+  if (!products && !isFetching)
     return (
       <p className='mt-8 text-center text-lg font-semibold'>لا يوجد نتائج بحث</p>
     )
 
   return (
     <ul className='col-span-6 grid gap-y-6 sm:grid-cols-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-6'>
-      {(
-        data as unknown as RouterOutputs['product']['byQuery'] | undefined
-      )?.products.map((product, idx) => (
+      {products?.products.map((product, idx) => (
         <li
           key={product.id}
-          ref={
-            idx ===
-            (data as unknown as RouterOutputs['product']['byQuery']).products
-              .length -
-              1
-              ? ref
-              : null
-          }
+          ref={idx === products.products.length - 1 ? ref : null}
           className='transition-transform hover:scale-[1.03]'
         >
           <Link href={PAGES.public.product(product.id)}>

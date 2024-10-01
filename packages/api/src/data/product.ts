@@ -19,6 +19,15 @@ import type { ProductByQuerySchema } from '../validations/products'
 
 // TODO: cache products if possible
 
+type ProductEssentials = {
+  id: string
+  name: string
+  image: string
+  price: number
+  rating: number
+  reviewsCount: number
+}[]
+
 const productCardSelections = {
   id: true,
   images: true,
@@ -34,7 +43,7 @@ export async function getAllProducts(db: DB) {
       where: {
         visibility: 'active',
         variants: {
-          every: {
+          some: {
             stock: {
               gt: 0,
             },
@@ -113,6 +122,7 @@ export async function getProductsByFilters({
   type,
   category,
   season,
+  cursor,
 }: {
   db: DB
   limit: ProductsByFiltersSchema['limit']
@@ -120,7 +130,10 @@ export async function getProductsByFilters({
   type?: ProductsByFiltersSchema['type']
   category?: Category
   season?: Season
+  cursor?: string
 }) {
+  const isInfinite = page === -1
+
   const query = {
     where: {
       visibility: 'active',
@@ -128,8 +141,6 @@ export async function getProductsByFilters({
         some: {
           category,
           season,
-        },
-        every: {
           stock: {
             gt: 0,
           },
@@ -141,25 +152,37 @@ export async function getProductsByFilters({
       createdAt: type === 'latest' ? 'desc' : undefined,
       rating: type === 'top-rated' ? 'desc' : undefined,
     },
-    skip: (page - 1) * limit,
-    take: limit,
+    cursor: isInfinite && cursor ? { id: cursor } : undefined,
+    skip: !isInfinite ? (page - 1) * limit : undefined,
+    take: isInfinite ? limit + 1 : limit,
   } satisfies Prisma.ProductFindManyArgs
 
   try {
-    const [products, count] = await db.$transaction([
-      db.product.findMany(query),
-      db.product.count({ where: query.where }),
-    ])
+    let products, count: number | undefined
+
+    if (isInfinite) products = await db.product.findMany(query)
+    else
+      [products, count] = await db.$transaction([
+        db.product.findMany(query),
+        db.product.count({ where: query.where }),
+      ])
+
+    let nextCursor: typeof cursor | undefined
+    if (products.length > limit) nextCursor = products.pop()?.id
 
     return {
       products: products.map(({ images, ...product }) => ({
         ...product,
-        image: images[0],
+        image: images[0]!,
       })),
-      total: count,
+      total: count ?? 0,
+      nextCursor,
     }
   } catch {
-    return { products: [], total: 0 }
+    return {
+      products: [] as ProductEssentials,
+      total: 0,
+    }
   }
 }
 
@@ -190,7 +213,7 @@ export async function getProductsByQuery({
 
     const productsWithImage = products.map(({ images, ...product }) => ({
       ...product,
-      image: images[0],
+      image: images[0]!,
     }))
 
     let nextCursor: typeof cursor | undefined
@@ -198,7 +221,9 @@ export async function getProductsByQuery({
 
     return { products: productsWithImage, nextCursor }
   } catch {
-    return { products: [] as Product[] }
+    return {
+      products: [] as ProductEssentials,
+    }
   }
 }
 
@@ -208,7 +233,7 @@ export async function getSimilarProducts(db: DB, limit: number) {
       where: {
         visibility: 'active',
         variants: {
-          every: {
+          some: {
             stock: {
               gt: 0,
             },

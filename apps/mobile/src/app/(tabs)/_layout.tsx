@@ -20,6 +20,7 @@ export default function TabsNavigation() {
       <Tabs.Screen
         name='index'
         options={{
+          headerShown: false,
           tabBarLabel: 'الرئيسية',
           tabBarIcon: ({ color, size }) => (
             <Entypo name='home' color={color} size={size} />

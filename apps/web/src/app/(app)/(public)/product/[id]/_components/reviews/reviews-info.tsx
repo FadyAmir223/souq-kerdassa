@@ -2,9 +2,8 @@
 
 import type { Product } from '@repo/db/types'
 
+import StarRating from '@/app/(app)/(public)/_components/star-rating'
 import { api } from '@/trpc/react'
-
-import StarRating from '../../../_components/star-rating'
 
 type ReviewsInfoProps = {
   productId: Product['id']

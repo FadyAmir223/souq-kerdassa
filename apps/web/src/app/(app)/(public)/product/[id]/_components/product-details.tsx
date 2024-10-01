@@ -8,7 +8,7 @@ import { api } from '@/trpc/server'
 import StarRating from '../../../_components/star-rating'
 import AddToCart from './add-to-cart'
 import ImageViewer from './image-viewer'
-import { ReviewsCount, ReviewsRating } from './reviews-info'
+import { ReviewsCount, ReviewsRating } from './reviews/reviews-info'
 
 type ProductDetailsProps = {
   productId: Product['id']

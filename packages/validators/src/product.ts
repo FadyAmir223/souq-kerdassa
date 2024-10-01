@@ -19,6 +19,7 @@ export const productsByFiltersSchema = paginationSchema.extend({
   type: productTypeSchema.optional(),
   season: productSeasonSchema.optional(),
   category: productCategorySchema.optional(),
+  cursor: z.string().optional(),
 })
 export type ProductsByFiltersSchema = z.infer<typeof productsByFiltersSchema>
 

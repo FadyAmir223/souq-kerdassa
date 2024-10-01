@@ -2,7 +2,8 @@ import type { RouterOutputs } from '@repo/api'
 import { Link } from 'expo-router'
 import { Pressable, Text, View } from 'react-native'
 
-import { Image } from '../image'
+import { Image } from '@/components/image'
+
 import StarRating from './star-rating'
 
 type ProductCardProps = {
@@ -19,7 +20,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       className='size-full flex-1'
     >
       <Pressable className='overflow-hidden rounded-lg shadow-lg'>
-        <View className='items-center justify-center'>
+        <View className='items-center justify-center bg-neutral-500/50'>
           <Image
             source={{ uri: image }}
             resizeMode='cover'

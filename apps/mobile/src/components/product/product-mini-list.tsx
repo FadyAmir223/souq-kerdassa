@@ -1,5 +1,6 @@
 import type { ProductsByFiltersSchema } from '@repo/validators'
-import { FlatList, View } from 'react-native'
+import { FlashList } from '@shopify/flash-list'
+import { View } from 'react-native'
 
 import { api } from '@/utils/api'
 
@@ -18,9 +19,10 @@ export default function ProductMiniList({ filter }: ProductMiniListProps) {
 
   if (isLoading)
     return (
-      <FlatList
-        data={Array(5).fill(null)}
+      <FlashList
+        data={Array(3).fill(null)}
         keyExtractor={(_, i) => i.toString()}
+        estimatedItemSize={3}
         renderItem={({ index }) => <ProductCardSkeleton key={index} />}
         ItemSeparatorComponent={() => <View className='h-6' />}
         showsVerticalScrollIndicator={false}
@@ -28,9 +30,10 @@ export default function ProductMiniList({ filter }: ProductMiniListProps) {
     )
 
   return (
-    <FlatList
+    <FlashList
       data={products?.products}
       keyExtractor={({ id }) => id}
+      estimatedItemSize={6}
       renderItem={({ item }) => <ProductCard product={item} />}
       ItemSeparatorComponent={() => <View className='h-6' />}
       showsVerticalScrollIndicator={false}
