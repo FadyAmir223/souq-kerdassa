@@ -31,7 +31,7 @@
     "db:migrate:prod": "pnpx prisma migrate deploy",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "type-check": "tsc-files --noEmit --emitDeclarationOnly false",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false",
     "clean": "rm -rf .turbo dist node_modules"
   },
   "dependencies": {

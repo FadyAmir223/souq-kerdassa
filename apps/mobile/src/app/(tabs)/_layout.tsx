@@ -43,6 +43,7 @@ export default function TabsNavigation() {
           tabBarIcon: ({ color, size }) => (
             <Entypo name='magnifying-glass' color={color} size={size} />
           ),
+          headerShown: false,
         }}
       />
       <Tabs.Screen

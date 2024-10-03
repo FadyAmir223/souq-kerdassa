@@ -10,7 +10,7 @@
   },
   "scripts": {
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "type-check": "tsc-files --noEmit",
+    "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {

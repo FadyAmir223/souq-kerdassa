@@ -34,13 +34,12 @@ const filters = [
   },
 ] as const
 
-type FilterDrawerProps = {
-  hasParams: boolean
-}
-
-export default function FilterDrawer({ hasParams }: FilterDrawerProps) {
+export default function FilterDrawer() {
   const [isOpen, setOpen] = useState(false)
   const searchParams = useLocalSearchParams<ProductFilterParams>()
+
+  const hasParams =
+    !!searchParams.type || !!searchParams.season || !!searchParams.category
 
   return (
     <>
