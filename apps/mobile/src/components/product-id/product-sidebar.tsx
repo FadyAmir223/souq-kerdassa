@@ -7,7 +7,7 @@ import ProductRelates from './product-relates'
 
 export default function ProductSidebar() {
   return (
-    <View>
+    <View className='mb-10'>
       <View className='mt-10 gap-y-2 rounded-lg bg-white p-4'>
         <View className='flex-row items-center gap-x-2'>
           <Image source={qualityImage} />

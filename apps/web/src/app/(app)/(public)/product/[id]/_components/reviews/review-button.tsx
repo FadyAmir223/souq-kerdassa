@@ -106,9 +106,9 @@ function DeleteReviewButton({ productId, reviewPage }: ReviewButtonProps) {
           <DialogTitle>هل انت متأكد من إلغاء الطلب؟</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className='flex gap-4'>
           <Button
-            className='me-4 min-w-16'
+            className='min-w-16'
             variant='destructive'
             onClick={() => deleteReview.mutate(productId)}
             disabled={deleteReview.isPending}

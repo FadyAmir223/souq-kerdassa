@@ -6,6 +6,7 @@ import ImageViewer from '@/components/product-id/image-viewer'
 import ProductDetails from '@/components/product-id/product-details'
 import ProductDetailsSkeleton from '@/components/product-id/product-details-skeleton'
 import ProductSidebar from '@/components/product-id/product-sidebar'
+import ReviewsSection from '@/components/product-id/reviews/reviews-section'
 import SimilarProducts from '@/components/product-id/similar-products'
 import { api } from '@/utils/api'
 
@@ -31,6 +32,7 @@ export default function ProductByIdScreen() {
               <ImageViewer images={product.images} />
               <ProductDetails productId={productId} />
               <ProductSidebar />
+              <ReviewsSection productId={productId} />
               <SimilarProducts />
             </>
           )
