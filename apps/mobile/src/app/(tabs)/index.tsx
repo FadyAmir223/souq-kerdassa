@@ -20,7 +20,7 @@ const seasonProducts = [
 
 export default function HomeScreen() {
   return (
-    <View className='flex-row px-6 py-4'>
+    <View className='flex-1 flex-row px-6 py-4'>
       <FlashList
         ListHeaderComponent={ImageSlider}
         data={seasonProducts}

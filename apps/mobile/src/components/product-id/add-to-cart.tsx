@@ -1,12 +1,10 @@
-'use client'
-
 import type { RouterOutputs } from '@repo/api'
 import type { Category, Season } from '@repo/db/types'
+import { useCombinedStore } from '@repo/store/mobile'
 import { useState } from 'react'
+import { Pressable, Text, View } from 'react-native'
+import Toast from 'react-native-toast-message'
 
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
-import { useAppStore } from '@/providers/app-store-provider'
 import { AR } from '@/utils/constants'
 
 type AddToCartProps = {
@@ -32,8 +30,7 @@ export default function AddToCart({ product }: AddToCartProps) {
     variants[0]?.category,
   )
 
-  const addCartItem = useAppStore((s) => s.addCartItem)
-  const { toast } = useToast()
+  const addCartItem = useCombinedStore((s) => s.addCartItem)
 
   if (variants.length === 0)
     return (
@@ -57,18 +54,23 @@ export default function AddToCart({ product }: AddToCartProps) {
       season: selectedSeason!,
     })
 
-    toast({ description: 'تم الإضافة للعربة', variant: 'success' })
+    Toast.show({
+      type: 'success',
+      text1: 'تم الإضافة للعربة',
+      text1Style: { fontSize: 18 },
+      position: 'bottom',
+    })
   }
 
   return (
-    <>
-      <div className='mb-4 flex gap-x-4'>
-        <span className='mb-3 min-w-16 text-lg font-semibold'>الموسم</span>
+    <View>
+      <View className='mb-4 flex-row items-center gap-x-4'>
+        <Text className='min-w-16 text-2xl font-semibold'>الموسم</Text>
         {seasons.map((season) => (
-          <Button
+          <Pressable
             key={season}
-            variant='outline'
-            onClick={() => {
+            className='rounded-md bg-white px-4 py-2 shadow-md disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            onPress={() => {
               setSelectedSeason(season)
 
               const firstVariant = product.variants
@@ -79,37 +81,36 @@ export default function AddToCart({ product }: AddToCartProps) {
 
               setSelectedCategory(firstVariant)
             }}
-            className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={season === selectedSeason}
           >
-            {AR.season[season]}
-          </Button>
+            <Text className='text-2xl font-semibold'>{AR.season[season]}</Text>
+          </Pressable>
         ))}
-      </div>
+      </View>
 
-      <div className='mb-4 flex gap-x-4'>
-        <span className='mb-3 min-w-16 text-lg font-semibold'>النوع</span>
+      <View className='mb-4 flex-row items-center gap-x-4'>
+        <Text className='min-w-16 text-2xl font-semibold'>النوع</Text>
         {variants.map(({ category }) => (
-          <Button
+          <Pressable
             key={category}
-            variant='outline'
-            onClick={() => setSelectedCategory(category)}
-            className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            onPress={() => setSelectedCategory(category)}
+            className='rounded-md bg-white px-4 py-2 shadow-md disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={category === selectedCategory}
           >
-            {AR.category[category as Category]}
-          </Button>
+            <Text className='text-2xl font-semibold'>
+              {AR.category[category as Category]}
+            </Text>
+          </Pressable>
         ))}
-      </div>
+      </View>
 
-      <Button
-        onClick={handleAddCartItem}
+      <Pressable
+        onPress={handleAddCartItem}
         disabled={!(selectedCategory && selectedSeason)}
-        className='px-6 py-2'
-        size='none'
+        className='self-start rounded-md bg-primary px-6 py-3 shadow active:scale-[0.98]'
       >
-        اضف إلى عربة التسوق
-      </Button>
-    </>
+        <Text className='text-2xl text-white'>اضف إلى عربة التسوق</Text>
+      </Pressable>
+    </View>
   )
 }

@@ -1,5 +1,5 @@
 {
-  "*.{js,jsx,ts,tsx,json,yml,css,md}": ["pnpm format:fix", "pnpm format", "git add"],
-  "*.{js,jsx,ts,tsx}": ["pnpm lint:fix", "pnpm lint", "git add"],
+  "*.{js,jsx,ts,tsx,json,yml,css,md}": ["pnpm format:fix", "pnpm format"],
+  "*.{js,jsx,ts,tsx}": ["pnpm lint:fix", "pnpm lint"],
   "*.{ts,tsx,!apps/mobile/**}": "pnpm type-check --"
 }
