@@ -9,6 +9,12 @@ import type { ProductFilterParams } from '@/types/product'
 import type { RouterOutputs } from '@/utils/api'
 import { api } from '@/utils/api'
 
+/**
+ * if searchParams are sent initially from another page
+ * (which shouldn't since there is no footer)
+ * TODO: replace useLocalSearchParams with useState
+ */
+
 export default function ProductsScreen() {
   const searchParams = useLocalSearchParams<ProductFilterParams>()
 

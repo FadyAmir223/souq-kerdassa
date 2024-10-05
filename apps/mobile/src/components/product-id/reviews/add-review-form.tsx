@@ -5,7 +5,7 @@ import { useCombinedStore } from '@repo/store/mobile'
 import type { ReviewSchema } from '@repo/validators'
 import { reviewSchema } from '@repo/validators'
 import { useState } from 'react'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Pressable, Text, TextInput, View } from 'react-native'
 import Toast from 'react-native-toast-message'
 import { useShallow } from 'zustand/react/shallow'
@@ -104,60 +104,61 @@ export default function AddReviewForm({
       </View>
 
       <View className='mx-4 rounded-md border-2 bg-secondary p-4'>
-        <FormProvider {...form}>
-          <View className='flex-row'>
-            {Array.from({ length: 5 }).map((_, idx) => (
-              <Pressable
-                key={idx}
-                className='pe-0.5'
-                onPress={() => handleRating(idx)}
-              >
-                {idx <= rating ? (
-                  <MaterialIcons name='star' size={28} color='#eab308' />
-                ) : (
-                  <MaterialIcons name='star-border' size={28} color='#eab308' />
-                )}
-              </Pressable>
-            ))}
-          </View>
-
-          <Controller
-            control={form.control}
-            name='message'
-            render={({ field: { value, onChange, onBlur } }) => {
-              return (
-                <TextInput
-                  placeholder='اختر تقييم النجوم و اكتب مراجعة'
-                  className='text-xl'
-                  autoCorrect={false}
-                  autoCapitalize='none'
-                  multiline
-                  numberOfLines={3}
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              )
-            }}
-          />
-
-          <View className='flex-row justify-end gap-x-3'>
+        {/* TODO: test whether provider is necessary */}
+        {/* <FormProvider {...form}> */}
+        <View className='flex-row'>
+          {Array.from({ length: 5 }).map((_, idx) => (
             <Pressable
-              className='rounded-md bg-primary px-4 py-2 disabled:opacity-75'
-              onPress={onSubmit}
-              disabled={rating < 0 || addReview.isPending}
+              key={idx}
+              className='pe-0.5'
+              onPress={() => handleRating(idx)}
             >
-              <Text className='text-xl text-white'>انشر</Text>
+              {idx <= rating ? (
+                <MaterialIcons name='star' size={28} color='#eab308' />
+              ) : (
+                <MaterialIcons name='star-border' size={28} color='#eab308' />
+              )}
             </Pressable>
-            <Pressable
-              className='rounded-md bg-white px-4 py-2 shadow-sm'
-              onPress={handleCloseForm}
-              disabled={addReview.isPending}
-            >
-              <Text className='text-xl'>إلغاء</Text>
-            </Pressable>
-          </View>
-        </FormProvider>
+          ))}
+        </View>
+
+        <Controller
+          control={form.control}
+          name='message'
+          render={({ field: { value, onChange, onBlur } }) => {
+            return (
+              <TextInput
+                placeholder='اختر تقييم النجوم و اكتب مراجعة'
+                className='text-xl'
+                autoCorrect={false}
+                autoCapitalize='none'
+                multiline
+                numberOfLines={3}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+              />
+            )
+          }}
+        />
+
+        <View className='flex-row justify-end gap-x-3'>
+          <Pressable
+            className='rounded-md bg-primary px-4 py-2 disabled:opacity-75'
+            onPress={onSubmit}
+            disabled={rating < 0 || addReview.isPending}
+          >
+            <Text className='text-xl text-white'>انشر</Text>
+          </Pressable>
+          <Pressable
+            className='rounded-md bg-white px-4 py-2 shadow-sm'
+            onPress={handleCloseForm}
+            disabled={addReview.isPending}
+          >
+            <Text className='text-xl'>إلغاء</Text>
+          </Pressable>
+        </View>
+        {/* </FormProvider> */}
       </View>
     </View>
   )

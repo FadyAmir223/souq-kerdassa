@@ -69,7 +69,7 @@ export default function AddToCart({ product }: AddToCartProps) {
         {seasons.map((season) => (
           <Pressable
             key={season}
-            className='rounded-md bg-white px-4 py-2 shadow-md disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            className='rounded-md bg-white px-4 py-2 shadow-md disabled:opacity-60'
             onPress={() => {
               setSelectedSeason(season)
 
@@ -94,7 +94,7 @@ export default function AddToCart({ product }: AddToCartProps) {
           <Pressable
             key={category}
             onPress={() => setSelectedCategory(category)}
-            className='rounded-md bg-white px-4 py-2 shadow-md disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            className='rounded-md bg-white px-4 py-2 shadow-md disabled:opacity-60'
             disabled={category === selectedCategory}
           >
             <Text className='text-2xl font-semibold'>

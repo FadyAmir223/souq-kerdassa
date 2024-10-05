@@ -1,7 +1,11 @@
 import Entypo from '@expo/vector-icons/Entypo'
+import { useCombinedStore } from '@repo/store/mobile'
 import { Tabs } from 'expo-router'
+import { Text, View } from 'react-native'
 
 export default function TabsNavigation() {
+  const cartTotalQuantity = useCombinedStore((s) => s.getCartTotalQuantity())
+
   return (
     <Tabs
       screenOptions={{
@@ -32,8 +36,21 @@ export default function TabsNavigation() {
         options={{
           tabBarLabel: 'العربة',
           tabBarIcon: ({ color, size }) => (
-            <Entypo name='shopping-cart' color={color} size={size} />
+            <View>
+              <Entypo name='shopping-cart' color={color} size={size} />
+
+              {cartTotalQuantity > 0 && (
+                <View className='absolute -right-2 -top-2 size-5 items-center justify-center rounded-full bg-primary'>
+                  <Text className='text-xs text-white'>{cartTotalQuantity}</Text>
+                </View>
+              )}
+            </View>
           ),
+          headerTitle: 'عربة التسوق',
+          headerTitleStyle: {
+            fontSize: 22,
+            fontWeight: 'bold',
+          },
         }}
       />
       <Tabs.Screen
