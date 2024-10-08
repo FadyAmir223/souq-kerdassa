@@ -40,7 +40,7 @@ export default function TabsNavigation() {
               <Entypo name='shopping-cart' color={color} size={size} />
 
               {cartTotalQuantity > 0 && (
-                <View className='absolute -right-2 -top-2 size-5 items-center justify-center rounded-full bg-primary'>
+                <View className='absolute right-[-8px] top-[-8px] size-5 items-center justify-center rounded-full bg-primary'>
                   <Text className='text-xs text-white'>{cartTotalQuantity}</Text>
                 </View>
               )}

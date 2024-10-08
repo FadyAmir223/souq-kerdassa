@@ -17,8 +17,6 @@ export const createTRPCContext = async (opts: {
   session: Session | null
 }) => {
   const authToken = opts.headers.get('Authorization') ?? null
-  // TODO: remove after migrating admin to next-auth
-  const token = authToken?.startsWith('Basic') ? null : authToken
 
   const session = await isomorphicGetSession(opts.headers)
 
@@ -27,7 +25,11 @@ export const createTRPCContext = async (opts: {
     console.log('>>> tRPC Request from', source, 'by', session?.user)
   }
 
-  return { session, db, token }
+  return {
+    session,
+    db,
+    token: authToken,
+  }
 }
 
 const t = initTRPC.context<typeof createTRPCContext>().create({

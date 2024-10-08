@@ -1,8 +1,5 @@
 import { useSession } from 'next-auth/react'
 
-// TODO: figure out where the password is passed to the session
-// if not through authenticate()
-
 export function useCurrentUser() {
   const { data } = useSession()
 

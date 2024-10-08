@@ -23,3 +23,18 @@ export const AR = {
     refunded: 'مسترد',
   },
 } as const
+
+export const PLACEHOLDER = {
+  form: {
+    name: 'سارة',
+    phone: '01XXXXXXXXXX',
+    password: '********',
+  },
+  address: {
+    city: 'القاهرة',
+    region: 'مدينة نصر / النزهة',
+    street: 'اسم الشارع',
+    building: 'اسم / رقم المبنى, رقم الطابق, رقم الشقة',
+    mark: 'اختيارى',
+  },
+}

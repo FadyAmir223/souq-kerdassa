@@ -29,9 +29,9 @@ export const authRouter = {
     return { success: true }
   }),
 
-  signOut: protectedProcedure.mutation(async (opts) => {
-    if (!opts.ctx.token) return { success: false }
-    await invalidateSessionToken(opts.ctx.token)
+  signOut: protectedProcedure.mutation(async ({ ctx }) => {
+    if (!ctx.token) return { success: false }
+    await invalidateSessionToken(ctx.token)
     return { success: true }
   }),
 } satisfies TRPCRouterRecord

@@ -1,9 +1,11 @@
-import { Text, View } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 
 export default function OrdersScreen() {
   return (
-    <View>
-      <Text>orders</Text>
-    </View>
+    <SafeAreaView>
+      <View className='py-6'>
+        <Text>orders</Text>
+      </View>
+    </SafeAreaView>
   )
 }

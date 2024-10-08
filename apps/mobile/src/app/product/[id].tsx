@@ -1,6 +1,12 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useLayoutEffect } from 'react'
-import { ScrollView, View } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  View,
+} from 'react-native'
 
 import ImageViewer from '@/components/product-id/image-viewer'
 import ProductDetails from '@/components/product-id/product-details'
@@ -22,22 +28,29 @@ export default function ProductByIdScreen() {
   }, [navigation, product])
 
   return (
-    <ScrollView>
-      <View className='px-6 py-4'>
-        {isLoading ? (
-          <ProductDetailsSkeleton />
-        ) : (
-          product && (
-            <>
-              <ImageViewer images={product.images} />
-              <ProductDetails productId={productId} />
-              <ProductSidebar />
-              <ReviewsSection productId={productId} />
-              <SimilarProducts />
-            </>
-          )
-        )}
-      </View>
-    </ScrollView>
+    <SafeAreaView>
+      <KeyboardAvoidingView
+        behavior='padding'
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+      >
+        <ScrollView>
+          <View className='px-6 py-4'>
+            {isLoading ? (
+              <ProductDetailsSkeleton />
+            ) : (
+              product && (
+                <>
+                  <ImageViewer images={product.images} />
+                  <ProductDetails productId={productId} />
+                  <ProductSidebar />
+                  <ReviewsSection productId={productId} />
+                  <SimilarProducts />
+                </>
+              )
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }

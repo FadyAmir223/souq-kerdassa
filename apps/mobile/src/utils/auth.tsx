@@ -1,4 +1,5 @@
 import * as Linking from 'expo-linking'
+import type { Href } from 'expo-router'
 import { useRouter } from 'expo-router'
 import * as Browser from 'expo-web-browser'
 
@@ -27,14 +28,14 @@ export const useUser = () => {
   return session?.user ?? null
 }
 
-export const useSignIn = () => {
+export const useSignIn = (redirectTo?: Href<string>) => {
   const utils = api.useUtils()
   const router = useRouter()
 
   return async () => {
     await signIn()
     await utils.invalidate()
-    router.replace('/')
+    router.replace(redirectTo ?? '/(account)/')
   }
 }
 

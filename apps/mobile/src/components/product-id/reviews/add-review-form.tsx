@@ -32,7 +32,7 @@ export default function AddReviewForm({
     useShallow(({ isReviewing, setReviewing }) => ({ isReviewing, setReviewing })),
   )
 
-  const form = useForm<ReviewSchema>({
+  const { control, setValue, getValues, reset, trigger } = useForm<ReviewSchema>({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       message: '',
@@ -43,12 +43,12 @@ export default function AddReviewForm({
   const handleCloseForm = () => {
     setReviewing(false)
     setRating(0)
-    form.reset()
+    reset()
   }
 
   const addReview = api.product.review.add.useMutation({
     onSuccess: async () => {
-      if (form.getValues('message')) {
+      if (getValues('message')) {
         await utils.product.review.some.invalidate({
           productId,
           page: 1,
@@ -80,17 +80,16 @@ export default function AddReviewForm({
 
   const handleRating = (newRating: number) => {
     setRating(newRating)
-    form.setValue('rating', newRating)
+    setValue('rating', newRating)
   }
 
-  const onSubmit = () => {
-    const values = form.getValues()
-    const result = reviewSchema.safeParse(values)
-    if (!result.success) return
+  const onSubmit = async () => {
+    const result = await trigger()
+    if (!result) return
 
     addReview.mutate({
       productId,
-      review: result.data,
+      review: getValues(),
     })
   }
 
@@ -104,8 +103,6 @@ export default function AddReviewForm({
       </View>
 
       <View className='mx-4 rounded-md border-2 bg-secondary p-4'>
-        {/* TODO: test whether provider is necessary */}
-        {/* <FormProvider {...form}> */}
         <View className='flex-row'>
           {Array.from({ length: 5 }).map((_, idx) => (
             <Pressable
@@ -123,7 +120,7 @@ export default function AddReviewForm({
         </View>
 
         <Controller
-          control={form.control}
+          control={control}
           name='message'
           render={({ field: { value, onChange, onBlur } }) => {
             return (
@@ -158,7 +155,6 @@ export default function AddReviewForm({
             <Text className='text-xl'>إلغاء</Text>
           </Pressable>
         </View>
-        {/* </FormProvider> */}
       </View>
     </View>
   )

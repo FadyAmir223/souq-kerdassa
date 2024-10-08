@@ -5,7 +5,7 @@ import Credentials from '@auth/core/providers/credentials'
 import Google from '@auth/core/providers/google'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import db from '@repo/db'
-import type { User } from '@repo/db/types'
+import type { User as PrismaUser } from '@repo/db/types'
 import { loginFormSchema } from '@repo/validators'
 import bcrypt from 'bcryptjs'
 import type {
@@ -20,9 +20,13 @@ import { getUserByPhone } from './data/user'
 declare module 'next-auth' {
   interface Session {
     user: {
-      id: User['id']
-      phone?: User['phone'] // TODO: type me properly
+      id: PrismaUser['id']
+      phone?: PrismaUser['phone']
     } & DefaultSession['user']
+  }
+
+  interface User {
+    phone?: PrismaUser['phone']
   }
 }
 
@@ -67,8 +71,10 @@ export const authConfig = {
       return {
         ...opts.session,
         user: {
-          ...opts.session.user,
+          // ...opts.session.user,
           id: opts.user.id,
+          name: opts.user.name,
+          phone: opts.user.phone,
         },
       }
     },
@@ -115,5 +121,6 @@ export async function validateToken(token: string): Promise<NextAuthSession | nu
 }
 
 export async function invalidateSessionToken(token: string) {
-  await adapter.deleteSession?.(token)
+  const sessionToken = token.slice('Bearer '.length)
+  await adapter.deleteSession?.(sessionToken)
 }
