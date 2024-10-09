@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { EditProfileSchema } from '@repo/validators'
 import { editProfileSchema } from '@repo/validators'
-import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -20,21 +19,18 @@ const inputs = [
     label: 'الاسم بالكامل',
     name: 'name',
     placeholder: PLACEHOLDER.form.name,
-    autoComplete: 'off',
   },
   {
     type: 'text',
     label: 'رقم التليفون',
     name: 'phone',
     placeholder: PLACEHOLDER.form.phone,
-    autoComplete: 'off',
   },
 ] as const
 
 export default function EditProfileForm() {
   const { toast } = useToast()
   const user = useCurrentUser()
-  const { update } = useSession()
 
   const {
     register,
@@ -55,8 +51,7 @@ export default function EditProfileForm() {
     user?.name === watchFields.name && user.phone === watchFields.phone
 
   const editProfile = api.user.editProfile.useMutation({
-    onSuccess: async () => {
-      await update()
+    onSuccess: () => {
       toast({
         variant: 'success',
         description: 'تم تحديث البيانات',
@@ -85,7 +80,16 @@ export default function EditProfileForm() {
         </div>
       ))}
 
-      <Button disabled={isInitData || editProfile.isPending}>تعديل البيانات</Button>
+      <Button
+        disabled={
+          watchFields.name === '' ||
+          watchFields.phone === '' ||
+          isInitData ||
+          editProfile.isPending
+        }
+      >
+        تعديل البيانات
+      </Button>
     </form>
   )
 }

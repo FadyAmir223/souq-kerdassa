@@ -26,7 +26,6 @@ const inputs = [
     label: 'الاسم بالكامل',
     name: 'name',
     placeholder: PLACEHOLDER.form.name,
-    autoComplete: 'off',
   },
   {
     keyboardType: 'numeric',

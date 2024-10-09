@@ -43,7 +43,12 @@
     "tsc-files": "catalog:",
     "turbo": "^2.0.12"
   },
-  "packageManager": "pnpm@9.11.0",
+  "pnpm": {
+    "overrides": {
+      "use-latest-callback": "0.2.1"
+    }
+  },
+  "packageManager": "pnpm@9.12.1",
   "engines": {
     "node": ">=20.16.0"
   },
