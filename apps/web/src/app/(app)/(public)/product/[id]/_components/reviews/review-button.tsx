@@ -103,7 +103,7 @@ function DeleteReviewButton({ productId, reviewPage }: ReviewButtonProps) {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle>هل انت متأكد من إلغاء الطلب؟</DialogTitle>
+          <DialogTitle>هل انت متأكد من مسح المراجعة</DialogTitle>
           <DialogDescription />
         </DialogHeader>
         <DialogFooter className='flex gap-4'>

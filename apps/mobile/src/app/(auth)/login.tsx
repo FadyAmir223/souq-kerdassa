@@ -121,25 +121,23 @@ export default function ProfileScreen() {
                 key={name}
                 control={control}
                 name={name}
-                render={({ field: { value, onChange, onBlur } }) => {
-                  return (
-                    <View>
-                      <Text className='mb-2 text-2xl font-semibold'>{label}</Text>
-                      <TextInput
-                        className='mb-1 w-full rounded-md border border-black px-4 py-1.5 text-right text-2xl'
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        autoCorrect={false}
-                        autoCapitalize='none'
-                        {...props}
-                      />
-                      <Text className='h-6 text-xl font-semibold text-destructive'>
-                        {errors[name]?.message}
-                      </Text>
-                    </View>
-                  )
-                }}
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <View>
+                    <Text className='mb-2 text-2xl font-semibold'>{label}</Text>
+                    <TextInput
+                      className='mb-1 w-full rounded-md border border-black px-4 py-1.5 text-right text-2xl'
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      autoCorrect={false}
+                      autoCapitalize='none'
+                      {...props}
+                    />
+                    <Text className='h-6 text-xl font-semibold text-destructive'>
+                      {errors[name]?.message}
+                    </Text>
+                  </View>
+                )}
               />
             ))}
 

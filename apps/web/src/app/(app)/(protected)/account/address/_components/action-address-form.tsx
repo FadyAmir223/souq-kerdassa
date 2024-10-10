@@ -37,9 +37,8 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import type { RouterOutputs } from '@/trpc/react'
 import { api } from '@/trpc/react'
-import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
+import { PAGES, PLACEHOLDER, SEARCH_PARAMS } from '@/utils/constants'
 
-import { addressInputFields } from '../_constants/address-input-fields'
 import { areEqualShallow } from '../_utils/object-equal-shallow'
 
 const labels = {
@@ -54,6 +53,37 @@ const labels = {
     submit: 'تحديث العنوان',
   },
 } as const
+
+export const addressInputFields = [
+  {
+    type: 'text',
+    label: 'المنطقة',
+    name: 'region',
+    placeholder: PLACEHOLDER.address.region,
+    autoComplete: 'off',
+  },
+  {
+    type: 'text',
+    label: 'الشارع',
+    name: 'street',
+    placeholder: PLACEHOLDER.address.street,
+    autoComplete: 'off',
+  },
+  {
+    type: 'text',
+    label: 'المبنى',
+    name: 'building',
+    placeholder: PLACEHOLDER.address.building,
+    autoComplete: 'off',
+  },
+  {
+    type: 'text',
+    label: 'علامة مميزة',
+    name: 'mark',
+    placeholder: PLACEHOLDER.address.mark,
+    autoComplete: 'off',
+  },
+] as const
 
 type ActionAddressFormProps = {
   action: 'add' | 'edit'
@@ -168,12 +198,12 @@ export default function ActionAddressForm({
 
       return { oldAddresses }
     },
-    onError: (error, _, ctx) => {
+    onError: ({ message }, _, ctx) => {
       utils.user.addresses.all.setData(undefined, ctx?.oldAddresses)
 
       toast({
         variant: 'destructive',
-        description: error.message,
+        description: message,
       })
     },
   })

@@ -1,7 +1,5 @@
-import { auth } from '@repo/auth'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
-import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
 import H1 from '@/app/(app)/_components/h1'
@@ -22,10 +20,7 @@ export const metadata: Metadata = {
     'قومى بإضافة و تحديث عناوين الشحن الخاصة بك. سهّلى عملية الشراء بإدارة عناوينك بشكل مريح وفعال.',
 }
 
-export default async function AddressesPage() {
-  const session = await auth()
-  if (!session?.user) notFound()
-
+export default function AddressesPage() {
   void Promise.all([api.user.addresses.all.prefetch(), api.city.all.prefetch()])
 
   return (

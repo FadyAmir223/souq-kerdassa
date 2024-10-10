@@ -1,7 +1,8 @@
 import type { Product } from '@repo/db/types'
 import { useCombinedStore } from '@repo/store/mobile'
 import { useState } from 'react'
-import { Modal, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import Modal from 'react-native-modal'
 import Toast from 'react-native-toast-message'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -92,25 +93,27 @@ function DeleteReviewButton({ productId, reviewPage }: ReviewButtonProps) {
         <Text className='text-2xl font-semibold'>امسح مراجعتك</Text>
       </Pressable>
 
-      <Modal
-        transparent={true}
-        animationType='fade'
-        visible={isOpen}
-        onRequestClose={() => setOpen(false)}
-      >
-        <Text>هل انت متأكد من إلغاء الطلب؟</Text>
+      <Modal isVisible={isOpen} onBackdropPress={() => setOpen(false)}>
+        <View className='m-8 rounded-md bg-white p-4 shadow-md'>
+          <Text className='mb-6 text-2xl font-bold'>
+            هل انت متأكد من مسح المراجعة؟
+          </Text>
 
-        <View className='flex-row gap-x-5'>
-          <Pressable
-            className='me-4 min-w-16'
-            onPress={() => deleteReview.mutate(productId)}
-            disabled={deleteReview.isPending}
-          >
-            <Text>نعم</Text>
-          </Pressable>
-          <Pressable className='min-w-16' onPress={() => setOpen(false)}>
-            <Text>لا</Text>
-          </Pressable>
+          <View className='flex-row gap-x-3 self-end'>
+            <Pressable
+              className='me-4 w-20 rounded-md bg-primary px-4 py-2 shadow-sm'
+              onPress={() => deleteReview.mutate(productId)}
+              disabled={deleteReview.isPending}
+            >
+              <Text className='self-center text-xl font-bold text-white'>نعم</Text>
+            </Pressable>
+            <Pressable
+              className='me-4 w-20 rounded-md border border-black bg-white px-4 py-2 shadow-sm'
+              onPress={() => setOpen(false)}
+            >
+              <Text className='self-center text-xl text-black'>لا</Text>
+            </Pressable>
+          </View>
         </View>
       </Modal>
     </>

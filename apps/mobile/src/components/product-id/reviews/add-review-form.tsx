@@ -122,21 +122,19 @@ export default function AddReviewForm({
         <Controller
           control={control}
           name='message'
-          render={({ field: { value, onChange, onBlur } }) => {
-            return (
-              <TextInput
-                placeholder='اختر تقييم النجوم و اكتب مراجعة'
-                className='text-xl'
-                autoCorrect={false}
-                autoCapitalize='none'
-                multiline
-                numberOfLines={3}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-              />
-            )
-          }}
+          render={({ field: { value, onChange, onBlur } }) => (
+            <TextInput
+              placeholder='اختر تقييم النجوم و اكتب مراجعة'
+              className='text-xl'
+              autoCorrect={false}
+              autoCapitalize='none'
+              multiline
+              numberOfLines={3}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+            />
+          )}
         />
 
         <View className='flex-row justify-end gap-x-3'>

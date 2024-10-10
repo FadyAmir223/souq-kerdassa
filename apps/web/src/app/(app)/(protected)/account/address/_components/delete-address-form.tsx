@@ -58,7 +58,7 @@ export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps)
           <DialogTitle>هل انت متأكد من حذف العنوان؟</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className='flex-row justify-end space-x-2'>
           <Button
             className='me-4 min-w-16'
             variant='destructive'

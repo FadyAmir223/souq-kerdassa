@@ -8,7 +8,7 @@ import { api } from '@/trpc/react'
 import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
 
 export default function RedirectToCheckoutButton() {
-  const addresses = api.user.addresses.all.useQuery(undefined, {
+  const { data: addresses } = api.user.addresses.all.useQuery(undefined, {
     staleTime: Infinity,
   })
 
@@ -16,7 +16,7 @@ export default function RedirectToCheckoutButton() {
   const isPurchasing =
     searchParams.get(SEARCH_PARAMS.redirectTo) === PAGES.protected.buy.checkout
 
-  if (!isPurchasing || addresses.data?.length === 0) return null
+  if (!isPurchasing || addresses?.length === 0) return null
 
   return (
     <div className='mt-8 text-center'>
