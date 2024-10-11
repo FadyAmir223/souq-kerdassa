@@ -13,7 +13,7 @@ import {
 import Toast from 'react-native-toast-message'
 
 import { api } from '@/utils/api'
-import { useUser } from '@/utils/auth'
+import { useSignOut, useUser } from '@/utils/auth'
 import { PLACEHOLDER } from '@/utils/constants'
 
 const inputs = [
@@ -30,7 +30,8 @@ const inputs = [
 ] as const
 
 export default function ProfileScreen() {
-  const user = useUser()
+  const { user } = useUser()
+  const logout = useSignOut()
 
   const {
     control,
@@ -125,6 +126,13 @@ export default function ProfileScreen() {
             <Text className='text-2xl text-white'>تعديل البيانات</Text>
           </Pressable>
         </View>
+
+        <Pressable
+          className='mt-20 self-end rounded-md bg-primary px-4 py-2 shadow-md active:scale-[0.98]'
+          onPress={() => logout()}
+        >
+          <Text className='text-xl text-white'>تسجيل الخروج</Text>
+        </Pressable>
       </View>
     </KeyboardAvoidingView>
   )

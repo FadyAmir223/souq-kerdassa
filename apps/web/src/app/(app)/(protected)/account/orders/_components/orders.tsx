@@ -35,9 +35,9 @@ export default function Orders() {
     return (
       <li key={order.id} className='rounded-md bg-white p-4 shadow-md'>
         <div className='mb-4 flex justify-between border-b border-b-gray-400 pb-4'>
-          <div>
+          <div className='flex flex-col sm:flex-row sm:items-center'>
             <span className='font-semibold'>وقت الطلب</span>
-            <span className='ms-3 inline-block text-sm text-black/80'>
+            <span className='inline-block text-sm text-black/80 sm:ms-3'>
               {formatDistanceToNow(order.createdAt, {
                 addSuffix: true,
                 locale: ar,

@@ -1,9 +1,20 @@
-import { Text, View } from 'react-native'
+import { Platform, ScrollView, StatusBar, View } from 'react-native'
+
+import { Orders } from '@/components/orders/orders'
 
 export default function ProfileScreen() {
   return (
-    <View className='py-6'>
-      <Text className='text-2xl font-bold'>طلباتى</Text>
-    </View>
+    <ScrollView
+      className='mb-[4.25rem] px-4'
+      style={Platform.select({
+        android: {
+          marginTop: StatusBar.currentHeight,
+        },
+      })}
+    >
+      <View className='gap-y-4'>
+        <Orders />
+      </View>
+    </ScrollView>
   )
 }

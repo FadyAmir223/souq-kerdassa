@@ -25,7 +25,7 @@ export default function AddReviewForm({
   setReviewPage,
 }: AddReviewFormProps) {
   const [rating, setRating] = useState(initRating)
-  const user = useUser()
+  const { user } = useUser()
   const utils = api.useUtils()
 
   const { isReviewing, setReviewing } = useCombinedStore(

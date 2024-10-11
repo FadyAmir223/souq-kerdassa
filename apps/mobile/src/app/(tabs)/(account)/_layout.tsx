@@ -4,8 +4,16 @@ import type {
 } from '@react-navigation/material-top-tabs'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native'
-import { withLayoutContext } from 'expo-router'
-import { Platform, SafeAreaView, StatusBar } from 'react-native'
+import { Redirect, withLayoutContext } from 'expo-router'
+import {
+  ActivityIndicator,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  View,
+} from 'react-native'
+
+import { useUser } from '@/utils/auth'
 
 const { Navigator } = createMaterialTopTabNavigator()
 
@@ -17,6 +25,17 @@ export const MaterialTopTabs = withLayoutContext<
 >(Navigator)
 
 export default function TabsAccountNavigation() {
+  const { user, isLoading } = useUser()
+
+  if (isLoading)
+    return (
+      <View className='flex-1 items-center justify-center'>
+        <ActivityIndicator size='small' />
+      </View>
+    )
+
+  if (!user) return <Redirect href='/login' />
+
   return (
     <SafeAreaView
       className='flex-1'

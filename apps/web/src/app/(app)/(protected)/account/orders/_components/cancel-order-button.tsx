@@ -33,7 +33,7 @@ export default function CancelOrderButton({ orderId }: CancelOrderButtonProps) {
       await utils.order.all.cancel()
       const oldOrder = utils.order.all.getData() ?? []
       const newOrder = oldOrder.map((order) =>
-        order.id === orderId ? { ...order, status: 'cancelled' } : order,
+        order.id === orderId ? { ...order, status: 'cancelled' as const } : order,
       )
       utils.order.all.setData(undefined, newOrder)
 
@@ -64,7 +64,7 @@ export default function CancelOrderButton({ orderId }: CancelOrderButtonProps) {
           <DialogTitle>هل انت متأكد من إلغاء الطلب؟</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className='flex-row justify-end space-x-2'>
           <Button
             className='me-4 min-w-16'
             variant='destructive'

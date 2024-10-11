@@ -113,7 +113,7 @@ export default function ProfileScreen() {
             },
           })}
         >
-          <Text className='mb-5 text-3xl font-bold'>إنشاء حساب</Text>
+          <Text className='mb-5 text-3xl font-bold'>تسجيل الدخول</Text>
 
           <View className='gap-y-2.5'>
             {inputs.map(({ name, label, ...props }) => (

@@ -36,6 +36,7 @@ export default function CheckoutAddressSelection({
   const [isOpen, setOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const utils = api.useUtils()
 
   const {
     cart,
@@ -88,11 +89,11 @@ export default function CheckoutAddressSelection({
   }
 
   const handlePurchaseSuccess = () => {
+    void utils.order.all.invalidate()
+
     router.replace(
       `${PAGES.protected.user.orders}?${SEARCH_PARAMS.redirectedFrom}=${PAGES.protected.buy.checkout}`,
     )
-
-    router.refresh()
   }
 
   return (

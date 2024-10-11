@@ -47,7 +47,7 @@ function AddReviewButton() {
 function DeleteReviewButton({ productId, reviewPage }: ReviewButtonProps) {
   const [isOpen, setOpen] = useState(false)
   const utils = api.useUtils()
-  const user = useUser()
+  const { user } = useUser()
 
   const deleteReview = api.product.review.delete.useMutation({
     onSuccess: async () => {

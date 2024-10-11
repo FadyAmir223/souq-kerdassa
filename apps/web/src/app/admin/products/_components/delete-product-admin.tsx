@@ -66,7 +66,7 @@ export default function DeleteProductAdmin({
           <DialogTitle>هل انت متأكد من حذف المنتج</DialogTitle>
           <DialogDescription />
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className='flex-row justify-end space-x-2'>
           <Button
             className='me-4 min-w-16'
             variant='destructive'

@@ -1,17 +1,13 @@
-'use client'
-
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useCombinedStore } from '@repo/store/mobile'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
-import { useAppStore } from '@/providers/app-store-provider'
-import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
-
 export default function ResetCheckout() {
-  const redirectedFrom = useSearchParams().get(SEARCH_PARAMS.redirectedFrom)
+  const searchParams = useLocalSearchParams<{ redirectedFrom?: string }>()
   const router = useRouter()
 
-  const { cart, deleteCartItem, resetCart, setSelectedAddress } = useAppStore(
+  const { cart, deleteCartItem, resetCart, setSelectedAddress } = useCombinedStore(
     useShallow(({ cart, deleteCartItem, resetCart, setSelectedAddress }) => ({
       cart,
       deleteCartItem,
@@ -23,9 +19,12 @@ export default function ResetCheckout() {
   useEffect(() => {
     for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
 
-    if (redirectedFrom !== PAGES.protected.buy.checkout) return
+    if (searchParams.redirectedFrom !== '/checkout') return
 
-    router.replace(PAGES.protected.user.orders)
+    // TODO: check if clearing the navigation stack happens here or /checkout
+    // https://github.com/expo/router/discussions/495
+
+    router.replace('/orders')
     resetCart()
     setSelectedAddress(null)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps

@@ -65,7 +65,7 @@ export default function ReviewsSection({ productId }: ReviewsSectionProps) {
               <span className='text-lg font-semibold'>{review.user.name}</span>
               <StarRating rating={review.rating} />
 
-              <span className='ms-3 inline-block text-sm text-black/80'>
+              <span className='ms:ms-3 inline-block text-sm text-black/80'>
                 {formatDistanceToNow(review.updatedAt, {
                   addSuffix: true,
                   locale: ar,

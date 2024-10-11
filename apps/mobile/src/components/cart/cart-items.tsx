@@ -78,11 +78,11 @@ export default function CartItems() {
 
               <View className='self-center'>
                 <Text className='mb-2.5 text-3xl font-semibold'>{item.name}</Text>
-                <View className='max-w-[5.5rem] gap-y-2'>
-                  <Text className='rounded-md bg-primary px-2.5 py-0.5 text-center text-xl font-bold text-white'>
+                <View className='w-20 gap-y-2'>
+                  <Text className='rounded-md bg-primary px-2.5 py-0.5 text-center text-lg font-bold text-white'>
                     {AR.season[item.season]}
                   </Text>
-                  <Text className='mb-1.5 rounded-md bg-sky-500 px-2.5 py-0.5 text-center text-xl font-bold text-white'>
+                  <Text className='mb-1.5 rounded-md bg-sky-500 px-2.5 py-0.5 text-center text-lg font-bold text-white'>
                     {AR.category[item.category]}
                   </Text>
                 </View>
