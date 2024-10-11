@@ -3,8 +3,8 @@ import type { Href } from 'expo-router'
 import { useRouter } from 'expo-router'
 import * as Browser from 'expo-web-browser'
 
-import { api } from './api'
-import { getBaseUrl } from './base-url'
+import { api } from '../api'
+import { getBaseUrl } from '../base-url'
 import { deleteToken, setToken } from './session-store'
 
 export const signIn = async () => {

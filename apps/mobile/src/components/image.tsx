@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Image as RNImage, PixelRatio } from 'react-native'
 import type { FastImageProps } from 'react-native-fast-image'
 
-// import Image from 'react-native-fast-image'
 import { getBaseUrl } from '@/utils/base-url'
 import { SEARCH_PARAMS } from '@/utils/constants'
+
+// https://tarasov.dev/blog/how-to-use-nextjs-image-optimization-in-react-native/
 
 function extractStyleWidth(className?: FastImageProps['className']) {
   if (!className) return
@@ -83,7 +84,7 @@ export function Image({
         if (onLayout) onLayout(event)
         if (!staticWidth) setImageWidth(event.nativeEvent.layout.width)
       }}
-      // TODO: fix me
+      // @ts-expect-error ...
       source={
         !unoptimized && typeof source === 'object' && 'uri' in source && source.uri
           ? {
@@ -102,39 +103,3 @@ export function Image({
     />
   )
 }
-
-// Object.getOwnPropertyNames(FastImage).forEach((prop) => {
-//   if (!['$$typeof', 'render', 'displayName'].includes(prop)) {
-//     // @ts-expect-error issue
-//     UntypedImage[prop] = FastImage[prop]
-//   }
-// })
-
-/*
-type PreloadOptimized = (
-  sources: (Source & { width?: number; uri: string })[],
-) => void
-
-// Preload images using our loader when width is defined
-const preload: PreloadOptimized = (sources) => {
-  FastImage.preload(
-    sources.map(({ uri, width, ...rest }) => ({
-      ...rest,
-      uri:
-        uri && width
-          ? imageLoader({
-              width,
-              src: uri,
-            })
-          : uri,
-    })),
-  )
-}
-
-OptimizedImage.preload = preload
-
-export const Image = OptimizedImage as React.FunctionComponent<Props> &
-  FastImageStaticProperties & {
-    preloadOptimized: PreloadOptimized
-  }
-*/

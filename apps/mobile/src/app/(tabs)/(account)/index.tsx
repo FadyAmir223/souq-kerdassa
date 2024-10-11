@@ -13,7 +13,7 @@ import {
 import Toast from 'react-native-toast-message'
 
 import { api } from '@/utils/api'
-import { useSignOut, useUser } from '@/utils/auth'
+import { useSignOut, useUser } from '@/utils/auth/auth'
 import { PLACEHOLDER } from '@/utils/constants'
 
 const inputs = [
@@ -86,7 +86,7 @@ export default function ProfileScreen() {
       behavior='padding'
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
-      <View className='px-4 py-6'>
+      <View className='px-4 pb-2 pt-6'>
         <View className='gap-y-2.5'>
           {inputs.map(({ name, label, ...props }) => (
             <Controller

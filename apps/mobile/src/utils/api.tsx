@@ -5,8 +5,8 @@ import { createTRPCReact } from '@trpc/react-query'
 import { useState } from 'react'
 import superjson from 'superjson'
 
+import { getToken } from './auth/session-store'
 import { getBaseUrl } from './base-url'
-import { getToken } from './session-store'
 
 /**
  * A set of typesafe hooks for consuming your API.

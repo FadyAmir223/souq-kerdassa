@@ -5,6 +5,7 @@ import { Link } from 'expo-router'
 import { Text, View } from 'react-native'
 
 import { api } from '@/utils/api'
+import { cn } from '@/utils/cn'
 import { AR } from '@/utils/constants'
 
 import { Image } from '../image'
@@ -49,7 +50,12 @@ export function Orders() {
             <Text className='text-xl font-bold'>{AR.status[status]}</Text>
             <View className='size-6 items-center justify-center'>
               <View
-                className={`size-2 rounded-full ${status === 'pending' ? 'bg-yellow-500' : ''} ${status === 'completed' ? 'bg-green-500' : ''} ${status === 'cancelled' ? 'bg-gray-500' : ''} ${status === 'refunded' ? 'bg-orange-500' : ''}`}
+                className={cn('size-2 rounded-full', {
+                  'bg-yellow-500': status === 'pending',
+                  'bg-green-500': status === 'completed',
+                  'bg-gray-500': status === 'cancelled',
+                  'bg-orange-500': status === 'refunded',
+                })}
               />
             </View>
           </View>

@@ -13,7 +13,7 @@ import {
   View,
 } from 'react-native'
 
-import { useUser } from '@/utils/auth'
+import { useUser } from '@/utils/auth/auth'
 
 const { Navigator } = createMaterialTopTabNavigator()
 

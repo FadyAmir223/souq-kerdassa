@@ -13,7 +13,6 @@ export default function TabsNavigation() {
         tabBarInactiveTintColor: '#333333',
         tabBarLabelStyle: { fontSize: 14, fontWeight: '700' },
         tabBarStyle: {
-          position: 'absolute',
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           borderTopWidth: 0,

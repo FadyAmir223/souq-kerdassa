@@ -15,7 +15,6 @@ const SongsScreenLayout = () => {
             color: '#c82d2d',
           },
           headerTintColor: '#c82d2d',
-          // headerTransparent: true,
           headerShadowVisible: false,
         }}
       />

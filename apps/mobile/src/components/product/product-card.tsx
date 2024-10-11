@@ -20,7 +20,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       className='size-full flex-1'
     >
       <Pressable className='overflow-hidden rounded-lg shadow-lg'>
-        <View className='items-center justify-center bg-neutral-500/50'>
+        <View className='bg-neutral-500/50'>
           <Image
             source={{ uri: image }}
             resizeMode='cover'

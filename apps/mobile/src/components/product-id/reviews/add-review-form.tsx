@@ -11,7 +11,8 @@ import Toast from 'react-native-toast-message'
 import { useShallow } from 'zustand/react/shallow'
 
 import { api } from '@/utils/api'
-import { useUser } from '@/utils/auth'
+import { useUser } from '@/utils/auth/auth'
+import { cn } from '@/utils/cn'
 
 type AddReviewFormProps = {
   productId: Product['id']
@@ -95,7 +96,9 @@ export default function AddReviewForm({
 
   return (
     <View
-      className={`mt-4 rounded-md bg-white p-4 shadow-sm ${!isReviewing && !isReviewing}`}
+      className={cn('mt-4 rounded-md bg-white p-4 shadow-sm', {
+        hidden: !isReviewing,
+      })}
     >
       <View className='mb-2'>
         <Text className='mb-1 self-start text-2xl font-semibold'>{user.name}</Text>

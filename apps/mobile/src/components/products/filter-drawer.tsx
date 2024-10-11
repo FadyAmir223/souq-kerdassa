@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 
 import type { ProductFilterParams } from '@/types/product'
+import { cn } from '@/utils/cn'
 
 const filters = [
   {
@@ -86,7 +87,9 @@ export default function FilterDrawer() {
                       onPress={() => router.setParams({ [filter.key]: value })}
                     >
                       <Text
-                        className={`text-lg font-semibold ${value === searchParams[filter.key] && 'text-primary/80'}`}
+                        className={cn('text-lg font-semibold', {
+                          'text-primary/80': value === searchParams[filter.key],
+                        })}
                       >
                         {label}
                       </Text>

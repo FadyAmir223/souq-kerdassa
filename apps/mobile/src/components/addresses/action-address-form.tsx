@@ -11,8 +11,9 @@ import SelectDropdown from 'react-native-select-dropdown'
 import Toast from 'react-native-toast-message'
 
 import { api } from '@/utils/api'
+import { cn } from '@/utils/cn'
 import { PLACEHOLDER } from '@/utils/constants'
-import { areEqualShallow } from '@/utils/object-equal-shallow'
+import { areEqualShallow } from '@/utils/helpers/object-equal-shallow'
 
 const labels = {
   add: {
@@ -262,13 +263,18 @@ export default function ActionAddressForm({
                     renderItem={(item, index, isSelected) => {
                       return (
                         <View
-                          className={`mx-2 flex-row items-center justify-between rounded-md px-3 py-2 ${isSelected ? 'bg-primary/5' : ''}`}
+                          className={cn(
+                            'mx-2 flex-row items-center justify-between rounded-md px-3 py-2',
+                            { 'bg-primary/5': isSelected },
+                          )}
                         >
                           {isSelected && (
                             <Entypo name='check' size={18} color='#c82d2d' />
                           )}
                           <Text
-                            className={`ms-auto text-xl font-semibold ${isSelected ? 'text-primary' : ''}`}
+                            className={cn('ms-auto text-xl font-semibold', {
+                              'text-primary': isSelected,
+                            })}
                           >
                             {item.name}
                           </Text>

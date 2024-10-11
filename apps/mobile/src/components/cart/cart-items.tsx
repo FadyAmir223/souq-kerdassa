@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
+import { cn } from '@/utils/cn'
 import { AR } from '@/utils/constants'
 
 import { Image } from '../image'
@@ -147,10 +148,16 @@ export default function CartItems() {
         ).map(({ label, url, iconProps }, idx) => (
           <Link key={label} href={url} asChild>
             <Pressable
-              className={`flex-row items-center justify-between rounded-md px-4 shadow ${idx === 0 ? 'flex-row-reverse bg-white' : 'bg-primary'}`}
+              className={cn(
+                'flex-row items-center justify-between rounded-md px-4 shadow',
+                idx === 0 ? 'flex-row-reverse bg-white' : 'bg-primary',
+              )}
             >
               <Text
-                className={`items-center justify-between py-5 text-[1.375rem] font-semibold ${idx === 1 && 'text-white'}`}
+                className={cn(
+                  'items-center justify-between py-3 text-[1.375rem] font-semibold',
+                  { 'text-white': idx === 1 },
+                )}
               >
                 {label}
               </Text>

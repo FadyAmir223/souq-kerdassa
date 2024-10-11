@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message'
 import { useShallow } from 'zustand/react/shallow'
 
 import { api } from '@/utils/api'
-import { useUser } from '@/utils/auth'
+import { useUser } from '@/utils/auth/auth'
 
 type ReviewButtonProps = {
   productId: Product['id']

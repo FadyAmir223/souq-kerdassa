@@ -18,7 +18,7 @@ const iconsSection = [
 export default function CartPage() {
   return (
     <ScrollView>
-      <View className='px-6 py-4'>
+      <View className='px-6 pb-2 pt-4'>
         <CartItems />
 
         <View className='mt-10'>

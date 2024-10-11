@@ -24,6 +24,10 @@ export default function ProductByIdScreen() {
   const navigation = useNavigation()
 
   useLayoutEffect(() => {
+    navigation.setOptions({ title: '' })
+  }, [navigation])
+
+  useLayoutEffect(() => {
     if (product) navigation.setOptions({ title: product.name })
   }, [navigation, product])
 
@@ -34,7 +38,7 @@ export default function ProductByIdScreen() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
       >
         <ScrollView>
-          <View className='px-6 py-4'>
+          <View className='px-6 pb-2 pt-4'>
             {isLoading ? (
               <ProductDetailsSkeleton />
             ) : (

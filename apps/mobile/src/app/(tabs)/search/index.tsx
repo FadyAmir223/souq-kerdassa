@@ -28,7 +28,7 @@ export default function SearchScreen() {
   const products = data as RouterOutputs['product']['byQuery'] | undefined
 
   return (
-    <View className='size-full px-6 py-4'>
+    <View className='size-full px-6 pb-2 pt-4'>
       <FlashList
         data={products?.products}
         keyExtractor={({ id }) => id}

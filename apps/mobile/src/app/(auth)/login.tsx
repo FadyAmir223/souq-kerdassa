@@ -17,9 +17,9 @@ import {
 import Toast from 'react-native-toast-message'
 
 import { api } from '@/utils/api'
+import { setToken } from '@/utils/auth/session-store'
 import { getBaseUrl } from '@/utils/base-url'
 import { PLACEHOLDER, SEARCH_PARAMS } from '@/utils/constants'
-import { setToken } from '@/utils/session-store'
 
 const inputs = [
   {

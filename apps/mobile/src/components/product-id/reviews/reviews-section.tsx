@@ -6,7 +6,7 @@ import { Text, View } from 'react-native'
 
 import StarRating from '@/components/product/star-rating'
 import { api } from '@/utils/api'
-import { readableNumber } from '@/utils/readable-number'
+import { readableNumber } from '@/utils/helpers/readable-number'
 
 import AddReviewForm from './add-review-form'
 import ReviewButton from './review-button'
