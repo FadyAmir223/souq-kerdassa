@@ -3,7 +3,6 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { useCombinedStore } from '@repo/store/mobile'
 import { Link } from 'expo-router'
-import { useEffect, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -11,7 +10,6 @@ import { cn } from '@/utils/cn'
 import { AR } from '@/utils/constants'
 
 import { Image } from '../image'
-import CartItemSkeleton from './cart-item-skeleton'
 
 export default function CartItems() {
   const { cart, incrementCartItem, decrementCartItem, deleteCartItem } =
@@ -24,20 +22,6 @@ export default function CartItems() {
           deleteCartItem,
         }),
       ),
-    )
-
-  const [isHydrated, setHydrated] = useState(false)
-
-  useEffect(() => {
-    setHydrated(true)
-  }, [])
-
-  if (!isHydrated)
-    return (
-      <View className='gap-y-3'>
-        <CartItemSkeleton />
-        <CartItemSkeleton />
-      </View>
     )
 
   if (cart.length === 0)
@@ -57,7 +41,7 @@ export default function CartItems() {
 
   return (
     <View>
-      <View>
+      <View className='gap-y-4'>
         {cart.map((item) => (
           <View
             key={item.id + item.season + item.category}

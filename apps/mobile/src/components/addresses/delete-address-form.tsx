@@ -46,7 +46,7 @@ export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps)
       </Pressable>
 
       <Modal isVisible={isOpen} onBackdropPress={() => setOpen(false)}>
-        <View className='m-8 rounded-md bg-white p-4 shadow-md'>
+        <View className='rounded-md bg-white p-4 shadow-md'>
           <Text className='mb-6 text-2xl font-bold'>
             هل انت متأكد من حذف العنوان؟
           </Text>

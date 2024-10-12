@@ -128,7 +128,7 @@ export default function ProfileScreen() {
         </View>
 
         <Pressable
-          className='mt-20 self-end rounded-md bg-primary px-4 py-2 shadow-md active:scale-[0.98]'
+          className='mt-24 self-end rounded-md bg-primary px-4 py-2 shadow-md active:scale-[0.98]'
           onPress={() => logout()}
         >
           <Text className='text-xl text-white'>تسجيل الخروج</Text>
