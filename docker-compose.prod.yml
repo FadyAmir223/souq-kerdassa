@@ -21,9 +21,9 @@ services:
       - db-prod
     labels:
       - traefik.enable=true
-      - traefik.http.routers.app-prod.rule=Host(`example.com`) || Host(`www.example.com`)
+      - traefik.http.routers.app-prod.rule=Host(`souqkerdassa.com`) || Host(`www.souqkerdassa.com`)
       - traefik.http.services.app-prod.loadbalancer.server.port=3000
-      - traefik.http.routers.app-prod.tls.certresolver=staging # production
+      # - traefik.http.routers.app-prod.tls.certresolver=staging # production
     restart: on-failure
     deploy:
       mode: replicated

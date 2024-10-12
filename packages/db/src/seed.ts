@@ -299,8 +299,9 @@ async function main() {
     ),
   )
 
+  // @ts-expect-error ...
   // eslint-disable-next-line no-restricted-properties
-  if (process.env.NODE_ENV === 'production') return
+  if (process.env.NODE_ENV === 'production') PRODUCTS.length = 3
 
   await Promise.all(
     PRODUCTS.map(({ variants, ...product }) =>
