@@ -68,7 +68,9 @@ export default function AdminLoginForm() {
         ))}
       </CardContent>
       <CardFooter>
-        <Button className='w-full'>تسجيل الدخول</Button>
+        <Button className='w-full' disabled={loginUser.isPending}>
+          تسجيل الدخول
+        </Button>
       </CardFooter>
     </form>
   )

@@ -7,6 +7,7 @@ import {
 } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
+import { revalidateTag } from 'next/cache'
 import { z } from 'zod'
 
 import {
@@ -40,12 +41,14 @@ export const ordersRouter = {
           cause: { soldOutVariants },
         })
 
-      await createOrder({
+      const productIds = await createOrder({
         db: ctx.db,
         userId: ctx.session.user.id,
         address: input.address,
         cart: input.cart,
       })
+
+      productIds.forEach((id) => revalidateTag(id))
     }),
 
   // TODO: maybe permit canceling just for a certain duration

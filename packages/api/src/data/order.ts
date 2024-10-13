@@ -173,6 +173,9 @@ export async function createOrder({
           },
         })
     })
+
+    // productIds
+    return products.map((product) => product.id)
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)
       if (error.code === 'P2025')

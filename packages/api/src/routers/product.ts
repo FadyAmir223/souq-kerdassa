@@ -10,6 +10,7 @@ import {
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
 import { rm } from 'fs/promises'
+import { revalidateTag, unstable_cache } from 'next/cache'
 import path from 'path'
 import { z } from 'zod'
 
@@ -21,7 +22,6 @@ import {
   getAdminProductDetails,
   getAdminProducts,
   getAdminProductsCount,
-  getAllProducts,
   getProductById,
   getProductIds,
   getProductsByFilters,
@@ -34,12 +34,13 @@ import { adminProcedure, protectedProcedure, publicProcedure } from '../trpc'
 import { productByQuerySchema } from '../validations/products'
 
 export const productRouter = {
-  all: publicProcedure.query(({ ctx }) => getAllProducts(ctx.db)),
   ids: publicProcedure.query(({ ctx }) => getProductIds(ctx.db)),
 
-  byId: publicProcedure
-    .input(cuidSchema)
-    .query(({ ctx, input: id }) => getProductById(ctx.db, id)),
+  byId: publicProcedure.input(cuidSchema).query(({ ctx, input: id }) =>
+    unstable_cache(() => getProductById(ctx.db, id), ['product', 'byId', id], {
+      tags: ['product.byId', id],
+    })(),
+  ),
 
   byFilter: publicProcedure
     .input(productsByFiltersSchema)
@@ -63,12 +64,7 @@ export const productRouter = {
           page: z.coerce.number().default(1),
         }),
       )
-      .query(async ({ ctx, input }) =>
-        getReviews({
-          db: ctx.db,
-          ...input,
-        }),
-      ),
+      .query(async ({ ctx, input }) => getReviews({ db: ctx.db, ...input })),
 
     add: protectedProcedure
       .input(z.object({ productId: cuidSchema, review: reviewSchema }))
@@ -145,14 +141,16 @@ export const productRouter = {
 
     edit: adminProcedure
       .input(addProductImagePathsSchema)
-      .mutation(async ({ ctx, input: newProduct }) =>
-        editAdminProduct(ctx.db, newProduct),
-      ),
+      .mutation(async ({ ctx, input: newProduct }) => {
+        await editAdminProduct(ctx.db, newProduct)
+        revalidateTag(newProduct.id!)
+      }),
 
     delete: adminProcedure
       .input(cuidSchema)
       .mutation(async ({ ctx, input: productId }) => {
         const imagePath = await deleteAdminProduct(ctx.db, productId)
+        revalidateTag(productId)
         const imagesDir = path.dirname(imagePath)
         await rm(imagesDir, { recursive: true, force: true })
       }),
