@@ -18,7 +18,6 @@ import Toast from 'react-native-toast-message'
 
 import { api } from '@/utils/api'
 import { setToken } from '@/utils/auth/session-store'
-import { getBaseUrl } from '@/utils/base-url'
 import { PLACEHOLDER, SEARCH_PARAMS } from '@/utils/constants'
 
 const inputs = [
@@ -57,15 +56,13 @@ export default function ProfileScreen() {
   })
 
   const loginUser = api.auth.login.useMutation({
-    onSuccess: async () => {
+    onSuccess: async ({ success, sessionId }) => {
+      if (!success || !sessionId) return
+
       try {
-        const res = await fetch(`${getBaseUrl()}/api/auth/session`)
-        const data = await res.json()
-
-        if (!data) return
-        setToken(data.sessionToken)
-
+        setToken(sessionId)
         await utils.invalidate()
+
         // @ts-expect-error redirectTo is valid route
         router.replace(searchParams.redirectTo ?? '/(account)/')
       } catch {

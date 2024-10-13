@@ -25,12 +25,12 @@ export const MaterialTopTabs = withLayoutContext<
 >(Navigator)
 
 export default function TabsAccountNavigation() {
-  const { user, isLoading } = useUser()
+  const { user, isFetching } = useUser()
 
-  if (isLoading)
+  if (isFetching)
     return (
       <View className='flex-1 items-center justify-center'>
-        <ActivityIndicator size='small' />
+        <ActivityIndicator size='large' />
       </View>
     )
 

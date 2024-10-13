@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
-import SidebarCollapseButton from '@/app/admin/_components/sidebar-collapse-button'
+import SidebarCollapseButton from '@/app/admin/(main)/_components/sidebar-collapse-button'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -38,7 +38,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
 
-import { PAGES } from '../../../_utils/constants'
+import { PAGES } from '../../../../_utils/constants'
 import { uploadImages } from '../../_actions/upload-images'
 import UploadImagesSection from './upload-images-section'
 import VariantsStoreSection from './variants-store-section'
@@ -104,7 +104,7 @@ type ActionProductFormProps = {
 
 export default function ActionProductForm({ productId }: ActionProductFormProps) {
   const { data: productDetails, isFetched } = api.product.admin.detailsById.useQuery(
-    productId,
+    productId!,
     { enabled: !!productId },
   )
 

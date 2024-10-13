@@ -72,7 +72,11 @@ export const protectedProcedure = t.procedure
     })
   })
 
-// TODO: secure me
-export const adminProcedure = t.procedure.use(timingMiddleware).use(({ next }) => {
-  return next()
-})
+export const adminProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    if (ctx.session?.user.role !== 'ADMIN')
+      throw new TRPCError({ code: 'UNAUTHORIZED' })
+
+    return next()
+  })

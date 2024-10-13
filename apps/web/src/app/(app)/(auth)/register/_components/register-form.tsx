@@ -64,12 +64,12 @@ export default function RegisterForm() {
   })
 
   const registerUser = api.auth.register.useMutation({
-    onSuccess: () => {
+    onSuccess: ({ success }) => {
+      if (success) router.refresh()
+
       const redirectTo =
         searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect()
       router.replace(redirectTo, { scroll: !redirectTo })
-
-      router.refresh()
     },
     onError: ({ message }) => {
       toast({

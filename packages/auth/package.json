@@ -19,11 +19,11 @@
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
-    "@auth/core": "0.32.0",
+    "@auth/core": "0.35.3",
     "@auth/prisma-adapter": "^2.4.1",
     "@repo/db": "workspace:*",
     "@repo/validators": "workspace:*",
-    "@t3-oss/env-nextjs": "^0.10.1",
+    "@t3-oss/env-nextjs": "catalog:",
     "bcryptjs": "catalog:",
     "next": "catalog:",
     "next-auth": "catalog:",

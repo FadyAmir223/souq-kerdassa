@@ -7,13 +7,16 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
+import { CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
-import { loginFormInputs, PAGES, SEARCH_PARAMS } from '@/utils/constants'
+import { loginFormInputs, SEARCH_PARAMS } from '@/utils/constants'
 
-export default function LoginForm() {
+import { PAGES } from '../../_utils/constants'
+
+export default function AdminLoginForm() {
   const { toast } = useToast()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -35,7 +38,7 @@ export default function LoginForm() {
       if (success) router.refresh()
 
       const redirectTo =
-        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.defaultLoginRedirect()
+        searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.dashboard
       router.replace(redirectTo, { scroll: !redirectTo })
     },
     onError: ({ message }) => {
@@ -52,21 +55,21 @@ export default function LoginForm() {
   })
 
   return (
-    <form
-      onSubmit={handleSubmit((formData) => loginUser.mutate(formData))}
-      className='space-y-3'
-    >
-      {loginFormInputs.map(({ name, label, ...props }) => (
-        <div key={name}>
-          <Label>{label}</Label>
-          <Input {...register(name)} {...props} className='border-black' />
-          <p className='h-[1.21875rem] text-[0.8rem] font-medium text-destructive'>
-            {errors[name]?.message}
-          </p>
-        </div>
-      ))}
-
-      <Button disabled={loginUser.isPending}>تسجيل الدخول</Button>
+    <form onSubmit={handleSubmit((formData) => loginUser.mutate(formData))}>
+      <CardContent className='grid gap-4'>
+        {loginFormInputs.map(({ name, label, ...props }) => (
+          <div key={name}>
+            <Label>{label}</Label>
+            <Input {...register(name)} {...props} className='border-black' />
+            <p className='h-[1.21875rem] text-[0.8rem] font-medium text-destructive'>
+              {errors[name]?.message}
+            </p>
+          </div>
+        ))}
+      </CardContent>
+      <CardFooter>
+        <Button className='w-full'>تسجيل الدخول</Button>
+      </CardFooter>
     </form>
   )
 }

@@ -24,6 +24,7 @@
     "@trpc/server": "catalog:",
     "bcryptjs": "catalog:",
     "date-fns": "catalog:",
+    "next": "catalog:",
     "next-auth": "catalog:",
     "superjson": "catalog:",
     "zod": "catalog:"

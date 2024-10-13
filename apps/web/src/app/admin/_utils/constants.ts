@@ -1,6 +1,7 @@
 import type { Product } from '@repo/db/types'
 
 export const PAGES = {
+  login: '/admin/login',
   dashboard: '/admin/dashboard',
   products: {
     root: '/admin/products',

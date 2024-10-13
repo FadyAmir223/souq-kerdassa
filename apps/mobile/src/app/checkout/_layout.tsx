@@ -6,16 +6,15 @@ import { useUser } from '@/utils/auth/auth'
 import { SEARCH_PARAMS } from '@/utils/constants'
 
 const CheckoutScreenLayout = () => {
-  const { user, isLoading } = useUser()
-  const { data: addresses, isLoading: _isLoading } = api.user.addresses.all.useQuery(
-    undefined,
-    { gcTime: Infinity },
-  )
+  const { user, isFetching } = useUser()
+  const { data: addresses, isLoading } = api.user.addresses.all.useQuery(undefined, {
+    gcTime: Infinity,
+  })
 
-  if (isLoading || _isLoading)
+  if (isFetching || isLoading)
     return (
       <View className='flex-1 items-center justify-center'>
-        <ActivityIndicator size='small' />
+        <ActivityIndicator size='large' />
       </View>
     )
 

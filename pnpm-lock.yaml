@@ -49,8 +49,8 @@ catalogs:
       specifier: 14.2.6
       version: 14.2.6
     next-auth:
-      specifier: 5.0.0-beta.19
-      version: 5.0.0-beta.19
+      specifier: 5.0.0-beta.22
+      version: 5.0.0-beta.22
     prettier:
       specifier: ^3.3.3
       version: 3.3.3
@@ -411,7 +411,7 @@ importers:
         version: 14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: 'catalog:'
-        version: 5.0.0-beta.19(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.0.0-beta.22(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: catalog:react18
         version: 18.3.1
@@ -527,9 +527,12 @@ importers:
       date-fns:
         specifier: 'catalog:'
         version: 3.6.0
+      next:
+        specifier: 'catalog:'
+        version: 14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: 'catalog:'
-        version: 5.0.0-beta.19(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.0.0-beta.22(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       superjson:
         specifier: 'catalog:'
         version: 2.2.1
@@ -565,8 +568,8 @@ importers:
   packages/auth:
     dependencies:
       '@auth/core':
-        specifier: 0.32.0
-        version: 0.32.0
+        specifier: 0.35.3
+        version: 0.35.3
       '@auth/prisma-adapter':
         specifier: ^2.4.1
         version: 2.7.0(@prisma/client@5.20.0(prisma@5.20.0))
@@ -577,8 +580,8 @@ importers:
         specifier: workspace:*
         version: link:../validators
       '@t3-oss/env-nextjs':
-        specifier: ^0.10.1
-        version: 0.10.1(typescript@5.6.3)(zod@3.23.8)
+        specifier: 'catalog:'
+        version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
       bcryptjs:
         specifier: 'catalog:'
         version: 2.4.3
@@ -587,7 +590,7 @@ importers:
         version: 14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: 'catalog:'
-        version: 5.0.0-beta.19(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 5.0.0-beta.22(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: catalog:react18
         version: 18.3.1
@@ -659,6 +662,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.6.3
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/store:
     dependencies:
@@ -854,8 +860,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@auth/core@0.32.0':
-    resolution: {integrity: sha512-3+ssTScBd+1fd0/fscAyQN1tSygXzuhysuVVzB942ggU4mdfiTbv36P0ccVnExKWYJKvu3E2r3/zxXCCAmTOrg==}
+  '@auth/core@0.35.3':
+    resolution: {integrity: sha512-g6qfiqU4OtyvIEZ8J7UoIwAxEnNnLJV0/f/DW41U+4G5nhBlaCrnKhawJIJpU0D3uavXLeDT3B0BkjtiimvMDA==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -2925,26 +2931,8 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
-  '@t3-oss/env-core@0.10.1':
-    resolution: {integrity: sha512-GcKZiCfWks5CTxhezn9k5zWX3sMDIYf6Kaxy2Gx9YEQftFcz8hDRN56hcbylyAO3t4jQnQ5ifLawINsNgCDpOg==}
-    peerDependencies:
-      typescript: '>=5.0.0'
-      zod: ^3.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   '@t3-oss/env-core@0.11.1':
     resolution: {integrity: sha512-MaxOwEoG1ntCFoKJsS7nqwgcxLW1SJw238AJwfJeaz3P/8GtkxXZsPPolsz1AdYvUTbe3XvqZ/VCdfjt+3zmKw==}
-    peerDependencies:
-      typescript: '>=5.0.0'
-      zod: ^3.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  '@t3-oss/env-nextjs@0.10.1':
-    resolution: {integrity: sha512-iy2qqJLnFh1RjEWno2ZeyTu0ufomkXruUsOZludzDIroUabVvHsrSjtkHqwHp1/pgPUzN3yBRHMILW162X7x2Q==}
     peerDependencies:
       typescript: '>=5.0.0'
       zod: ^3.0.0
@@ -5614,12 +5602,12 @@ packages:
   nested-error-stacks@2.0.1:
     resolution: {integrity: sha512-SrQrok4CATudVzBS7coSz26QRSmlK9TzzoFbeKfcPBUFPjcQM9Rqvr/DlJkOrwI/0KcgvMub1n1g5Jt9EgRn4A==}
 
-  next-auth@5.0.0-beta.19:
-    resolution: {integrity: sha512-YHu1igcAxZPh8ZB7GIM93dqgY6gcAzq66FOhQFheAdOx1raxNcApt05nNyNCSB6NegSiyJ4XOPsaNow4pfDmsg==}
+  next-auth@5.0.0-beta.22:
+    resolution: {integrity: sha512-QGBo9HGOjmnJBHGXvtFztl0tM5tL0porDlk74HVoCCzXd986ApOlIW3EmiCuho7YzEopgkFiwwmcXpoCrHAtYw==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
-      next: ^14 || ^15.0.0-0
+      next: ^14.0.0-0 || ^15.0.0-0
       nodemailer: ^6.6.5
       react: ^18.2.0 || ^19.0.0-0
     peerDependenciesMeta:
@@ -7476,6 +7464,11 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
+  yaml@2.6.0:
+    resolution: {integrity: sha512-a6ae//JvKDEra2kdi1qzCyrJW/WZCgFi8ydDV+eXExl95t+5R+ijnqHJbz9tmMh8FUjx3iv2fCQ4dclAQlO2UQ==}
+    engines: {node: '>= 14'}
+    hasBin: true
+
   yargs-parser@18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==}
     engines: {node: '>=6'}
@@ -7536,7 +7529,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@auth/core@0.32.0':
+  '@auth/core@0.35.3':
     dependencies:
       '@panva/hkdf': 1.2.1
       '@types/cookie': 0.6.0
@@ -9867,7 +9860,7 @@ snapshots:
       semver: 7.6.3
       strip-ansi: 5.2.0
       wcwidth: 1.0.1
-      yaml: 2.5.1
+      yaml: 2.6.0
     transitivePeerDependencies:
       - encoding
 
@@ -10380,21 +10373,8 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.7.0
 
-  '@t3-oss/env-core@0.10.1(typescript@5.6.3)(zod@3.23.8)':
-    dependencies:
-      zod: 3.23.8
-    optionalDependencies:
-      typescript: 5.6.3
-
   '@t3-oss/env-core@0.11.1(typescript@5.6.3)(zod@3.23.8)':
     dependencies:
-      zod: 3.23.8
-    optionalDependencies:
-      typescript: 5.6.3
-
-  '@t3-oss/env-nextjs@0.10.1(typescript@5.6.3)(zod@3.23.8)':
-    dependencies:
-      '@t3-oss/env-core': 0.10.1(typescript@5.6.3)(zod@3.23.8)
       zod: 3.23.8
     optionalDependencies:
       typescript: 5.6.3
@@ -13452,9 +13432,9 @@ snapshots:
 
   nested-error-stacks@2.0.1: {}
 
-  next-auth@5.0.0-beta.19(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-auth@5.0.0-beta.22(next@14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@auth/core': 0.32.0
+      '@auth/core': 0.35.3
       next: 14.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
@@ -13796,7 +13776,7 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.4.47):
     dependencies:
       lilconfig: 3.1.2
-      yaml: 2.5.1
+      yaml: 2.6.0
     optionalDependencies:
       postcss: 8.4.47
 
@@ -15317,6 +15297,8 @@ snapshots:
   yaml@1.10.2: {}
 
   yaml@2.5.1: {}
+
+  yaml@2.6.0: {}
 
   yargs-parser@18.1.3:
     dependencies:

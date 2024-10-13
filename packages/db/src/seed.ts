@@ -6,6 +6,8 @@ import type {
 } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 
+import { env } from './env.js'
+
 const db = new PrismaClient()
 
 const assetsPath = '/app/apps/web/uploads'
@@ -270,6 +272,19 @@ const CITY_CATEGORIES = [
 >[]
 
 async function main() {
+  await db.user.upsert({
+    where: {
+      phone: env.ADMIN_USERNAME!,
+    },
+    update: {},
+    create: {
+      phone: env.ADMIN_USERNAME!,
+      password: env.ADMIN_PASSWORD,
+      role: 'ADMIN',
+      name: '',
+    },
+  })
+
   await Promise.all(
     CITY_CATEGORIES.map(({ category, price, cities }) =>
       db.cityCategoryPrice.upsert({
@@ -300,8 +315,7 @@ async function main() {
   )
 
   // @ts-expect-error ...
-  // eslint-disable-next-line no-restricted-properties
-  if (process.env.NODE_ENV === 'production') PRODUCTS.length = 3
+  if (env.NODE_ENV === 'production') PRODUCTS.length = 3
 
   await Promise.all(
     PRODUCTS.map(({ variants, ...product }) =>

@@ -1,3 +1,5 @@
+export const bcryptSalt = 10
+
 export const assetEP = `/api/assets`
 
 export const ASSETS = {
@@ -81,4 +83,18 @@ export const AR = {
   },
 } as const
 
-export const bcryptSalt = 10
+export const loginFormInputs = [
+  {
+    type: 'text',
+    label: 'رقم التليفون',
+    name: 'phone',
+    placeholder: PLACEHOLDER.form.phone,
+  },
+  {
+    type: 'password',
+    label: 'كلمة السر',
+    name: 'password',
+    placeholder: PLACEHOLDER.form.password,
+    autoComplete: 'current-password',
+  },
+] as const

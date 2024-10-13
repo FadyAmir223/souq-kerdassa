@@ -1,6 +1,6 @@
 import { Home, Package, ShoppingCart, Users } from 'lucide-react'
 
-import { PAGES } from '../../_utils/constants'
+import { PAGES } from '../../../_utils/constants'
 import ActiveOrdersCount from '../active-orders-count'
 import NavLink from './nav-link'
 

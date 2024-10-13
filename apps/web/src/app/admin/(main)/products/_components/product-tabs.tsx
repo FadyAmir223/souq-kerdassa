@@ -28,8 +28,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api } from '@/trpc/react'
 
+import { PAGES } from '../../../_utils/constants'
 import AdminPagination from '../../_components/admin-pagination'
-import { PAGES } from '../../_utils/constants'
 import { tabs } from '../_utils/tabs'
 import ProductItem from './product-item'
 

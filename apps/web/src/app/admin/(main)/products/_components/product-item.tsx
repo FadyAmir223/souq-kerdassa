@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { TableCell, TableRow } from '@/components/ui/table'
 
-import { PAGES } from '../../_utils/constants'
+import { PAGES } from '../../../_utils/constants'
 import DeleteProductAdmin from './delete-product-admin'
 import EditProductStatusAdmin from './edit-product-status-admin'
 

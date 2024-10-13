@@ -22,11 +22,13 @@ declare module 'next-auth' {
     user: {
       id: PrismaUser['id']
       phone?: PrismaUser['phone']
+      role?: PrismaUser['role']
     } & DefaultSession['user']
   }
 
   interface User {
     phone?: PrismaUser['phone']
+    role?: PrismaUser['role']
   }
 }
 
@@ -59,6 +61,7 @@ export const authConfig = {
           id: user.id,
           name: user.name,
           phone: user.phone,
+          role: user.role,
         }
       },
     }),
@@ -75,6 +78,7 @@ export const authConfig = {
           id: opts.user.id,
           name: opts.user.name,
           phone: opts.user.phone,
+          role: opts.user.role,
         },
       }
     },
@@ -88,10 +92,6 @@ export const authConfig = {
 
       return { id: session?.sessionToken }
     },
-
-    // TODO: try redirection to be deterministic (redirectTo!!)
-    // redirect(params) {
-    // },
   },
 
   jwt: {

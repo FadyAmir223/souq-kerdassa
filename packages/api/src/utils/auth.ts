@@ -1,9 +1,9 @@
 import { signIn } from '@repo/auth'
 import type { LoginFormSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
-// import { AuthError } from 'next-auth'
+import { AuthError } from 'next-auth'
 
-export async function credentialSignIn({ phone, password }: LoginFormSchema) {
+export async function credentialsSignIn({ phone, password }: LoginFormSchema) {
   try {
     await signIn('credentials', {
       phone,
@@ -11,10 +11,7 @@ export async function credentialSignIn({ phone, password }: LoginFormSchema) {
       redirect: false,
     })
   } catch (error) {
-    // ? why this is falsy if exported from '@repo/auth despite being the same class?
-    // if (error instanceof AuthError)
-
-    if (error && typeof error === 'object' && 'type' in error) {
+    if (error instanceof AuthError) {
       if (error.type === 'CredentialsSignin')
         throw new TRPCError({
           code: 'UNAUTHORIZED',

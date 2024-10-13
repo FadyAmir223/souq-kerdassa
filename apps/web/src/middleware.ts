@@ -2,28 +2,38 @@ import { auth } from '@repo/auth'
 import { uuidSchema } from '@repo/validators'
 import { NextResponse } from 'next/server'
 
-import { isAuthenticated } from '@/utils/is-authenticated'
+import { PAGES as ADMIN_PAGES } from '@/app/admin/_utils/constants'
 
 import { checkPublicRoute } from './utils/check-public-route'
 import { PAGES, SEARCH_PARAMS } from './utils/constants'
 
-export default auth(async (req) => {
+export default auth((req) => {
   const { nextUrl } = req
 
   if (nextUrl.pathname.startsWith('/admin')) {
-    const authHeaders =
-      req.headers.get('Authorization') ?? req.headers.get('authorization')
+    const isAuthRoute = nextUrl.pathname === ADMIN_PAGES.login
+    const isLoggedIn = req.cookies.get('isAdmin')?.value === 'true'
 
-    if ((await isAuthenticated(authHeaders)) === false)
-      return new NextResponse('Unauthorized', {
-        status: 401,
-        headers: { 'WWW-Authenticate': 'Basic' },
-      })
+    if (isAuthRoute) {
+      if (!isLoggedIn) return
+      return NextResponse.redirect(new URL(ADMIN_PAGES.dashboard, nextUrl))
+    }
 
     if (nextUrl.pathname === '/admin')
-      return NextResponse.redirect(new URL('/admin/dashboard', req.url))
+      return NextResponse.redirect(new URL(ADMIN_PAGES.dashboard, nextUrl))
 
-    return
+    if (isLoggedIn) return
+
+    let redirectTo = nextUrl.pathname
+    if (nextUrl.search) redirectTo += nextUrl.search
+    const encodedRedirectTo = encodeURIComponent(redirectTo)
+
+    return NextResponse.redirect(
+      new URL(
+        `${ADMIN_PAGES.login}?${SEARCH_PARAMS.redirectTo}=${encodedRedirectTo}`,
+        nextUrl,
+      ),
+    )
   }
 
   // req.auth doesn't support database strategy because dbs doesn't support edge
@@ -32,19 +42,13 @@ export default auth(async (req) => {
 
   const cookie = req.cookies.get('authjs.session-token')?.value
 
-  const isLoggedIn = uuidSchema.safeParse(cookie).success
+  // @ts-expect-error ...
   const isAuthRoute = PAGES.authRoutes().includes(nextUrl.pathname)
+  const isLoggedIn = uuidSchema.safeParse(cookie).success
 
   if (isAuthRoute) {
     if (!isLoggedIn) return
-
-    return NextResponse.redirect(
-      new URL(
-        nextUrl.searchParams.get(SEARCH_PARAMS.redirectTo) ??
-          PAGES.defaultLoginRedirect(),
-        nextUrl,
-      ),
-    )
+    return NextResponse.redirect(new URL(PAGES.defaultLoginRedirect(), nextUrl))
   }
 
   const isPublicRoute = checkPublicRoute(nextUrl.pathname)

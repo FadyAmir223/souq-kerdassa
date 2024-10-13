@@ -10,6 +10,7 @@ export async function getUserByPhone(phone: User['phone']) {
         name: true,
         phone: true,
         password: true,
+        role: true,
       },
     })
   } catch {

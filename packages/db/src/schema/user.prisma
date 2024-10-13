@@ -4,6 +4,7 @@ model User {
   name     String
   phone    String  @unique
   password String?
+  role     Role    @default(USER)
 
   addresses Address[]
   reviews   Review[]
@@ -16,6 +17,11 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@index([phone])
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model Session {
