@@ -8,8 +8,4 @@ const envSchema = z.object({
   ADMIN_PASSWORD: z.string().min(1),
 })
 
-export const env = envSchema.parse({
-  NODE_ENV: process.env.NODE_ENV,
-  ADMIN_USERNAME: process.env.ADMIN_USERNAME,
-  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
-})
+export const env = envSchema.parse(process.env)

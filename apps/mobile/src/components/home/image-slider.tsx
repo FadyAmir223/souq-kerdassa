@@ -1,8 +1,8 @@
 import { Image, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 
-import landing1 from '@/assets/images/landing/1.png'
-import landing2 from '@/assets/images/landing/2.png'
+import landing1 from '@/assets/images/landing/1.jpg'
+import landing2 from '@/assets/images/landing/2.jpg'
 
 export default function ImageSlider() {
   return (
