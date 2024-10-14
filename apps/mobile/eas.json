@@ -42,7 +42,6 @@
     },
     "production": {
       "extends": "base",
-      "autoIncrement": true,
       "env": {
         "APP_VARIANT": "production"
       }
