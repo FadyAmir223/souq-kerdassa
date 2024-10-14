@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - v*.preview
 
 jobs:
   build:
@@ -48,10 +50,13 @@ jobs:
       - name: Build Android app
         run: |
           cd ./apps/mobile
-          eas build --platform android --local --no-wait --profile preview --output ${{ github.workspace }}/app-release.apk
+          eas build --platform android --local --no-wait --profile preview --output ${{ github.workspace }}/app.preview.apk
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: app-release
-          path: ${{ github.workspace }}/app-release.apk
+          tag: ${{ github.sha }}
+          files: ${{ github.workspace }}/app.preview.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
