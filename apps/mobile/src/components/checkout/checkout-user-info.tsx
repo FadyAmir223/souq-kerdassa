@@ -7,10 +7,10 @@ export default function CheckoutUserInfo() {
 
   return (
     <View className='mb-6 mt-10'>
-      <Text className='mb-2 text-2xl font-bold'>معلومات التواصل</Text>
+      <Text className='mb-2 self-start text-2xl font-bold'>معلومات التواصل</Text>
       <View className='gap-y-4'>
         <View>
-          <Text className='mb-1 text-xl font-bold'>الإسم</Text>
+          <Text className='mb-1 self-start text-xl font-bold'>الإسم</Text>
           <TextInput
             id='name'
             value={user?.name ?? ''}
@@ -19,7 +19,7 @@ export default function CheckoutUserInfo() {
           />
         </View>
         <View>
-          <Text className='mb-1 text-xl font-bold'>رقم التليفون</Text>
+          <Text className='mb-1 self-start text-xl font-bold'>رقم التليفون</Text>
           <TextInput
             id='phone'
             value={user?.phone ?? ''}

@@ -24,14 +24,16 @@ export default function ProductDetails({ productId }: ProductDetailsProps) {
         </Text>
         <ReviewsRating productId={productId} />
       </View>
-      <Text className='mb-5 text-4xl font-bold text-primary'>
+      <Text className='ios:self-start mb-5 text-4xl font-bold text-primary'>
         {product.price} جنية
       </Text>
 
       <AddToCart product={product} />
 
       <View className='mt-8'>
-        <Text className='mb-3 mt-10 text-3xl font-bold text-primary'>الوصف</Text>
+        <Text className='ios:self-start mb-3 mt-10 text-3xl font-bold text-primary'>
+          الوصف
+        </Text>
         <Text className='text-xl font-semibold'>{product.description}</Text>
       </View>
     </>

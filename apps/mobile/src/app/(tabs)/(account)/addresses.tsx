@@ -11,7 +11,7 @@ export default function ProfileScreen() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <ScrollView
-        className='px-4 pb-2'
+        className='mx-6 pb-2 pt-6'
         style={Platform.select({
           android: {
             marginTop: StatusBar.currentHeight,

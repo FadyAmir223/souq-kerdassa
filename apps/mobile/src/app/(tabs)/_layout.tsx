@@ -1,7 +1,7 @@
 import Entypo from '@expo/vector-icons/Entypo'
 import { useCombinedStore } from '@repo/store/mobile'
 import { Tabs } from 'expo-router'
-import { Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 
 export default function TabsNavigation() {
   const cartTotalQuantity = useCombinedStore((s) => s.getCartTotalQuantity())
@@ -13,6 +13,7 @@ export default function TabsNavigation() {
         tabBarInactiveTintColor: '#333333',
         tabBarLabelStyle: { fontSize: 14, fontWeight: '700' },
         tabBarStyle: {
+          backgroundColor: Platform.OS === 'ios' ? '#cccccc' : undefined,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           borderTopWidth: 0,

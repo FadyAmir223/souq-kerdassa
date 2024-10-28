@@ -18,7 +18,7 @@ export default function SimilarProducts() {
 
   return (
     <View className='pt-14'>
-      <Text className='mb-3 text-3xl font-bold'>قد تعجبك</Text>
+      <Text className='mb-3 self-start text-3xl font-bold'>قد تعجبك</Text>
 
       {/* TODO: real relevance */}
       {/* @ts-expect-error page & limit has default */}

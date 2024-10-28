@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 export default function ProductCardSkeleton() {
   return (
-    <View className='animate-pulse overflow-hidden rounded-lg'>
+    <View className='overflow-hidden rounded-lg'>
       <View className='aspect-[83/100] bg-neutral-500/50' />
 
       <View className='bg-white p-3'>

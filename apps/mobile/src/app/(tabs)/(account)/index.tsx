@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useCombinedStore } from '@repo/store/mobile'
 import type { EditProfileSchema } from '@repo/validators'
 import { editProfileSchema } from '@repo/validators'
 import { Controller, useForm } from 'react-hook-form'
@@ -32,6 +33,7 @@ const inputs = [
 export default function ProfileScreen() {
   const { user } = useUser()
   const logout = useSignOut()
+  const toggleLoggedIn = useCombinedStore((s) => s.toggleLoggedIn)
 
   const {
     control,
@@ -60,7 +62,7 @@ export default function ProfileScreen() {
     onSuccess: () => {
       Toast.show({
         text1: 'تم تحديث البيانات',
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },
@@ -68,7 +70,7 @@ export default function ProfileScreen() {
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },
@@ -86,7 +88,7 @@ export default function ProfileScreen() {
       behavior='padding'
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
-      <View className='px-4 pb-2 pt-6'>
+      <View className='px-6 pb-2 pt-6'>
         <View className='gap-y-2.5'>
           {inputs.map(({ name, label, ...props }) => (
             <Controller
@@ -95,7 +97,9 @@ export default function ProfileScreen() {
               name={name}
               render={({ field: { value, onChange, onBlur } }) => (
                 <View>
-                  <Text className='mb-2 text-2xl font-semibold'>{label}</Text>
+                  <Text className='mb-2 self-start text-2xl font-semibold'>
+                    {label}
+                  </Text>
                   <TextInput
                     className='mb-1 w-full rounded-md border border-black px-4 py-1.5 text-right text-2xl'
                     value={value}
@@ -105,7 +109,7 @@ export default function ProfileScreen() {
                     autoCapitalize='none'
                     {...props}
                   />
-                  <Text className='h-6 text-xl font-semibold text-destructive'>
+                  <Text className='h-6 self-start text-xl font-semibold text-destructive'>
                     {errors[name]?.message}
                   </Text>
                 </View>
@@ -129,7 +133,10 @@ export default function ProfileScreen() {
 
         <Pressable
           className='mt-24 self-end rounded-md bg-primary px-4 py-2 shadow-md active:scale-[0.98]'
-          onPress={() => logout()}
+          onPress={async () => {
+            toggleLoggedIn()
+            await logout()
+          }}
         >
           <Text className='text-xl text-white'>تسجيل الخروج</Text>
         </Pressable>

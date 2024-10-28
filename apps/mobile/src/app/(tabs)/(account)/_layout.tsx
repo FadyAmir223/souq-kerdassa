@@ -25,9 +25,9 @@ export const MaterialTopTabs = withLayoutContext<
 >(Navigator)
 
 export default function TabsAccountNavigation() {
-  const { user, isFetching } = useUser()
+  const { user, isLoading } = useUser()
 
-  if (isFetching)
+  if (isLoading)
     return (
       <View className='flex-1 items-center justify-center'>
         <ActivityIndicator size='large' />
@@ -58,7 +58,7 @@ export default function TabsAccountNavigation() {
             justifyContent: 'center',
           },
           tabBarIndicatorStyle: {
-            left: '16.67%',
+            left: Platform.OS === 'android' ? '16.67%' : '22%',
           },
         }}
       >

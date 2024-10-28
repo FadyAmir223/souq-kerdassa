@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       asChild
       className='size-full flex-1'
     >
-      <Pressable className='overflow-hidden rounded-lg shadow-lg'>
+      <Pressable className='overflow-hidden rounded-lg border border-black'>
         <View className='bg-neutral-500/50'>
           <Image
             source={{ uri: image }}
@@ -29,7 +29,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </View>
 
         <View className='bg-white p-3'>
-          <Text className='text-center text-2xl font-bold'>{name}</Text>
+          <Text className='text-center text-3xl font-bold'>{name}</Text>
           <View className='my-2 flex-row items-center justify-center space-x-2'>
             <StarRating rating={rating} />
             <Text className='text-lg'>({reviewsCount})</Text>

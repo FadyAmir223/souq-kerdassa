@@ -14,7 +14,7 @@ export default function CheckoutCartItem({ item }: CheckoutCartItemProps) {
   return (
     <View
       className={cn(
-        'relative flex-row gap-x-3 rounded-md bg-white p-2.5 shadow-sm',
+        'android:shadow-sm ios:border ios:border-black relative flex-row gap-x-3 rounded-md bg-white p-2.5',
         { 'opacity-50': item.quantity === 0 },
       )}
     >

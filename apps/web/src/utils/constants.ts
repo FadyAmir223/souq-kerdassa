@@ -1,9 +1,11 @@
+import { env } from '@/lib/env'
+
 export const bcryptSalt = 10
 
 export const assetEP = `/api/assets`
 
 export const ASSETS = {
-  path: '/app/apps/web/uploads',
+  path: env.NODE_ENV === 'production' ? '/app/apps/web/uploads' : 'uploads',
   images: `${assetEP}/images`,
 } as const
 

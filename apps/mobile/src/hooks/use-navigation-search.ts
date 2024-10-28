@@ -5,6 +5,7 @@ import type { SearchBarProps } from 'react-native-screens'
 const defaultSearchOptions: SearchBarProps = {
   tintColor: '#c82d2d',
   hideWhenScrolling: false,
+  cancelButtonText: 'إلغاء',
 }
 
 export default function useNavigationSearch({
@@ -12,15 +13,12 @@ export default function useNavigationSearch({
 }: {
   searchBarOptions?: SearchBarProps
 }) {
-  const [search, setSearch] = useState('')
-
   const navigation = useNavigation()
+  const [search, setSearch] = useState('')
 
   const handleOnChangeText: SearchBarProps['onChangeText'] = ({
     nativeEvent: { text },
-  }) => {
-    setSearch(text)
-  }
+  }) => setSearch(text)
 
   useLayoutEffect(() => {
     navigation.setOptions({

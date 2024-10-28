@@ -39,11 +39,11 @@ export default function CheckoutItemsSection() {
   )
 
   useEffect(() => {
-    if (!isHydrated) return setHydrated(true)
+    setHydrated(true)
 
     for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
     resetOverQuantities()
-  }, [isHydrated]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isHydrated && cart.length === 0) router.replace(PAGES.public.main)

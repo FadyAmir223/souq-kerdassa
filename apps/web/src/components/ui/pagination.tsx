@@ -5,11 +5,10 @@ import {
 } from '@radix-ui/react-icons'
 import * as React from 'react'
 
+import LinkWithParams from '@/app/(app)/_components/link-with-params'
 import type { ButtonProps } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
-
-import LinkWithParams from '../../app/(app)/_components/link-with-params'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav

@@ -46,23 +46,23 @@ export default function CheckoutAddresses() {
             },
           )}
         >
-          <Text className='text-xl font-bold'>
+          <Text className='self-start text-xl font-bold'>
             <Text className='text-2xl'>المدينة: </Text>
             {address.city.name}
           </Text>
-          <Text className='text-xl font-bold'>
+          <Text className='self-start text-xl font-bold'>
             <Text className='text-2xl'>المنطقة: </Text>
             {address.region}
           </Text>
-          <Text className='text-xl font-bold'>
+          <Text className='self-start text-xl font-bold'>
             <Text className='text-2xl'>الشارع: </Text>
             {address.street}
           </Text>
-          <Text className='text-xl font-bold'>
+          <Text className='self-start text-xl font-bold'>
             <Text className='text-2xl'>المبنى: </Text>
             {address.building}
           </Text>
-          <Text className='text-xl font-bold'>
+          <Text className='self-start text-xl font-bold'>
             <Text className='text-2xl'>علامة مميزة: </Text>
             {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
             {address.mark || 'لا يوجد'}

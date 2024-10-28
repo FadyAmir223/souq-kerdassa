@@ -22,7 +22,10 @@ export function Addresses() {
   return (
     <View className='gap-4'>
       {addresses?.map((address) => (
-        <View key={address.id} className='rounded-md bg-white px-4 py-5 shadow-md'>
+        <View
+          key={address.id}
+          className='ios:border ios:border-black android:shadow-md rounded-md bg-white px-4 py-5'
+        >
           <View className='mb-3 flex-row justify-between'>
             <FontAwesome6 name='location-dot' size={24} />
 
@@ -34,23 +37,23 @@ export function Addresses() {
           </View>
 
           <View>
-            <Text className='text-xl font-bold'>
+            <Text className='self-start text-xl font-bold'>
               <Text className='text-2xl'>المدينة: </Text>
               {address.city.name}
             </Text>
-            <Text className='text-xl font-bold'>
+            <Text className='self-start text-xl font-bold'>
               <Text className='text-2xl'>المنطقة: </Text>
               {address.region}
             </Text>
-            <Text className='text-xl font-bold'>
+            <Text className='self-start text-xl font-bold'>
               <Text className='text-2xl'>الشارع: </Text>
               {address.street}
             </Text>
-            <Text className='text-xl font-bold'>
+            <Text className='self-start text-xl font-bold'>
               <Text className='text-2xl'>المبنى: </Text>
               {address.building}
             </Text>
-            <Text className='text-xl font-bold'>
+            <Text className='self-start text-xl font-bold'>
               <Text className='text-2xl'>علامة مميزة: </Text>
               {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
               {address.mark || 'لا يوجد'}

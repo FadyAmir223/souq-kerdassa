@@ -33,7 +33,9 @@ export default function CartItems() {
 
   useEffect(() => {
     setHydrated(true)
-  }, [])
+
+    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isHydrated)
     return (

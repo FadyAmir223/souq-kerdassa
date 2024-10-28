@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useCombinedStore } from '@repo/store/mobile'
 import type { LoginFormSchema } from '@repo/validators'
 import { loginFormSchema } from '@repo/validators'
 import { Link, useLocalSearchParams, useRouter } from 'expo-router'
@@ -41,6 +42,7 @@ export default function ProfileScreen() {
   const searchParams = useLocalSearchParams<{ redirectTo?: string }>()
   const utils = api.useUtils()
   const router = useRouter()
+  const toggleLoggedIn = useCombinedStore((s) => s.toggleLoggedIn)
 
   const {
     control,
@@ -58,10 +60,11 @@ export default function ProfileScreen() {
   const loginUser = api.auth.login.useMutation({
     onSuccess: async ({ success, sessionId }) => {
       if (!success || !sessionId) return
+      setToken(sessionId)
+      toggleLoggedIn()
 
       try {
-        setToken(sessionId)
-        await utils.invalidate()
+        await utils.auth.getSession.refetch()
 
         // @ts-expect-error redirectTo is valid route
         router.replace(searchParams.redirectTo ?? '/(account)/')
@@ -69,7 +72,7 @@ export default function ProfileScreen() {
         Toast.show({
           type: 'error',
           text1: 'حدث خطأ',
-          text1Style: { fontSize: 18 },
+          text1Style: { fontSize: 18, textAlign: 'left' },
           position: 'bottom',
         })
       }
@@ -78,7 +81,7 @@ export default function ProfileScreen() {
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },
@@ -103,14 +106,14 @@ export default function ProfileScreen() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
       >
         <ScrollView
-          className='px-6 py-4'
+          className='mx-4'
           style={Platform.select({
             android: {
               marginTop: StatusBar.currentHeight,
             },
           })}
         >
-          <Text className='mb-5 text-3xl font-bold'>تسجيل الدخول</Text>
+          <Text className='mb-5 self-start text-3xl font-bold'>تسجيل الدخول</Text>
 
           <View className='gap-y-2.5'>
             {inputs.map(({ name, label, ...props }) => (
@@ -120,7 +123,9 @@ export default function ProfileScreen() {
                 name={name}
                 render={({ field: { value, onChange, onBlur } }) => (
                   <View>
-                    <Text className='mb-2 text-2xl font-semibold'>{label}</Text>
+                    <Text className='mb-2 self-start text-2xl font-semibold'>
+                      {label}
+                    </Text>
                     <TextInput
                       className='mb-1 w-full rounded-md border border-black px-4 py-1.5 text-right text-2xl'
                       value={value}
@@ -130,7 +135,7 @@ export default function ProfileScreen() {
                       autoCapitalize='none'
                       {...props}
                     />
-                    <Text className='h-6 text-xl font-semibold text-destructive'>
+                    <Text className='h-6 self-start text-xl font-semibold text-destructive'>
                       {errors[name]?.message}
                     </Text>
                   </View>

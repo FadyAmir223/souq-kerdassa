@@ -1,7 +1,7 @@
 import type { ProductsByFiltersSchema } from '@repo/validators'
 import { FlashList } from '@shopify/flash-list'
 import { Link } from 'expo-router'
-import { Text, View } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 
 import ImageSlider from '@/components/home/image-slider'
 import ProductMiniList from '@/components/product/product-mini-list'
@@ -20,11 +20,11 @@ const seasonProducts = [
 
 export default function HomeScreen() {
   return (
-    <View className='mb-2 flex-1 flex-row px-6'>
+    <SafeAreaView className='mx-6 mb-2 flex-1'>
       <FlashList
         ListHeaderComponent={ImageSlider}
         data={seasonProducts}
-        estimatedItemSize={6}
+        estimatedItemSize={3}
         keyExtractor={({ label }) => label}
         renderItem={({ item: { label, filter } }) => (
           <View className='gap-4'>
@@ -48,6 +48,6 @@ export default function HomeScreen() {
         ItemSeparatorComponent={() => <View className='h-10' />}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   )
 }

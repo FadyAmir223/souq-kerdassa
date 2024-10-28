@@ -29,7 +29,7 @@ export default function CartPage() {
             </Text>
           </View>
 
-          <View className='mb-14 mt-4 flex-row flex-wrap justify-between rounded-md bg-white'>
+          <View className='ios:border ios:border-black mb-14 mt-4 flex-row flex-wrap justify-between rounded-md bg-white'>
             {iconsSection.map(({ image, label }) => (
               <View key={label} className='w-1/2 p-2'>
                 <Image source={image} className='mx-auto w-14' />

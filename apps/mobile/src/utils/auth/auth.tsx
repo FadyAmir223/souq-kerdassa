@@ -24,11 +24,12 @@ export const signIn = async () => {
 }
 
 export const useUser = () => {
-  const { data: session, isFetching } = api.auth.getSession.useQuery(undefined, {
+  const { data: session, isLoading } = api.auth.getSession.useQuery(undefined, {
     staleTime: Infinity,
     gcTime: Infinity,
   })
-  return { user: session?.user ?? null, isFetching }
+
+  return { user: session?.user ?? null, isLoading }
 }
 
 export const useSignIn = (redirectTo?: Href<string>) => {

@@ -1,12 +1,11 @@
-import { Entypo, FontAwesome6, Ionicons } from '@expo/vector-icons'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { Entypo, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { RouterOutputs } from '@repo/api'
 import type { AddressSchema } from '@repo/validators'
 import { addressSchema } from '@repo/validators'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { Modal, Pressable, Text, TextInput, View } from 'react-native'
+import { Modal, Platform, Pressable, Text, TextInput, View } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import Toast from 'react-native-toast-message'
 
@@ -134,7 +133,7 @@ export default function ActionAddressForm({
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },
@@ -172,7 +171,7 @@ export default function ActionAddressForm({
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },
@@ -226,12 +225,14 @@ export default function ActionAddressForm({
         onRequestClose={() => setOpen(false)}
       >
         <View className='m-5 rounded-md bg-white p-4 shadow-md'>
-          <Pressable onPress={() => setOpen(false)}>
-            <Ionicons name='close' size={24} />
+          <Pressable className='ios:mt-6' onPress={() => setOpen(false)}>
+            <Ionicons name='close' size={Platform.OS === 'android' ? 24 : 30} />
           </Pressable>
 
-          <Text className='text-2xl font-bold'>{labels[action].title}</Text>
-          <Text className='mb-4 text-xl font-bold text-muted-foreground'>
+          <Text className='self-start text-2xl font-bold'>
+            {labels[action].title}
+          </Text>
+          <Text className='mb-4 self-start text-xl font-bold text-muted-foreground'>
             {labels[action].description}
           </Text>
 
@@ -241,7 +242,9 @@ export default function ActionAddressForm({
               name='cityId'
               render={({ field: { value, onChange } }) => (
                 <View>
-                  <Text className='mb-2 text-2xl font-semibold'>المحافظة</Text>
+                  <Text className='mb-2 self-start text-2xl font-semibold'>
+                    المحافظة
+                  </Text>
 
                   <SelectDropdown
                     data={cities ?? []}
@@ -284,7 +287,7 @@ export default function ActionAddressForm({
                     showsVerticalScrollIndicator={false}
                   />
 
-                  <Text className='h-6 text-xl font-semibold text-destructive'>
+                  <Text className='h-6 self-start text-xl font-semibold text-destructive'>
                     {errors.cityId?.message}
                   </Text>
                 </View>
@@ -298,7 +301,9 @@ export default function ActionAddressForm({
                 name={name}
                 render={({ field: { value, onChange, onBlur } }) => (
                   <View>
-                    <Text className='mb-2 text-2xl font-semibold'>{label}</Text>
+                    <Text className='mb-2 self-start text-2xl font-semibold'>
+                      {label}
+                    </Text>
                     <TextInput
                       className='mb-1 w-full rounded-md border border-black px-4 py-1.5 text-right text-2xl'
                       value={value ?? undefined}
@@ -308,7 +313,7 @@ export default function ActionAddressForm({
                       autoCapitalize='none'
                       {...props}
                     />
-                    <Text className='h-6 text-xl font-semibold text-destructive'>
+                    <Text className='h-6 self-start text-xl font-semibold text-destructive'>
                       {errors[name]?.message}
                     </Text>
                   </View>

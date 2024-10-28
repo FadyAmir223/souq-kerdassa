@@ -10,7 +10,8 @@ import { env } from './env.js'
 
 const db = new PrismaClient()
 
-const assetsPath = '/app/apps/web/uploads'
+const assetsPath =
+  env.NODE_ENV === 'production' ? '/app/apps/web/uploads' : 'uploads'
 
 const description =
   'تحتوي عبايتنا صيفيه على تفاصيل رائعة مثل التطريزات والزخارف الفاخرة، والتي تضفي على العباية لمسة رائعة من الجمال والأناقة لتحصلي على إطلالة متألقة وأنيقة في المناسبات والحفلات'

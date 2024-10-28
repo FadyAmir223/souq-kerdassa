@@ -34,7 +34,7 @@ export default function CancelOrderButton({ orderId }: CancelOrderButtonProps) {
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },

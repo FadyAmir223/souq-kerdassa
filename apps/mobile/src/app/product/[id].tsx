@@ -24,8 +24,8 @@ export default function ProductByIdScreen() {
   const navigation = useNavigation()
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: '' })
-  }, [navigation])
+    navigation.setOptions({ title: '', headerBackTitle: 'رجوع' })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
     if (product) navigation.setOptions({ title: product.name })

@@ -108,7 +108,7 @@ export default function AddToCart({ product }: AddToCartProps) {
         className='px-6 py-2'
         size='none'
       >
-        اضف إلى عربة التسوق
+        اضف إلى العربة
       </Button>
     </>
   )

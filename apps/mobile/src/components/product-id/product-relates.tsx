@@ -24,7 +24,7 @@ export default function ProductRelates() {
       href={{ pathname: '/product/[id]', params: { id: product.id } }}
       asChild
     >
-      <Pressable className='h-36 flex-row justify-between gap-x-2 gap-y-3 rounded-md bg-white p-2 shadow-md'>
+      <Pressable className='h-36 flex-row justify-between gap-x-2 gap-y-3 rounded-md bg-white p-2 shadow'>
         <View className='aspect-[83/100] overflow-hidden rounded-md bg-neutral-500/50'>
           <Image
             source={{ uri: product.image }}
@@ -41,7 +41,7 @@ export default function ProductRelates() {
             <Text className='text-xl'>({product.reviewsCount})</Text>
           </View>
 
-          <Text className='text-xl font-semibold text-primary/90'>
+          <Text className='self-start text-xl font-semibold text-primary/90'>
             {product.price} جنية
           </Text>
         </View>

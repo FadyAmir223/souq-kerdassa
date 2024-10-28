@@ -10,7 +10,7 @@ export default function RedirectToCheckoutButton() {
 
   const searchParams = useLocalSearchParams<{ redirectTo?: string }>()
 
-  if (searchParams.redirectTo !== '' || addresses?.length === 0) return null
+  if (searchParams.redirectTo !== '/checkout' || addresses?.length === 0) return null
 
   return (
     <View className='mt-8'>

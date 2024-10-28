@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
 }
 
-const roboto = Rubik({
+const rubik = Rubik({
   weight: ['400', '600', '700'],
   subsets: ['arabic'],
   display: 'swap',
@@ -71,7 +71,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang='ar' dir='rtl'>
       <body
         className={cn(
-          roboto.className,
+          rubik.className,
           'flex min-h-dvh flex-col overflow-x-hidden bg-neutral-200',
           env.NODE_ENV === 'development' && 'debug-screens',
         )}

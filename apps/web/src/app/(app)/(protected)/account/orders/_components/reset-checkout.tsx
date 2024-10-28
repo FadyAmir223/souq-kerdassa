@@ -11,18 +11,14 @@ export default function ResetCheckout() {
   const redirectedFrom = useSearchParams().get(SEARCH_PARAMS.redirectedFrom)
   const router = useRouter()
 
-  const { cart, deleteCartItem, resetCart, setSelectedAddress } = useAppStore(
-    useShallow(({ cart, deleteCartItem, resetCart, setSelectedAddress }) => ({
-      cart,
-      deleteCartItem,
+  const { resetCart, setSelectedAddress } = useAppStore(
+    useShallow(({ resetCart, setSelectedAddress }) => ({
       resetCart,
       setSelectedAddress,
     })),
   )
 
   useEffect(() => {
-    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
-
     if (redirectedFrom !== PAGES.protected.buy.checkout) return
 
     router.replace(PAGES.protected.user.orders)

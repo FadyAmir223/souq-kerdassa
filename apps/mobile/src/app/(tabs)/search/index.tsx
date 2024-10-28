@@ -28,7 +28,7 @@ export default function SearchScreen() {
   const products = data as RouterOutputs['product']['byQuery'] | undefined
 
   return (
-    <View className='size-full px-6 pb-2 pt-4'>
+    <View className='ios:mt-28 size-full px-6 pb-2 pt-4'>
       <FlashList
         data={products?.products}
         keyExtractor={({ id }) => id}
@@ -43,7 +43,7 @@ export default function SearchScreen() {
               <ProductCardSkeleton />
             </>
           ) : (
-            <Text className='mt-4 text-center text-2xl font-semibold'>
+            <Text className='ios:mt-16 android:mt-4 text-center text-2xl font-semibold'>
               لا يوجد نتائج بحث
             </Text>
           )

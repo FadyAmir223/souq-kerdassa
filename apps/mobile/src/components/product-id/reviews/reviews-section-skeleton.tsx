@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 export default function ReviewsSectionSkeleton() {
   return (
-    <View className='animate-pulse'>
+    <View>
       <View className='mb-7'>
         <View className='mb-2.5 h-7 w-[13.5rem] rounded-md bg-neutral-500/50' />
         <View className='h-6 w-24 rounded-md bg-neutral-500/50' />

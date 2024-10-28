@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 export default function OrderSkeleton() {
   return (
-    <View className='animate-pulse rounded-md bg-white p-4'>
+    <View className='rounded-md bg-white p-4'>
       <View className='mb-4 flex-row justify-between border-b border-b-gray-400 pb-4'>
         <View>
           <View className='mb-1 h-6 w-24 rounded-md bg-neutral-500/50' />

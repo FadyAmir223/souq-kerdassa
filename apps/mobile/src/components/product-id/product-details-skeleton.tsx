@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 export default function ProductDetailsSkeleton() {
   return (
-    <View className='animate-pulse'>
+    <View>
       <View className='mb-5 aspect-[83/100] w-full rounded-md bg-neutral-500/50' />
 
       <View className='flex-[0.25] flex-row gap-x-3.5'>
@@ -14,7 +14,6 @@ export default function ProductDetailsSkeleton() {
         ))}
       </View>
 
-      {/* animate-pulse */}
       <View className='mt-8 flex-1'>
         <View className='mb-5 h-6 w-36 rounded-md bg-neutral-500/50' />
         <View className='mb-4 h-7 w-44 rounded-md bg-neutral-500/50' />

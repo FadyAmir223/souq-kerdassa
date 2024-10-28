@@ -34,11 +34,14 @@ export function Orders() {
       ) + shippingCost
 
     return (
-      <View key={order.id} className='rounded-md bg-white p-4 shadow-md'>
+      <View
+        key={order.id}
+        className='android:shadow-md ios:border ios:border-black rounded-md bg-white p-4'
+      >
         <View className='mb-4 flex-row justify-between border-b border-b-gray-400 pb-4'>
           <View>
             <Text className='text-xl font-bold'>وقت الطلب</Text>
-            <Text className='inline-block text-black/80'>
+            <Text className='inline-block self-start text-black/80'>
               {formatDistanceToNow(order.createdAt, {
                 addSuffix: true,
                 locale: ar,
@@ -95,11 +98,11 @@ export function Orders() {
               </View>
 
               <View className='w-[10.5rem]'>
-                <Text className='text-lg'>
+                <Text className='self-start text-lg'>
                   <Text className='text-xl font-bold'>الكمية: </Text>
                   {item.quantity}
                 </Text>
-                <Text className='text-lg'>
+                <Text className='self-start text-lg'>
                   <Text className='text-xl font-bold'>السعر: </Text>
                   {item.price}
                 </Text>

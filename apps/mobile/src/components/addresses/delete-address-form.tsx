@@ -30,7 +30,7 @@ export default function DeleteAddressForm({ addressId }: DeleteAddressFormProps)
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },

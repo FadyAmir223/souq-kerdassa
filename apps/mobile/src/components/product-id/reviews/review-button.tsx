@@ -73,7 +73,7 @@ function DeleteReviewButton({ productId, reviewPage }: ReviewButtonProps) {
       Toast.show({
         type: 'success',
         text1: 'تم مسح مراجعتك',
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },
@@ -81,7 +81,7 @@ function DeleteReviewButton({ productId, reviewPage }: ReviewButtonProps) {
       Toast.show({
         type: 'error',
         text1: message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },

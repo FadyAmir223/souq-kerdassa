@@ -11,14 +11,12 @@ export default function CheckoutScreen() {
   const navigation = useNavigation()
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'الشراء',
-    })
+    navigation.setOptions({ title: 'الشراء' })
   }, [navigation])
 
   return (
     <SafeAreaView>
-      <ScrollView className='px-6 pb-2'>
+      <ScrollView className='mx-6 pb-2'>
         <CheckoutItemsSection />
         <CheckoutUserInfo />
         <CheckoutAddressSelection />

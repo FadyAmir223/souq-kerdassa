@@ -13,7 +13,7 @@ import { SEARCH_PARAMS } from '@/utils/constants'
 import CheckoutAddresses from './checkout-addresses'
 
 export default function CheckoutAddressSelection() {
-  const [isOpen, setOpen] = useState(true)
+  const [isOpen, setOpen] = useState(false)
   const router = useRouter()
   const utils = api.useUtils()
 
@@ -49,7 +49,7 @@ export default function CheckoutAddressSelection() {
       Toast.show({
         type: 'error',
         text1: error.message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
 
@@ -65,19 +65,25 @@ export default function CheckoutAddressSelection() {
 
     createOrder.mutate({
       address: selectedAddress,
-      cart,
+      cart: cart.filter(({ quantity }) => quantity > 0),
     })
   }
 
-  const handlePurchaseSuccess = () => {
-    void utils.order.all.invalidate()
-    router.replace(`/orders?${SEARCH_PARAMS.redirectedFrom}=/checkout`)
+  const handlePurchaseSuccess = async () => {
+    setOpen(false)
+    await utils.order.all.invalidate()
+
+    setTimeout(() => {
+      router.replace(`/orders?${SEARCH_PARAMS.redirectedFrom}=/checkout`)
+    }, 50)
   }
 
   return (
     <>
       <View className='mb-16'>
-        <Text className='mb-2 text-2xl font-bold'>اختر عنوان التوصيل</Text>
+        <Text className='mb-2 self-start text-2xl font-bold'>
+          اختر عنوان التوصيل
+        </Text>
 
         <CheckoutAddresses />
       </View>
@@ -98,7 +104,7 @@ export default function CheckoutAddressSelection() {
         )}
       </View>
 
-      <Modal isVisible={isOpen} onBackdropPress={() => setOpen(false)}>
+      <Modal isVisible={isOpen}>
         <View className='rounded-md bg-white p-4 shadow-md'>
           <View className='items-center'>
             <FontAwesome name='check-circle' size={80} color='#15803d' />

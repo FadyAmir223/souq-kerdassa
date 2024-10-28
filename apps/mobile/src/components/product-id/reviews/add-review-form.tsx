@@ -71,7 +71,7 @@ export default function AddReviewForm({
       Toast.show({
         type: 'error',
         text1: error.message,
-        text1Style: { fontSize: 18 },
+        text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
     },

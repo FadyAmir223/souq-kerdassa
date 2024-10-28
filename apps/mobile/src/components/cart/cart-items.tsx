@@ -3,6 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { useCombinedStore } from '@repo/store/mobile'
 import { Link } from 'expo-router'
+import { useEffect } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -23,6 +24,10 @@ export default function CartItems() {
         }),
       ),
     )
+
+  useEffect(() => {
+    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (cart.length === 0)
     return (
@@ -45,7 +50,7 @@ export default function CartItems() {
         {cart.map((item) => (
           <View
             key={item.id + item.season + item.category}
-            className='gap-y-2 rounded-md bg-white p-3'
+            className='ios:border ios:border-black gap-y-2 rounded-md bg-white p-3'
           >
             <View className='flex-row gap-x-5'>
               <Link
@@ -74,7 +79,7 @@ export default function CartItems() {
               </View>
             </View>
 
-            <Text className='text-2xl font-semibold text-primary'>
+            <Text className='ios:self-start text-2xl font-semibold text-primary'>
               {item.price} جنية
             </Text>
 
@@ -133,7 +138,7 @@ export default function CartItems() {
           <Link key={label} href={url} asChild>
             <Pressable
               className={cn(
-                'flex-row items-center justify-between rounded-md px-4 shadow',
+                'android:shadow ios:border ios:border-black flex-row items-center justify-between rounded-md px-4',
                 idx === 0 ? 'flex-row-reverse bg-white' : 'bg-primary',
               )}
             >

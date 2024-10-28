@@ -84,7 +84,7 @@ export default function CheckoutAddressSelection({
 
     createOrder.mutate({
       address: selectedAddress,
-      cart,
+      cart: cart.filter(({ quantity }) => quantity > 0),
     })
   }
 
