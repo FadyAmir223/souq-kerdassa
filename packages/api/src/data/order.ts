@@ -1,7 +1,98 @@
-import type { DB, Order, OrderStatus, Product, User } from '@repo/db/types'
+import type { DB, Order, OrderStatus, Prisma, Product, User } from '@repo/db/types'
 import type { AdminOrdersSchema, CreateOrderSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
 import { startOfMonth, startOfWeek, subMonths, subWeeks } from 'date-fns'
+
+async function changeOrderStatusWithStock({
+  db,
+  filters,
+  from,
+  to,
+}: {
+  db: DB
+  filters: Prisma.OrderUpdateArgs['where']
+  from: OrderStatus
+  to: OrderStatus
+}) {
+  let action: 'none' | 'cancel' | 'order' = 'none'
+  if (
+    (from === 'pending' || from === 'completed') &&
+    (to === 'cancelled' || to === 'refunded')
+  )
+    action = 'cancel'
+  else if (
+    (from === 'cancelled' || from === 'refunded') &&
+    (to === 'pending' || to === 'completed')
+  )
+    action = 'order'
+
+  let productIds: string[] = []
+
+  await db.$transaction(async (tx) => {
+    const { products } = await tx.order.update({
+      where: filters,
+      data: {
+        status: to,
+      },
+      select: {
+        id: action === 'none',
+        products:
+          action !== 'none'
+            ? {
+                select: {
+                  productId: true,
+                  productVariantId: true,
+                  quantity: true,
+                },
+              }
+            : undefined,
+      },
+    })
+
+    if (action === 'none') return
+
+    const groupedCanceledProducts = products.reduce(
+      (acc, item) => {
+        if (acc[item.productId]) acc[item.productId]! += item.quantity
+        else acc[item.productId] = item.quantity
+        return acc
+      },
+      {} as Record<Product['id'], CreateOrderSchema['cart'][number]['quantity']>,
+    )
+
+    productIds = Object.keys(groupedCanceledProducts)
+
+    for (const productId of productIds)
+      await tx.product.update({
+        where: {
+          id: productId,
+        },
+        data: {
+          sales: {
+            [action === 'order' ? 'increment' : 'decrement']:
+              groupedCanceledProducts[productId],
+          },
+        },
+        select: {
+          id: true,
+        },
+      })
+
+    for (const product of products)
+      await tx.productVariant.update({
+        where: {
+          id: product.productVariantId,
+        },
+        data: {
+          stock: {
+            [action === 'order' ? 'decrement' : 'increment']: product.quantity,
+          },
+        },
+      })
+  })
+
+  return productIds
+}
 
 export async function getOrders(db: DB, userId: User['id']) {
   await new Promise((r) => setTimeout(r, 2000))
@@ -99,11 +190,13 @@ export async function createOrder({
     {} as Record<Product['id'], CreateOrderSchema['cart'][number]['quantity']>,
   )
 
+  const productIds = Object.keys(groupedCartProducts)
+
   try {
     const products = await db.product.findMany({
       where: {
         id: {
-          in: Object.keys(groupedCartProducts),
+          in: productIds,
         },
       },
       select: {
@@ -146,14 +239,14 @@ export async function createOrder({
         },
       })
 
-      for (const product of products)
+      for (const productId of productIds)
         await tx.product.update({
           where: {
-            id: product.id,
+            id: productId,
           },
           data: {
             sales: {
-              increment: groupedCartProducts[product.id],
+              increment: groupedCartProducts[productId],
             },
           },
           select: {
@@ -174,8 +267,7 @@ export async function createOrder({
         })
     })
 
-    // productIds
-    return products.map((product) => product.id)
+    return productIds
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)
       if (error.code === 'P2025')
@@ -201,17 +293,11 @@ export async function cancelOrder({
   orderId: Order['id']
 }) {
   try {
-    await db.order.update({
-      where: {
-        id: orderId,
-        userId,
-      },
-      data: {
-        status: 'cancelled',
-      },
-      select: {
-        id: true,
-      },
+    return changeOrderStatusWithStock({
+      db,
+      filters: { id: orderId, userId },
+      from: 'pending',
+      to: 'cancelled',
     })
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)
@@ -431,23 +517,20 @@ export async function getOrderStatistics(db: DB) {
 export async function changeOrderStatus({
   db,
   orderId,
-  status,
+  oldStatus,
+  newStatus,
 }: {
   db: DB
   orderId: Order['id']
-  status: OrderStatus
+  oldStatus: OrderStatus
+  newStatus: OrderStatus
 }) {
   try {
-    await db.order.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        status,
-      },
-      select: {
-        id: true,
-      },
+    return changeOrderStatusWithStock({
+      db,
+      filters: { id: orderId },
+      from: oldStatus,
+      to: newStatus,
     })
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)

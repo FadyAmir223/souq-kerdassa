@@ -55,7 +55,7 @@ export async function uploadImages({
 
     const imagePaths = imageFiles.map(
       ({ name }) =>
-        `${imagesPath}/${Math.floor(Math.random() * 10000)}${path.extname(name).toLowerCase()}`,
+        `${imagesPath}/${Math.floor(Math.random() * 1_000_000)}${path.extname(name).toLowerCase()}`,
     )
 
     await Promise.all(

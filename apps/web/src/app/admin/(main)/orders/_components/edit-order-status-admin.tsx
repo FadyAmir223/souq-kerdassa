@@ -33,18 +33,20 @@ export default function EditOrderStatusAdmin({
   const utils = api.useUtils()
 
   const changeStatus = api.order.admin.changeStatus.useMutation({
-    onMutate: async ({ status }) => {
+    onMutate: async ({ oldStatus }) => {
       await utils.order.admin.all.cancel()
       const filters = { limit: 10, page: currPage, status: activeStatus }
       const oldOrders = utils.order.admin.all.getData(filters) ?? []
 
       const newOrders = oldOrders.map((_order) =>
-        _order.id === order.id ? { ..._order, status } : _order,
+        _order.id === order.id
+          ? { ..._order, status: oldStatus as OrderStatus }
+          : _order,
       )
 
       utils.order.admin.all.setData(filters, newOrders)
 
-      return { oldOrders, oldStatus: order.status, newStatus: status }
+      return { oldOrders, oldStatus: order.status, newStatus: oldStatus }
     },
     onSuccess: (_, __, { oldStatus, newStatus }) => {
       // inconvenient cache invalidation
@@ -87,12 +89,16 @@ export default function EditOrderStatusAdmin({
     },
   })
 
-  const handleOrderStatusChange = (value: AdminOrderStatusSchema) => {
-    if (order.status === value) return
+  const handleOrderStatusChange = (
+    oldStatus: AdminOrderStatusSchema,
+    newStatus: AdminOrderStatusSchema,
+  ) => {
+    if (order.status === newStatus) return
 
     changeStatus.mutate({
       orderId: order.id,
-      status: value,
+      oldStatus,
+      newStatus,
     })
   }
 
@@ -124,7 +130,10 @@ export default function EditOrderStatusAdmin({
                 variant='ghost'
                 className='w-full'
                 onClick={() =>
-                  handleOrderStatusChange(value as AdminOrderStatusSchema)
+                  handleOrderStatusChange(
+                    order.status,
+                    value as AdminOrderStatusSchema,
+                  )
                 }
               >
                 <Badge

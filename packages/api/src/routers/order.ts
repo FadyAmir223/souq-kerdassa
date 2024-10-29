@@ -54,13 +54,15 @@ export const ordersRouter = {
   // TODO: maybe permit canceling just for a certain duration
   cancel: protectedProcedure
     .input(cuidSchema)
-    .mutation(async ({ ctx, input: orderId }) =>
-      cancelOrder({
+    .mutation(async ({ ctx, input: orderId }) => {
+      const productIds = await cancelOrder({
         db: ctx.db,
         userId: ctx.session.user.id,
         orderId,
-      }),
-    ),
+      })
+
+      productIds.forEach((id) => revalidateTag(id))
+    }),
 
   admin: {
     count: adminProcedure
@@ -94,15 +96,19 @@ export const ordersRouter = {
       .input(
         z.object({
           orderId: cuidSchema,
-          status: adminOrderStatusSchema,
+          oldStatus: adminOrderStatusSchema,
+          newStatus: adminOrderStatusSchema,
         }),
       )
-      .mutation(async ({ ctx, input }) =>
-        changeOrderStatus({
+      .mutation(async ({ ctx, input }) => {
+        const productIds = await changeOrderStatus({
           db: ctx.db,
           orderId: input.orderId,
-          status: input.status as OrderStatus,
-        }),
-      ),
+          oldStatus: input.oldStatus as OrderStatus,
+          newStatus: input.newStatus as OrderStatus,
+        })
+
+        productIds.forEach((id) => revalidateTag(id))
+      }),
   } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

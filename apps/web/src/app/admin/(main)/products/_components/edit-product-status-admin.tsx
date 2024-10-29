@@ -1,4 +1,4 @@
-import type { Product } from '@repo/db/types'
+import type { Product, VisibilityStatus } from '@repo/db/types'
 import type { AdminProductStatusSchema } from '@repo/validators'
 
 import { Badge } from '@/components/ui/badge'
@@ -39,7 +39,9 @@ export default function EditProductStatusAdmin({
       const oldProducts = utils.product.admin.all.getData(filters) ?? []
 
       const newProducts = oldProducts.map((_product) =>
-        _product.id === product.id ? { ..._product, visibility } : _product,
+        _product.id === product.id
+          ? { ..._product, visibility: visibility as VisibilityStatus }
+          : _product,
       )
 
       utils.product.admin.all.setData(filters, newProducts)
