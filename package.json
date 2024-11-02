@@ -40,7 +40,6 @@
     "husky": "^9.1.4",
     "lint-staged": "^15.2.8",
     "prettier": "catalog:",
-    "tsc-files": "catalog:",
     "turbo": "^2.0.12"
   },
   "pnpm": {

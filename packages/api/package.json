@@ -36,7 +36,6 @@
     "@types/bcryptjs": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "tsc-files": "catalog:",
     "typescript": "catalog:"
   },
   "prettier": "@repo/prettier-config"

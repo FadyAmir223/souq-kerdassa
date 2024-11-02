@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCombinedStore } from '@repo/store/mobile'
 import type { EditProfileSchema } from '@repo/validators'
 import { editProfileSchema } from '@repo/validators'
 import { Controller, useForm } from 'react-hook-form'
@@ -33,7 +32,6 @@ const inputs = [
 export default function ProfileScreen() {
   const { user } = useUser()
   const logout = useSignOut()
-  const toggleLoggedIn = useCombinedStore((s) => s.toggleLoggedIn)
 
   const {
     control,
@@ -134,7 +132,6 @@ export default function ProfileScreen() {
         <Pressable
           className='mt-24 self-end rounded-md bg-primary px-4 py-2 shadow-md active:scale-[0.98]'
           onPress={async () => {
-            toggleLoggedIn()
             await logout()
           }}
         >

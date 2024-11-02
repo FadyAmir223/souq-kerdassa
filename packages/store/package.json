@@ -37,7 +37,6 @@
     "dotenv-cli": "^7.4.2",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "tsc-files": "catalog:",
     "typescript": "catalog:"
   },
   "prettier": "@repo/prettier-config"

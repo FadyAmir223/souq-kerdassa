@@ -17,7 +17,6 @@ export type CartItem = {
 
 type CartState = {
   cart: CartItem[]
-  isLoggedIn: boolean
 }
 
 type CartActions = {
@@ -35,14 +34,12 @@ type CartActions = {
     }[],
   ) => void
   resetOverQuantities: () => void
-  toggleLoggedIn: () => void
 }
 
 export type CartSlice = CartState & CartActions
 
 const initialState: CartState = {
   cart: [],
-  isLoggedIn: false,
 }
 
 export const createCartSlice: StateCreator<
@@ -119,6 +116,4 @@ export const createCartSlice: StateCreator<
         item.overQuantity ? { ...item, overQuantity: undefined } : item,
       )
     }),
-
-  toggleLoggedIn: () => set((state) => ({ isLoggedIn: !state.isLoggedIn })),
 })

@@ -78,7 +78,6 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
-    "tsc-files": "catalog:",
     "typescript": "catalog:"
   },
   "prettier": "@repo/prettier-config"

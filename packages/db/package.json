@@ -49,7 +49,6 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "prisma": "^5.20.0",
-    "tsc-files": "catalog:",
     "typescript": "catalog:",
     "zod": "catalog:"
   },

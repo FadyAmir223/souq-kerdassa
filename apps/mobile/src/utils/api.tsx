@@ -6,7 +6,6 @@ import { createTRPCReact } from '@trpc/react-query'
 import { useEffect, useState } from 'react'
 import superjson from 'superjson'
 
-import { getToken } from './auth/session-store'
 import { getBaseUrl } from './base-url'
 
 /**
@@ -20,6 +19,8 @@ export { type RouterInputs, type RouterOutputs } from '@repo/api'
  * Use only in _app.tsx
  */
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
+  const token = useCombinedStore((s) => s.token)
+
   const client = api.createClient({
     links: [
       loggerLink({
@@ -35,7 +36,6 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
           const headers = new Map<string, string>()
           headers.set('x-trpc-source', 'expo-react')
 
-          const token = getToken()
           if (token) headers.set('Authorization', `Bearer ${token}`)
           return Object.fromEntries(headers)
         },
@@ -46,12 +46,10 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
   const [trpcClient, setTrpcClient] = useState(() => client)
 
-  const isLoggedIn = useCombinedStore((s) => s.isLoggedIn)
-
   useEffect(() => {
-    if (!isLoggedIn) return
+    if (!token) return
     setTrpcClient(client)
-  }, [isLoggedIn]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [token]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <api.Provider client={trpcClient} queryClient={queryClient}>

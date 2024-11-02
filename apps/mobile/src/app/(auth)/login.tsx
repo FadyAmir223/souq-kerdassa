@@ -18,7 +18,6 @@ import {
 import Toast from 'react-native-toast-message'
 
 import { api } from '@/utils/api'
-import { setToken } from '@/utils/auth/session-store'
 import { PLACEHOLDER, SEARCH_PARAMS } from '@/utils/constants'
 
 const inputs = [
@@ -42,7 +41,7 @@ export default function ProfileScreen() {
   const searchParams = useLocalSearchParams<{ redirectTo?: string }>()
   const utils = api.useUtils()
   const router = useRouter()
-  const toggleLoggedIn = useCombinedStore((s) => s.toggleLoggedIn)
+  const setToken = useCombinedStore((s) => s.setToken)
 
   const {
     control,
@@ -60,8 +59,7 @@ export default function ProfileScreen() {
   const loginUser = api.auth.login.useMutation({
     onSuccess: async ({ success, sessionId }) => {
       if (!success || !sessionId) return
-      setToken(sessionId)
-      toggleLoggedIn()
+      if (setToken) setToken(sessionId)
 
       try {
         await utils.auth.getSession.refetch()
