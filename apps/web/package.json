@@ -60,7 +60,7 @@
     "swiper": "11.1.10",
     "tailwind-merge": "catalog:",
     "tailwindcss-animate": "^1.0.7",
-    "use-debounce": "^10.0.3",
+    "use-debounce": "catalog:",
     "vaul": "^0.9.1",
     "zod": "catalog:",
     "zustand": "catalog:"

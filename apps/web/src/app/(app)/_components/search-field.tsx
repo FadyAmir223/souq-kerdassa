@@ -6,10 +6,9 @@ import { useEffect, useRef, useState } from 'react'
 import { LuSearch } from 'react-icons/lu'
 import { useDebounce } from 'use-debounce'
 
+import { Input } from '@/components/ui/input'
 import { cn } from '@/utils/cn'
 import { PAGES, SEARCH_PARAMS } from '@/utils/constants'
-
-import { Input } from '../../../components/ui/input'
 
 type SearchFieldProps = {
   isHeader?: boolean

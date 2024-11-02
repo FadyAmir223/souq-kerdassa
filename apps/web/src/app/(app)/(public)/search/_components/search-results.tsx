@@ -50,7 +50,7 @@ export default function SearchResults() {
 
   const products = data as RouterOutputs['product']['byQuery'] | undefined
 
-  if (!products && !isFetching)
+  if (products?.products.length === 0 && !isFetching)
     return (
       <p className='mt-8 text-center text-lg font-semibold'>لا يوجد نتائج بحث</p>
     )

@@ -57,6 +57,7 @@
     "react-native-toast-message": "^2.2.1",
     "superjson": "catalog:",
     "tailwind-merge": "catalog:",
+    "use-debounce": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

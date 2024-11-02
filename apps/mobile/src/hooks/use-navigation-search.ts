@@ -1,6 +1,7 @@
 import { useNavigation } from 'expo-router'
 import { useLayoutEffect, useState } from 'react'
 import type { SearchBarProps } from 'react-native-screens'
+import { useDebounce } from 'use-debounce'
 
 const defaultSearchOptions: SearchBarProps = {
   tintColor: '#c82d2d',
@@ -15,6 +16,7 @@ export default function useNavigationSearch({
 }) {
   const navigation = useNavigation()
   const [search, setSearch] = useState('')
+  const [debouncedSearch] = useDebounce(search, 400)
 
   const handleOnChangeText: SearchBarProps['onChangeText'] = ({
     nativeEvent: { text },
@@ -30,5 +32,5 @@ export default function useNavigationSearch({
     })
   }, [navigation, searchBarOptions])
 
-  return search
+  return debouncedSearch
 }
