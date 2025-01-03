@@ -1,4 +1,4 @@
-import type { Product, ProductVariant } from '@repo/db/types'
+import type { Product, ProductVariant, Size } from '@repo/db/types'
 import type { StateCreator } from 'zustand'
 
 import type { UnpersistedSlice } from './unpersisted-slice'
@@ -11,6 +11,7 @@ export type CartItem = {
   variantId: ProductVariant['id']
   season: ProductVariant['season']
   category: ProductVariant['category']
+  size: Size
   quantity: number
   overQuantity?: number
 }
@@ -19,12 +20,17 @@ type CartState = {
   cart: CartItem[]
 }
 
+type ItemArgs = {
+  itemVariantId: ProductVariant['id']
+  itemSize: Size
+}
+
 type CartActions = {
   resetCart: () => void
   addCartItem: (item: Omit<CartItem, 'quantity'>) => void
-  incrementCartItem: (variantId: ProductVariant['id']) => void
-  decrementCartItem: (variantId: ProductVariant['id']) => void
-  deleteCartItem: (variantId: ProductVariant['id']) => void
+  incrementCartItem: ({ itemVariantId, itemSize }: ItemArgs) => void
+  decrementCartItem: ({ itemVariantId, itemSize }: ItemArgs) => void
+  deleteCartItem: ({ itemVariantId, itemSize }: ItemArgs) => void
   getCartTotalPrice: () => CartItem['price']
   getCartTotalQuantity: () => number
   updateOverQuantities: (
@@ -54,7 +60,7 @@ export const createCartSlice: StateCreator<
 
   addCartItem: (item) => {
     const itemIndex = get().cart.findIndex(
-      ({ variantId }) => variantId === item.variantId,
+      ({ variantId, size }) => variantId === item.variantId && size === item.size,
     )
 
     set(({ cart }) => {
@@ -63,9 +69,9 @@ export const createCartSlice: StateCreator<
     })
   },
 
-  incrementCartItem: (itemVariantId) => {
+  incrementCartItem: ({ itemVariantId, itemSize }) => {
     const itemIndex = get().cart.findIndex(
-      ({ variantId }) => variantId === itemVariantId,
+      ({ variantId, size }) => variantId === itemVariantId && size === itemSize,
     )
 
     set(({ cart }) => {
@@ -74,9 +80,9 @@ export const createCartSlice: StateCreator<
     })
   },
 
-  decrementCartItem: (itemVariantId) => {
+  decrementCartItem: ({ itemVariantId, itemSize }) => {
     const itemIndex = get().cart.findIndex(
-      ({ variantId }) => variantId === itemVariantId,
+      ({ variantId, size }) => variantId === itemVariantId && size === itemSize,
     )
 
     set(({ cart }) => {
@@ -86,9 +92,11 @@ export const createCartSlice: StateCreator<
     })
   },
 
-  deleteCartItem: (itemVariantId) =>
+  deleteCartItem: ({ itemVariantId, itemSize }) =>
     set((state) => {
-      state.cart = state.cart.filter(({ variantId }) => variantId !== itemVariantId)
+      state.cart = state.cart.filter(
+        ({ variantId, size }) => !(variantId === itemVariantId && size === itemSize),
+      )
     }),
 
   getCartTotalPrice: () =>

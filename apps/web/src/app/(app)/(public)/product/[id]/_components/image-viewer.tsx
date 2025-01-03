@@ -16,7 +16,7 @@ export default function ImageViewer({ name, images }: ImageViewerProps) {
 
   return (
     <>
-      <div className='relative mb-5 aspect-[83/100] w-full'>
+      <div className='relative mb-5 aspect-[83/100] w-full overflow-hidden rounded-md'>
         <ImageApi
           src={images[activeImage]!}
           alt={name}
@@ -37,7 +37,7 @@ export default function ImageViewer({ name, images }: ImageViewerProps) {
             key={image}
             variant='none'
             size='none'
-            className='relative aspect-[83/100] flex-1 enabled:opacity-60 disabled:opacity-100'
+            className='relative aspect-[83/100] flex-1 overflow-hidden rounded-md enabled:opacity-60 disabled:opacity-100'
             onClick={() => setActiveImage(i)}
             disabled={i === activeImage}
           >

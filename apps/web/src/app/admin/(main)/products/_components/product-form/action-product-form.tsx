@@ -1,7 +1,13 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { Category, Product, Season, VisibilityStatus } from '@repo/db/types'
+import type {
+  Category,
+  Product,
+  Season,
+  Size,
+  VisibilityStatus,
+} from '@repo/db/types'
 import type { AddProductSchema } from '@repo/validators'
 import { addProductSchema } from '@repo/validators'
 import Link from 'next/link'
@@ -18,6 +24,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
@@ -37,6 +44,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
+import { SIZES } from '@/utils/constants'
 
 import { PAGES } from '../../../../_utils/constants'
 import { uploadImages } from '../../_actions/upload-images'
@@ -81,6 +89,7 @@ const defaultValues = {
   name: '',
   description: '',
   price: 1,
+  sizes: [] as Size[],
   images: [],
   visibility: '' as VisibilityStatus,
   variants: [
@@ -155,20 +164,24 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
     const { images, ...formData } = _formData
 
     if (actionType === 'add') {
-      const imagesForm = new FormData()
-      images.forEach((image, index) => {
-        imagesForm.append(`images.${index}`, image as Blob)
-      })
+      let uploadRes: Awaited<ReturnType<typeof uploadImages>> | undefined
 
-      const uploadRes = await uploadImages({ formData: imagesForm, action: 'add' })
-      if (uploadRes.error)
-        return toast({
-          description: uploadRes.error,
-          variant: 'destructive',
+      if (images.length) {
+        const imagesForm = new FormData()
+        images.forEach((image, index) => {
+          imagesForm.append(`images.${index}`, image as Blob)
         })
 
+        uploadRes = await uploadImages({ formData: imagesForm, action: 'add' })
+        if (uploadRes.error)
+          return toast({
+            description: uploadRes.error,
+            variant: 'destructive',
+          })
+      }
+
       actionProduct.mutate({
-        imagePaths: uploadRes.imagePaths!,
+        imagePaths: uploadRes ? uploadRes.imagePaths : undefined,
         ...formData,
       })
     } else {
@@ -181,22 +194,27 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
           ),
       )
 
-      const projectPath =
-        productDetails?.images[0]!.substring(
-          0,
-          productDetails.images[0]!.lastIndexOf('/'),
-        ) ?? ''
+      const hadImages = productDetails?.images.length
 
-      const deletedImages = imagesMetaRef.current
-        .filter(
-          (mainItem) =>
-            !images.some(
-              (newItem) =>
-                mainItem.size === newItem.size &&
-                mainItem.lastModified === newItem.lastModified,
-            ),
-        )
-        .map((mainItem) => mainItem.name)
+      const projectPath = hadImages
+        ? productDetails.images[0]!.substring(
+            0,
+            productDetails.images[0]!.lastIndexOf('/'),
+          )
+        : null
+
+      const deletedImages = hadImages
+        ? imagesMetaRef.current
+            .filter(
+              (mainItem) =>
+                !images.some(
+                  (newItem) =>
+                    mainItem.size === newItem.size &&
+                    mainItem.lastModified === newItem.lastModified,
+                ),
+            )
+            .map((mainItem) => mainItem.name)
+        : []
 
       const imagesForm = new FormData()
       addedImages.forEach((image, index) => {
@@ -206,12 +224,17 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
       let uploadRes: Awaited<ReturnType<typeof uploadImages>> | undefined
 
       if (addedImages.length > 0 || deletedImages.length > 0) {
-        uploadRes = await uploadImages({
-          formData: imagesForm,
-          projectPath,
-          deletedImages,
-          action: 'edit',
-        })
+        uploadRes = projectPath
+          ? await uploadImages({
+              formData: imagesForm,
+              projectPath,
+              deletedImages,
+              action: 'edit',
+            })
+          : await uploadImages({
+              formData: imagesForm,
+              action: 'add',
+            })
 
         if (uploadRes.error)
           return toast({
@@ -300,6 +323,35 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                           />
                         ),
                       )}
+
+                      <FormField
+                        control={form.control}
+                        name='sizes'
+                        render={({ field }) => (
+                          <FormItem className=''>
+                            <FormLabel>الأحجام</FormLabel>
+                            <div className='flex flex-wrap gap-x-5 gap-y-2'>
+                              {Object.keys(SIZES).map((size) => (
+                                <span key={size} className='flex items-center gap-1'>
+                                  <FormLabel>{size}</FormLabel>
+                                  <Checkbox
+                                    className='mb-[0.1875rem]'
+                                    id={size}
+                                    checked={field.value.includes(size as Size)}
+                                    onCheckedChange={(checked) => {
+                                      const newValue = checked
+                                        ? [...field.value, size]
+                                        : field.value.filter((val) => val !== size)
+                                      field.onChange(newValue)
+                                    }}
+                                  />
+                                </span>
+                              ))}
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </CardContent>
                 </Card>

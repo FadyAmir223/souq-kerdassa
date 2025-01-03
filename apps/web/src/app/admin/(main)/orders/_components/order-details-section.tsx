@@ -108,7 +108,7 @@ export default function OrderDetailsSection({ orderId }: OrderDetailsSectionProp
               <span>{orderDetails.shipping}</span>
             </li>
             <li className='flex items-center justify-between font-semibold'>
-              <span className='text-muted-foreground'>الاجمالى</span>
+              <span className='text-muted-foreground'>الإجمالى</span>
               <span>{orderDetails.totalPrice + orderDetails.shipping}</span>
             </li>
           </ul>

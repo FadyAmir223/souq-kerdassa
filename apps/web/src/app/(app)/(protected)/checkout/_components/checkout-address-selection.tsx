@@ -1,5 +1,6 @@
 'use client'
 
+import type { CartItemSchema } from '@repo/validators'
 import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
@@ -82,9 +83,14 @@ export default function CheckoutAddressSelection({
     if (selectedAddress === null) return setSelectedAddress(undefined)
     if (selectedAddress === undefined) return
 
+    const filteredCart = cart.reduce((acc, { id, variantId, size, quantity }) => {
+      if (quantity > 0) acc.push({ id, variantId, size, quantity })
+      return acc
+    }, [] as CartItemSchema[])
+
     createOrder.mutate({
       address: selectedAddress,
-      cart: cart.filter(({ quantity }) => quantity > 0),
+      cart: filteredCart,
     })
   }
 

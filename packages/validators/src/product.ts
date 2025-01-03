@@ -41,6 +41,9 @@ export const addProductNoImagesSchema = z.object({
     .number({ message: 'يجب ان يكون رقم' })
     .int({ message: 'يجب ان يكون رقم صحيح' })
     .positive({ message: 'يجب ان يكون رقم موجب' }),
+  sizes: z
+    .array(z.enum(['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL']))
+    .nonempty({ message: 'يجب ان تختار حجم واحد على الاقل' }),
   variants: z
     .array(
       z.object({
@@ -72,7 +75,6 @@ export const addProductImagesSchema = z.object({
         )
         .refine((file) => file.type.startsWith('image/'), 'صيغة صورة غير مدعمة'),
     )
-    .min(1, { message: 'اضف صورة واحدة على الاقل' })
     .max(4, { message: 'اقصى عدد 4 صور' }),
 })
 

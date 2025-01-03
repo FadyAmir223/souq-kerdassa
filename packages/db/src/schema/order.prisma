@@ -19,6 +19,7 @@ model ProductOrder {
   id String @id @default(cuid())
 
   quantity Int
+  size     Size
 
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)

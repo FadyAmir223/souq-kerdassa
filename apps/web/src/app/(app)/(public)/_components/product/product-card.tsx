@@ -16,7 +16,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
     <div
       className={cn('overflow-hidden rounded-lg text-center shadow-lg', className)}
     >
-      <div className='relative aspect-[83/100]'>
+      <div className='relative aspect-[83/100] overflow-hidden rounded-md'>
         <ImageApi
           src={image!}
           alt={name}

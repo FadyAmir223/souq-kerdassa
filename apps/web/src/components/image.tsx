@@ -8,7 +8,7 @@ import { ASSETS, SEARCH_PARAMS } from '@/utils/constants'
 type ImageApiProps = ComponentPropsWithoutRef<typeof Image>
 
 export default function ImageApi({ src, alt, ...props }: ImageApiProps) {
-  return (
+  return src ? (
     <Image
       src={src}
       loader={({ src: _src, width, quality }) =>
@@ -17,5 +17,7 @@ export default function ImageApi({ src, alt, ...props }: ImageApiProps) {
       alt={alt}
       {...props}
     />
+  ) : (
+    <div className='h-full bg-neutral-500/50' />
   )
 }

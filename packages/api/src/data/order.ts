@@ -95,7 +95,6 @@ async function changeOrderStatusWithStock({
 }
 
 export async function getOrders(db: DB, userId: User['id']) {
-  await new Promise((r) => setTimeout(r, 2000))
   try {
     const orders = await db.order.findMany({
       where: {
@@ -109,6 +108,7 @@ export async function getOrders(db: DB, userId: User['id']) {
         products: {
           select: {
             id: true,
+            size: true,
             quantity: true,
             product: {
               select: {
@@ -159,6 +159,7 @@ export async function getOrders(db: DB, userId: User['id']) {
         productId: product.product.id,
         name: product.product.name,
         price: product.product.price,
+        size: product.size,
         image: product.product.images[0] ?? '',
         ...product.productVariant,
       })),
@@ -229,6 +230,7 @@ export async function createOrder({
               data: cart.map((item) => ({
                 productId: item.id,
                 productVariantId: item.variantId,
+                size: item.size,
                 quantity: item.quantity,
               })),
             },

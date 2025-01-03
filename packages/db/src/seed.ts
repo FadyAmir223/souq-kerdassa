@@ -27,6 +27,7 @@ const PRODUCTS = [
       { season: 'summer', category: 'women', stock: 5 },
       { season: 'winter', category: 'children', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 2',
@@ -40,6 +41,7 @@ const PRODUCTS = [
       { season: 'winter', category: 'children', stock: 3 },
       { season: 'winter', category: 'women', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 3',
@@ -52,6 +54,7 @@ const PRODUCTS = [
       { season: 'winter', category: 'children', stock: 3 },
       { season: 'winter', category: 'women', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 4',
@@ -60,6 +63,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'winter', category: 'children', stock: 3 }],
+    sizes: ['XL', 'XXL', 'XXXL'],
   },
   {
     name: 'mona - 5',
@@ -68,6 +72,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'summer', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'soha - 1',
@@ -79,6 +84,7 @@ const PRODUCTS = [
       { season: 'summer', category: 'women', stock: 5 },
       { season: 'winter', category: 'children', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'toqa - 1',
@@ -90,8 +96,8 @@ const PRODUCTS = [
       { season: 'summer', category: 'women', stock: 5 },
       { season: 'winter', category: 'children', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
-
   {
     name: 'mona - 10',
     description,
@@ -99,6 +105,7 @@ const PRODUCTS = [
     price: 400,
     rating: 3,
     variants: [{ season: 'summer', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 20',
@@ -107,6 +114,7 @@ const PRODUCTS = [
     price: 400,
     rating: 3.3,
     variants: [{ season: 'summer', category: 'children', stock: 0 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 30',
@@ -115,6 +123,7 @@ const PRODUCTS = [
     price: 400,
     rating: 5,
     variants: [{ season: 'summer', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 40',
@@ -123,6 +132,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'summer', category: 'children', stock: 3 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 50',
@@ -131,6 +141,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'summer', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'soha - 10',
@@ -139,6 +150,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.6,
     variants: [{ season: 'summer', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'toqa - 10',
@@ -147,8 +159,8 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'summer', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
-
   {
     name: 'mona - 100',
     description,
@@ -156,6 +168,7 @@ const PRODUCTS = [
     price: 400,
     rating: 3,
     variants: [{ season: 'winter', category: 'children', stock: 3 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 200',
@@ -167,6 +180,7 @@ const PRODUCTS = [
       { season: 'winter', category: 'children', stock: 3 },
       { season: 'winter', category: 'women', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 300',
@@ -178,6 +192,7 @@ const PRODUCTS = [
       { season: 'winter', category: 'children', stock: 3 },
       { season: 'winter', category: 'women', stock: 3 },
     ],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 400',
@@ -186,6 +201,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'winter', category: 'children', stock: 3 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'mona - 500',
@@ -194,6 +210,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'winter', category: 'women', stock: 5 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'soha - 100',
@@ -202,6 +219,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.6,
     variants: [{ season: 'winter', category: 'children', stock: 3 }],
+    sizes: ['S', 'M', 'L'],
   },
   {
     name: 'toqa - 100',
@@ -210,6 +228,7 @@ const PRODUCTS = [
     price: 400,
     rating: 4.3,
     variants: [{ season: 'winter', category: 'children', stock: 3 }],
+    sizes: ['XL', 'XXXL', 'XXXL'],
   },
 ] as const satisfies Partial<Product & { variants: Partial<ProductVariant>[] }>[]
 

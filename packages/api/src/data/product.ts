@@ -100,6 +100,7 @@ export async function getProductById(db: DB, id: Product['id']) {
         description: true,
         price: true,
         images: true,
+        sizes: true,
         variants: {
           select: {
             id: true,
@@ -367,6 +368,7 @@ export async function getAdminProductDetails(db: DB, productId: Product['id']) {
         name: true,
         description: true,
         price: true,
+        sizes: true,
         images: true,
         visibility: true,
         variants: {
@@ -428,6 +430,7 @@ export async function addAdminProduct(db: DB, product: AddProductImagePathsSchem
         description: product.description,
         images: product.imagePaths,
         price: product.price,
+        sizes: product.sizes,
         visibility: product.visibility,
         variants: {
           createMany: {
@@ -463,6 +466,7 @@ export async function editAdminProduct(db: DB, product: AddProductImagePathsSche
           description: product.description,
           images: product.imagePaths,
           price: product.price,
+          sizes: product.sizes,
           visibility: product.visibility,
         },
         select: {

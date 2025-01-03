@@ -1,13 +1,13 @@
 'use client'
 
 import type { RouterOutputs } from '@repo/api'
-import type { Category, Season } from '@repo/db/types'
+import type { Category, Season, Size } from '@repo/db/types'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useAppStore } from '@/providers/app-store-provider'
-import { AR } from '@/utils/constants'
+import { AR, SIZES } from '@/utils/constants'
 
 type AddToCartProps = {
   product: NonNullable<RouterOutputs['product']['byId']>
@@ -30,6 +30,10 @@ export default function AddToCart({ product }: AddToCartProps) {
 
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(
     variants[0]?.category,
+  )
+
+  const [selectedSize, setSelectedSize] = useState<Size | undefined>(
+    product.sizes[0],
   )
 
   const addCartItem = useAppStore((s) => s.addCartItem)
@@ -55,6 +59,7 @@ export default function AddToCart({ product }: AddToCartProps) {
         )?.id ?? '',
       category: selectedCategory!,
       season: selectedSeason!,
+      size: selectedSize!,
     })
 
     toast({ description: 'تم الإضافة للعربة', variant: 'success' })
@@ -98,6 +103,21 @@ export default function AddToCart({ product }: AddToCartProps) {
             disabled={category === selectedCategory}
           >
             {AR.category[category as Category]}
+          </Button>
+        ))}
+      </div>
+
+      <div className='mb-4 flex gap-x-4'>
+        <span className='mb-3 min-w-16 text-lg font-semibold'>الحجم</span>
+        {product.sizes.map((size) => (
+          <Button
+            key={size}
+            variant='outline'
+            onClick={() => setSelectedSize(size)}
+            className='text-[0.8125rem] disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            disabled={size === selectedSize}
+          >
+            {SIZES[size]}
           </Button>
         ))}
       </div>

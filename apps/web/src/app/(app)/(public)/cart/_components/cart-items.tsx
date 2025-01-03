@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
 import { cn } from '@/utils/cn'
-import { AR, PAGES } from '@/utils/constants'
+import { AR, PAGES, SIZES } from '@/utils/constants'
 
 import CartItemSkeleton from './cart-item-skeleton'
 
@@ -34,7 +34,9 @@ export default function CartItems() {
   useEffect(() => {
     setHydrated(true)
 
-    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
+    for (const item of cart)
+      if (item.quantity === 0)
+        deleteCartItem({ itemVariantId: item.variantId, itemSize: item.size })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isHydrated)
@@ -60,12 +62,12 @@ export default function CartItems() {
       <ul className='space-y-3'>
         {cart.map((item) => (
           <li
-            key={item.id + item.season + item.category}
+            key={item.id + item.season + item.category + item.size}
             className='flex flex-col gap-y-2 rounded-md bg-white p-3 sm:flex-row sm:items-center sm:justify-between'
           >
             <div className='flex gap-x-5'>
               <Link href={PAGES.public.product(item.id)}>
-                <div className='relative aspect-[83/100] w-24'>
+                <div className='relative aspect-[83/100] w-24 overflow-hidden rounded-md'>
                   <ImageApi
                     src={item.image}
                     alt={item.name}
@@ -82,15 +84,14 @@ export default function CartItems() {
                 <span className='mb-2.5 block text-lg font-semibold'>
                   {item.name}
                 </span>
-                <div className='space-x-5'>
-                  <div className='mb-1'>
-                    <Badge>{AR.season[item.season]}</Badge>
-                  </div>
-                  <div>
-                    <Badge className='bg-sky-500 hover:bg-sky-500/80'>
-                      {AR.category[item.category]}
-                    </Badge>
-                  </div>
+                <div className='flex flex-col items-start gap-y-1'>
+                  <Badge className='inline-block'>{AR.season[item.season]}</Badge>
+                  <Badge className='inline-block bg-sky-500 hover:bg-sky-500/80'>
+                    {AR.category[item.category]}
+                  </Badge>
+                  <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
+                    {SIZES[item.size]}
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -104,7 +105,12 @@ export default function CartItems() {
                 variant='none'
                 size='none'
                 className='grid size-5 place-items-center text-gray-400'
-                onClick={() => incrementCartItem(item.variantId)}
+                onClick={() =>
+                  incrementCartItem({
+                    itemVariantId: item.variantId,
+                    itemSize: item.size,
+                  })
+                }
                 aria-label={`زيادة كمية ${item.name}`}
               >
                 <FaPlus />
@@ -116,7 +122,12 @@ export default function CartItems() {
                 variant='none'
                 size='none'
                 className='grid size-5 place-items-center text-gray-400'
-                onClick={() => decrementCartItem(item.variantId)}
+                onClick={() =>
+                  decrementCartItem({
+                    itemVariantId: item.variantId,
+                    itemSize: item.size,
+                  })
+                }
                 aria-label={`تقليل كمية ${item.name}`}
               >
                 <FaMinus />
@@ -127,7 +138,12 @@ export default function CartItems() {
               variant='none'
               size='icon'
               className='text-destructive'
-              onClick={() => deleteCartItem(item.variantId)}
+              onClick={() =>
+                deleteCartItem({
+                  itemVariantId: item.variantId,
+                  itemSize: item.size,
+                })
+              }
               aria-label={`إزالة ${item.name} من السلة`}
             >
               <IoClose size={30} />

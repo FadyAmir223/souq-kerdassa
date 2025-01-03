@@ -68,6 +68,16 @@ export const PAGES = {
   authRoutes: () => Object.values(PAGES.auth),
 } as const
 
+export const SIZES = {
+  S: 'S',
+  M: 'M',
+  L: 'L',
+  XL: 'XL',
+  XXL: '2XL',
+  XXXL: '3XL',
+  XXXXL: '4XL',
+} as const
+
 export const AR = {
   season: {
     summer: 'صيفى',

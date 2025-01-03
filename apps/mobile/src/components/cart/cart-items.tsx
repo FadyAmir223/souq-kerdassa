@@ -26,7 +26,9 @@ export default function CartItems() {
     )
 
   useEffect(() => {
-    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
+    for (const item of cart)
+      if (item.quantity === 0)
+        deleteCartItem({ itemVariantId: item.variantId, itemSize: item.size })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (cart.length === 0)
@@ -87,7 +89,12 @@ export default function CartItems() {
               <View className='w-fit flex-row items-center gap-x-6 self-start border-2 border-gray-400 px-3 py-2'>
                 <Pressable
                   className='grid size-5 place-items-center text-gray-400'
-                  onPress={() => incrementCartItem(item.variantId)}
+                  onPress={() =>
+                    incrementCartItem({
+                      itemVariantId: item.variantId,
+                      itemSize: item.size,
+                    })
+                  }
                 >
                   <FontAwesome name='plus' size={18} />
                 </Pressable>
@@ -98,7 +105,12 @@ export default function CartItems() {
 
                 <Pressable
                   className='grid size-5 place-items-center text-gray-400'
-                  onPress={() => decrementCartItem(item.variantId)}
+                  onPress={() =>
+                    decrementCartItem({
+                      itemVariantId: item.variantId,
+                      itemSize: item.size,
+                    })
+                  }
                 >
                   <FontAwesome name='minus' size={18} />
                 </Pressable>
@@ -106,7 +118,12 @@ export default function CartItems() {
 
               <Pressable
                 className='text-destructive'
-                onPress={() => deleteCartItem(item.variantId)}
+                onPress={() =>
+                  deleteCartItem({
+                    itemVariantId: item.variantId,
+                    itemSize: item.size,
+                  })
+                }
               >
                 <Ionicons name='close' color='#dc2626' size={32} />
               </Pressable>

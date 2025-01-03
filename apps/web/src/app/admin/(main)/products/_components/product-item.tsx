@@ -39,7 +39,7 @@ export default function ProductItem({
   return (
     <TableRow>
       <TableCell className='hidden sm:table-cell'>
-        <div className='relative aspect-[83/100] w-16'>
+        <div className='relative aspect-[83/100] w-16 overflow-hidden rounded-md'>
           <ImageApi
             src={product.image}
             alt={product.name}

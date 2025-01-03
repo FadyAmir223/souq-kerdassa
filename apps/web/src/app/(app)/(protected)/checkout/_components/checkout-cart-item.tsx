@@ -3,7 +3,7 @@ import type { CartItem } from '@repo/store/types'
 import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/utils/cn'
-import { AR } from '@/utils/constants'
+import { AR, SIZES } from '@/utils/constants'
 
 type CheckoutCartItemProps = {
   item: CartItem
@@ -39,13 +39,14 @@ export default function CheckoutCartItem({ item }: CheckoutCartItemProps) {
 
       <div className='flex flex-1 items-center justify-between'>
         <div>
-          <p>{item.name}</p>
-          <div className='mb-1'>
-            <Badge>{AR.season[item.season]}</Badge>
-          </div>
-          <div>
-            <Badge className='bg-sky-500 hover:bg-sky-500/80'>
+          <span className='font-semibold'>{item.name}</span>
+          <div className='flex flex-col items-start gap-y-0.5'>
+            <Badge className='inline-block'>{AR.season[item.season]}</Badge>
+            <Badge className='inline-block bg-sky-500 hover:bg-sky-500/80'>
               {AR.category[item.category]}
+            </Badge>
+            <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
+              {SIZES[item.size]}
             </Badge>
           </div>
         </div>

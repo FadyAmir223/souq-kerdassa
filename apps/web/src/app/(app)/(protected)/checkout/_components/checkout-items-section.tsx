@@ -41,7 +41,9 @@ export default function CheckoutItemsSection() {
   useEffect(() => {
     setHydrated(true)
 
-    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
+    for (const item of cart)
+      if (item.quantity === 0)
+        deleteCartItem({ itemVariantId: item.variantId, itemSize: item.size })
     resetOverQuantities()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -55,7 +57,7 @@ export default function CheckoutItemsSection() {
         {isHydrated ? (
           cart.map((item) => (
             <CheckoutCartItem
-              key={item.id + item.season + item.category}
+              key={item.id + item.season + item.category + item.size}
               item={item}
             />
           ))
@@ -69,7 +71,7 @@ export default function CheckoutItemsSection() {
 
       <div className='mt-5'>
         <div className='flex justify-between'>
-          <span>الإجمالى</span>
+          <span>الثمن</span>
           <span>{getCartTotalPrice()} جنية</span>
         </div>
 

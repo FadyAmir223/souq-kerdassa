@@ -5,6 +5,7 @@ model Product {
   description String           @default("")
   images      String[]
   price       Float
+  sizes       Size[]
   // TODO: original price
   variants    ProductVariant[]
 
@@ -47,6 +48,16 @@ enum Category {
 enum VisibilityStatus {
   active
   draft
+}
+
+enum Size {
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+  XXXXL
 }
 
 model Review {

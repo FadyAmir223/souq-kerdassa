@@ -25,9 +25,7 @@ import { getSoldOutVariants } from '../data/product'
 import { adminProcedure, protectedProcedure } from '../trpc'
 
 export const ordersRouter = {
-  all: protectedProcedure.query(async ({ ctx }) =>
-    getOrders(ctx.db, ctx.session.user.id),
-  ),
+  all: protectedProcedure.query(({ ctx }) => getOrders(ctx.db, ctx.session.user.id)),
 
   create: protectedProcedure
     .input(createOrderSchema)
@@ -67,11 +65,11 @@ export const ordersRouter = {
   admin: {
     count: adminProcedure
       .input(adminOrderStatusSchema)
-      .query(async ({ ctx, input: status }) =>
+      .query(({ ctx, input: status }) =>
         getAdminOrdersCount(ctx.db, status !== 'all' ? status : undefined),
       ),
 
-    all: adminProcedure.input(adminOrdersSchema).query(async ({ ctx, input }) =>
+    all: adminProcedure.input(adminOrdersSchema).query(({ ctx, input }) =>
       getAdminOrders({
         db: ctx.db,
         limit: input.limit,
@@ -82,13 +80,11 @@ export const ordersRouter = {
 
     detailsById: adminProcedure
       .input(cuidSchema)
-      .query(async ({ ctx, input: orderId }) =>
-        getAdminOrderDetails(ctx.db, orderId),
-      ),
+      .query(({ ctx, input: orderId }) => getAdminOrderDetails(ctx.db, orderId)),
 
-    statistics: adminProcedure.query(async ({ ctx }) => getOrderStatistics(ctx.db)),
+    statistics: adminProcedure.query(({ ctx }) => getOrderStatistics(ctx.db)),
 
-    allTimeStatistics: adminProcedure.query(async ({ ctx }) =>
+    allTimeStatistics: adminProcedure.query(({ ctx }) =>
       getOrderAllTimeStatistics(ctx.db),
     ),
 
