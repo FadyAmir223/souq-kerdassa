@@ -1,9 +1,10 @@
-import { createReadStream, existsSync } from 'fs'
-import fs from 'fs/promises'
+import { createReadStream, existsSync } from 'node:fs'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+
 import mime from 'mime'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import path from 'path'
 import sharp from 'sharp'
 
 import { SEARCH_PARAMS } from '@/utils/constants'

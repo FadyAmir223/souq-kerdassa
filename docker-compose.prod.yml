@@ -10,11 +10,12 @@ services:
         - ARG_NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
       secrets:
         - SECRET_ENVS
+    user: '${MY_UID}:${MY_GID}'
     volumes:
       - ./apps/web/uploads:/app/apps/web/uploads
     env_file:
-      - ./apps/envs/production/web/.env.production
-      - ./apps/envs/production/web/.env.production.local
+      - ./apps/web/envs/production/.env.production
+      - ./apps/web/envs/production/.env.production.local
     networks:
       - proxy
     depends_on:
@@ -23,7 +24,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.app-prod.rule=Host(`souqkerdassa.com`) || Host(`www.souqkerdassa.com`)
       - traefik.http.services.app-prod.loadbalancer.server.port=3000
-      # - traefik.http.routers.app-prod.tls.certresolver=staging # production
+      # - traefik.http.routers.app-prod.tls.certresolver=staging
+      - traefik.http.routers.app-prod.tls.certresolver=production
     restart: on-failure
     deploy:
       mode: replicated

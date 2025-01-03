@@ -54,7 +54,9 @@ export const authRouter = {
     if (!ctx.token) return { success: false }
     await invalidateSessionToken(ctx.token)
 
-    if (ctx.session.user.role === 'ADMIN') cookies().delete('isAdmin')
+    // maybe not here as its for mobile only?
+    // if (ctx.session.user.role === 'ADMIN')
+    cookies().delete('isAdmin')
 
     return { success: true }
   }),

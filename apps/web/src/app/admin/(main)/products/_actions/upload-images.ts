@@ -1,8 +1,8 @@
 'use server'
 
-import { existsSync } from 'fs'
-import { mkdir, readdir, unlink, writeFile } from 'fs/promises'
-import path from 'path'
+import { existsSync } from 'node:fs'
+import { mkdir, readdir, unlink, writeFile } from 'node:fs/promises'
+import path from 'node:path'
 
 import { ASSETS } from '@/utils/constants'
 

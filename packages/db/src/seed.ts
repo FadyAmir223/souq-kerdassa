@@ -275,14 +275,14 @@ const CITY_CATEGORIES = [
 async function main() {
   await db.user.upsert({
     where: {
-      phone: env.ADMIN_USERNAME!,
+      phone: env.ADMIN_USERNAME,
     },
     update: {},
     create: {
-      phone: env.ADMIN_USERNAME!,
+      name: 'admin',
+      phone: env.ADMIN_USERNAME,
       password: env.ADMIN_PASSWORD,
       role: 'ADMIN',
-      name: '',
     },
   })
 

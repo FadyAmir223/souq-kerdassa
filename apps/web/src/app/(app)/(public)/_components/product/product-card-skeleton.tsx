@@ -1,6 +1,6 @@
 export default function ProductCardSkeleton() {
   return (
-    <li className='animate-pulse overflow-hidden rounded-lg bg-white shadow-lg'>
+    <div className='animate-pulse overflow-hidden rounded-lg bg-white shadow-lg'>
       <div className='aspect-[83/100] bg-neutral-500/50' />
 
       <div className='p-2.5'>
@@ -11,6 +11,6 @@ export default function ProductCardSkeleton() {
         </div>
         <div className='mx-auto h-4 w-1/2 rounded-md bg-neutral-500/50' />
       </div>
-    </li>
+    </div>
   )
 }

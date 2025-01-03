@@ -1,0 +1,58 @@
+name: 'deploy'
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: npm run docker:prod:build app-prod
+
+      - name: Save Docker image as tar file
+        run: docker save -o app-prod.tar app-prod:latest
+
+      - name: Transfer Docker image to remote server
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          scp -o StrictHostKeyChecking=no app-prod.tar 
+          ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_ADDRESS }}:${{ secrets.VPS_PATH }}
+
+      - name: Load Docker image on remote server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_ADDRESS }} << 'ENDSSH'
+            docker load -i ${{ secrets.VPS_PATH }}/app-prod.tar
+          ENDSSH
+
+      - name: Transfer Docker Compose file to remote server
+        run: |
+          scp -o StrictHostKeyChecking=no \
+          docker-compose.yml \
+          ./apps/web/envs/production/.env.production \
+          ./apps/web/envs/production/.env.production.local \
+          ./apps/web/envs/production/.env.production.build.local \
+          ./apps/web/secrets/production/postgres-user.txt \
+          ./apps/web/secrets/production/postgres-password.txt \
+          ./apps/web/secrets/production/postgres-db.txt \
+          ./traefik/traefik.yml \
+          ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_ADDRESS }}:${{ secrets.VPS_PATH }}
+
+      - name: Deploy Docker containers using Docker Compose on remote server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_ADDRESS }} << 'ENDSSH'
+            cd ${{ secrets.VPS_PATH }}
+            rm app-prod.tar
+            pnpm docker:prod:up
+            docker system prune --volumes --all
+          ENDSSH

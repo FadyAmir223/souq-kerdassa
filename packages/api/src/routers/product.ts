@@ -1,3 +1,6 @@
+import { rm } from 'node:fs/promises'
+import path from 'node:path'
+
 import type { Product } from '@repo/db/types'
 import {
   addProductImagePathsSchema,
@@ -9,9 +12,7 @@ import {
 } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
-import { rm } from 'fs/promises'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import path from 'path'
 import { z } from 'zod'
 
 import {
