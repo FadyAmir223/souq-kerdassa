@@ -83,10 +83,13 @@ export default function CheckoutAddressSelection({
     if (selectedAddress === null) return setSelectedAddress(undefined)
     if (selectedAddress === undefined) return
 
-    const filteredCart = cart.reduce((acc, { id, variantId, size, quantity }) => {
-      if (quantity > 0) acc.push({ id, variantId, size, quantity })
-      return acc
-    }, [] as CartItemSchema[])
+    const filteredCart = cart.reduce(
+      (acc, { id, variantId, size, color, quantity }) => {
+        if (quantity > 0) acc.push({ id, variantId, size, color, quantity })
+        return acc
+      },
+      [] as CartItemSchema[],
+    )
 
     createOrder.mutate({
       address: selectedAddress,

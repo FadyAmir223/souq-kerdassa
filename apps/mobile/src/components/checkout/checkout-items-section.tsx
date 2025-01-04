@@ -40,7 +40,7 @@ export default function CheckoutItemsSection() {
       <View className='gap-y-2'>
         {cart.map((item) => (
           <CheckoutCartItem
-            key={item.id + item.season + item.category}
+            key={item.id + item.season + item.category + item.size + item.color}
             item={item}
           />
         ))}

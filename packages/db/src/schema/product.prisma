@@ -6,6 +6,7 @@ model Product {
   images      String[]
   price       Float
   sizes       Size[]
+  colors      String[]
   // TODO: original price
   variants    ProductVariant[]
 

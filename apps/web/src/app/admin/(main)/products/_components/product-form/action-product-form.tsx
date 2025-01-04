@@ -13,6 +13,7 @@ import { addProductSchema } from '@repo/validators'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { useRef } from 'react'
+import { SwatchesPicker } from 'react-color'
 import { useForm } from 'react-hook-form'
 
 import SidebarCollapseButton from '@/app/admin/(main)/_components/sidebar-collapse-button'
@@ -44,6 +45,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { api } from '@/trpc/react'
+import { cn } from '@/utils/cn'
 import { SIZES } from '@/utils/constants'
 
 import { PAGES } from '../../../../_utils/constants'
@@ -89,7 +91,10 @@ const defaultValues = {
   name: '',
   description: '',
   price: 1,
-  sizes: [] as Size[],
+  // @ts-expect-error wants non empty array
+  sizes: [],
+  // @ts-expect-error wants non empty array
+  colors: [],
   images: [],
   visibility: '' as VisibilityStatus,
   variants: [
@@ -99,7 +104,7 @@ const defaultValues = {
       category: '' as Category,
     },
   ],
-}
+} satisfies AddProductSchema
 
 export type ImageMeta = {
   name: string
@@ -323,7 +328,6 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                           />
                         ),
                       )}
-
                       <FormField
                         control={form.control}
                         name='sizes'
@@ -333,7 +337,7 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                             <div className='flex flex-wrap gap-x-5 gap-y-2'>
                               {Object.keys(SIZES).map((size) => (
                                 <span key={size} className='flex items-center gap-1'>
-                                  <FormLabel>{size}</FormLabel>
+                                  <FormLabel>{SIZES[size as Size]}</FormLabel>
                                   <Checkbox
                                     className='mb-[0.1875rem]'
                                     id={size}
@@ -348,6 +352,57 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                                 </span>
                               ))}
                             </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name='colors'
+                        render={({ field }) => (
+                          <FormItem className='grid'>
+                            <FormLabel>الألوان</FormLabel>
+
+                            <div className='mt-2 flex flex-wrap gap-2'>
+                              {field.value.length ? (
+                                field.value.map((color) => (
+                                  <Button
+                                    key={color}
+                                    className={cn('size-8 rounded', {
+                                      'border border-black': color === '#ffffff',
+                                    })}
+                                    style={{
+                                      backgroundColor: color,
+                                    }}
+                                    variant='none'
+                                    size='none'
+                                    type='button'
+                                    onClick={() =>
+                                      field.onChange(
+                                        field.value.filter((c) => c !== color),
+                                      )
+                                    }
+                                  />
+                                ))
+                              ) : (
+                                <div className='size-8 rounded border bg-gradient-to-bl from-green-500/50 via-blue-500/50 to-red-500/50' />
+                              )}
+                            </div>
+
+                            <FormControl>
+                              <SwatchesPicker
+                                onChangeComplete={(color) => {
+                                  const newColor = color.hex
+                                  const hasColor = field.value.includes(newColor)
+                                  const updatedColors = hasColor
+                                    ? field.value.filter((c) => c !== newColor)
+                                    : [...field.value, newColor]
+
+                                  field.onChange(updatedColors)
+                                }}
+                              />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}

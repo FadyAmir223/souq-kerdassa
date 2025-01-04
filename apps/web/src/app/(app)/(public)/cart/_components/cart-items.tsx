@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { FaMinus, FaPlus } from 'react-icons/fa'
+import { IoMdColorFilter } from 'react-icons/io'
 import { IoClose } from 'react-icons/io5'
 import {
   MdOutlineKeyboardDoubleArrowLeft,
@@ -16,6 +17,7 @@ import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
 import { cn } from '@/utils/cn'
 import { AR, PAGES, SIZES } from '@/utils/constants'
+import { invertColor } from '@/utils/invert-color'
 
 import CartItemSkeleton from './cart-item-skeleton'
 
@@ -36,7 +38,11 @@ export default function CartItems() {
 
     for (const item of cart)
       if (item.quantity === 0)
-        deleteCartItem({ itemVariantId: item.variantId, itemSize: item.size })
+        deleteCartItem({
+          itemVariantId: item.variantId,
+          itemSize: item.size,
+          itemColor: item.color,
+        })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isHydrated)
@@ -62,7 +68,7 @@ export default function CartItems() {
       <ul className='space-y-3'>
         {cart.map((item) => (
           <li
-            key={item.id + item.season + item.category + item.size}
+            key={item.id + item.season + item.category + item.size + item.color}
             className='flex flex-col gap-y-2 rounded-md bg-white p-3 sm:flex-row sm:items-center sm:justify-between'
           >
             <div className='flex gap-x-5'>
@@ -89,9 +95,21 @@ export default function CartItems() {
                   <Badge className='inline-block bg-sky-500 hover:bg-sky-500/80'>
                     {AR.category[item.category]}
                   </Badge>
-                  <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
-                    {SIZES[item.size]}
-                  </Badge>
+                  <div className='flex gap-x-2'>
+                    <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
+                      {SIZES[item.size]}
+                    </Badge>
+                    <Badge
+                      style={{
+                        backgroundColor: item.color,
+                      }}
+                    >
+                      <IoMdColorFilter
+                        className='text-[14px]'
+                        color={invertColor(item.color)}
+                      />
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>
@@ -109,6 +127,7 @@ export default function CartItems() {
                   incrementCartItem({
                     itemVariantId: item.variantId,
                     itemSize: item.size,
+                    itemColor: item.color,
                   })
                 }
                 aria-label={`زيادة كمية ${item.name}`}
@@ -126,6 +145,7 @@ export default function CartItems() {
                   decrementCartItem({
                     itemVariantId: item.variantId,
                     itemSize: item.size,
+                    itemColor: item.color,
                   })
                 }
                 aria-label={`تقليل كمية ${item.name}`}
@@ -142,6 +162,7 @@ export default function CartItems() {
                 deleteCartItem({
                   itemVariantId: item.variantId,
                   itemSize: item.size,
+                  itemColor: item.color,
                 })
               }
               aria-label={`إزالة ${item.name} من السلة`}

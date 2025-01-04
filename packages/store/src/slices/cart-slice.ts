@@ -12,6 +12,7 @@ export type CartItem = {
   season: ProductVariant['season']
   category: ProductVariant['category']
   size: Size
+  color: string
   quantity: number
   overQuantity?: number
 }
@@ -23,14 +24,15 @@ type CartState = {
 type ItemArgs = {
   itemVariantId: ProductVariant['id']
   itemSize: Size
+  itemColor: string
 }
 
 type CartActions = {
   resetCart: () => void
   addCartItem: (item: Omit<CartItem, 'quantity'>) => void
-  incrementCartItem: ({ itemVariantId, itemSize }: ItemArgs) => void
-  decrementCartItem: ({ itemVariantId, itemSize }: ItemArgs) => void
-  deleteCartItem: ({ itemVariantId, itemSize }: ItemArgs) => void
+  incrementCartItem: ({ itemVariantId, itemSize, itemColor }: ItemArgs) => void
+  decrementCartItem: ({ itemVariantId, itemSize, itemColor }: ItemArgs) => void
+  deleteCartItem: ({ itemVariantId, itemSize, itemColor }: ItemArgs) => void
   getCartTotalPrice: () => CartItem['price']
   getCartTotalQuantity: () => number
   updateOverQuantities: (
@@ -60,7 +62,8 @@ export const createCartSlice: StateCreator<
 
   addCartItem: (item) => {
     const itemIndex = get().cart.findIndex(
-      ({ variantId, size }) => variantId === item.variantId && size === item.size,
+      ({ variantId, size, color }) =>
+        variantId === item.variantId && size === item.size && color === item.color,
     )
 
     set(({ cart }) => {
@@ -69,9 +72,10 @@ export const createCartSlice: StateCreator<
     })
   },
 
-  incrementCartItem: ({ itemVariantId, itemSize }) => {
+  incrementCartItem: ({ itemVariantId, itemSize, itemColor }) => {
     const itemIndex = get().cart.findIndex(
-      ({ variantId, size }) => variantId === itemVariantId && size === itemSize,
+      ({ variantId, size, color }) =>
+        variantId === itemVariantId && size === itemSize && color === itemColor,
     )
 
     set(({ cart }) => {
@@ -80,9 +84,10 @@ export const createCartSlice: StateCreator<
     })
   },
 
-  decrementCartItem: ({ itemVariantId, itemSize }) => {
+  decrementCartItem: ({ itemVariantId, itemSize, itemColor }) => {
     const itemIndex = get().cart.findIndex(
-      ({ variantId, size }) => variantId === itemVariantId && size === itemSize,
+      ({ variantId, size, color }) =>
+        variantId === itemVariantId && size === itemSize && color === itemColor,
     )
 
     set(({ cart }) => {
@@ -92,10 +97,11 @@ export const createCartSlice: StateCreator<
     })
   },
 
-  deleteCartItem: ({ itemVariantId, itemSize }) =>
+  deleteCartItem: ({ itemVariantId, itemSize, itemColor }) =>
     set((state) => {
       state.cart = state.cart.filter(
-        ({ variantId, size }) => !(variantId === itemVariantId && size === itemSize),
+        ({ variantId, size, color }) =>
+          !(variantId === itemVariantId && size === itemSize && color === itemColor),
       )
     }),
 

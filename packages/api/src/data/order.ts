@@ -109,6 +109,7 @@ export async function getOrders(db: DB, userId: User['id']) {
           select: {
             id: true,
             size: true,
+            color: true,
             quantity: true,
             product: {
               select: {
@@ -160,6 +161,7 @@ export async function getOrders(db: DB, userId: User['id']) {
         name: product.product.name,
         price: product.product.price,
         size: product.size,
+        color: product.color,
         image: product.product.images[0] ?? '',
         ...product.productVariant,
       })),
@@ -231,6 +233,7 @@ export async function createOrder({
                 productId: item.id,
                 productVariantId: item.variantId,
                 size: item.size,
+                color: item.color,
                 quantity: item.quantity,
               })),
             },
@@ -394,6 +397,8 @@ export async function getAdminOrderDetails(db: DB, orderId: Order['id']) {
         },
         products: {
           select: {
+            size: true,
+            color: true,
             quantity: true,
             product: {
               select: {
@@ -442,6 +447,8 @@ export async function getAdminOrderDetails(db: DB, orderId: Order['id']) {
       products: order?.products.map((product) => ({
         id: product.productVariant.id,
         quantity: product.quantity,
+        size: product.size,
+        color: product.color,
         name: product.product.name,
         price: product.product.price,
         image: product.product.images[0]!,

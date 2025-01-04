@@ -23,7 +23,10 @@ export default function OrderSkeleton() {
                 <div className='mb-[0.3125rem] h-[1.1875rem] w-20 rounded-md bg-neutral-500/50' />
                 <div className='mb-1 h-[1.1875rem] w-12 rounded-md bg-neutral-500/50' />
                 <div className='mb-1 h-[1.1875rem] w-12 rounded-md bg-neutral-500/50' />
-                <div className='mb-1 h-[1.1875rem] w-[1.625rem] rounded-md bg-neutral-500/50' />
+                <div className='flex gap-x-2'>
+                  <div className='mb-1 h-[1.1875rem] w-[1.625rem] rounded-md bg-neutral-500/50' />
+                  <div className='mb-1 h-[1.1875rem] w-8 rounded-md bg-neutral-500/50' />
+                </div>
               </div>
             </div>
 

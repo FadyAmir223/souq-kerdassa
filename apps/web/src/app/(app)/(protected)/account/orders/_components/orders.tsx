@@ -4,12 +4,14 @@ import type { Order } from '@repo/db/types'
 import { formatDistanceToNow } from 'date-fns'
 import { ar } from 'date-fns/locale'
 import Link from 'next/link'
+import { IoMdColorFilter } from 'react-icons/io'
 
 import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
 import { api } from '@/trpc/react'
 import { cn } from '@/utils/cn'
 import { AR, PAGES, SIZES } from '@/utils/constants'
+import { invertColor } from '@/utils/invert-color'
 
 import CancelOrderButton from './cancel-order-button'
 
@@ -88,9 +90,22 @@ export default function Orders() {
                     <Badge className='inline-block bg-sky-500 hover:bg-sky-500/80'>
                       {AR.category[item.category]}
                     </Badge>
-                    <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
-                      {SIZES[item.size]}
-                    </Badge>
+                    <div className='flex gap-x-2'>
+                      <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
+                        {SIZES[item.size]}
+                      </Badge>
+                      <Badge
+                        style={{
+                          backgroundColor: item.color,
+                        }}
+                        className=''
+                      >
+                        <IoMdColorFilter
+                          className='text-[14px]'
+                          color={invertColor(item.color)}
+                        />
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </div>

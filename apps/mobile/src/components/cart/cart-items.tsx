@@ -28,7 +28,11 @@ export default function CartItems() {
   useEffect(() => {
     for (const item of cart)
       if (item.quantity === 0)
-        deleteCartItem({ itemVariantId: item.variantId, itemSize: item.size })
+        deleteCartItem({
+          itemVariantId: item.variantId,
+          itemSize: item.size,
+          itemColor: item.color,
+        })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (cart.length === 0)
@@ -51,7 +55,7 @@ export default function CartItems() {
       <View className='gap-y-4'>
         {cart.map((item) => (
           <View
-            key={item.id + item.season + item.category}
+            key={item.id + item.season + item.category + item.size + item.color}
             className='ios:border ios:border-black gap-y-2 rounded-md bg-white p-3'
           >
             <View className='flex-row gap-x-5'>
@@ -93,6 +97,7 @@ export default function CartItems() {
                     incrementCartItem({
                       itemVariantId: item.variantId,
                       itemSize: item.size,
+                      itemColor: item.color,
                     })
                   }
                 >
@@ -109,6 +114,7 @@ export default function CartItems() {
                     decrementCartItem({
                       itemVariantId: item.variantId,
                       itemSize: item.size,
+                      itemColor: item.color,
                     })
                   }
                 >
@@ -122,6 +128,7 @@ export default function CartItems() {
                   deleteCartItem({
                     itemVariantId: item.variantId,
                     itemSize: item.size,
+                    itemColor: item.color,
                   })
                 }
               >

@@ -79,7 +79,16 @@ export default function OrderDetailsSection({ orderId }: OrderDetailsSectionProp
           <div className='font-semibold'>تفاصيل الطلب</div>
           <ul className='grid gap-3'>
             {orderDetails.products?.map((product) => (
-              <li key={product.id} className='flex items-center justify-between'>
+              <li
+                key={
+                  product.id +
+                  product.season +
+                  product.category +
+                  product.size +
+                  product.color
+                }
+                className='flex items-center justify-between'
+              >
                 <div className='relative aspect-[83/100] w-12'>
                   <ImageApi
                     src={product.image}
@@ -148,13 +157,15 @@ export default function OrderDetailsSection({ orderId }: OrderDetailsSectionProp
           <div className='font-semibold'>معلومات العميل</div>
           <dl className='grid gap-3'>
             <div className='flex items-center justify-between'>
-              <dt className='text-muted-foreground'>العميل</dt>
+              <dt className='text-muted-foreground'>الإسم</dt>
               <dd>{orderDetails.user?.name}</dd>
             </div>
             <div className='flex items-center justify-between'>
               <dt className='text-muted-foreground'>التليفون</dt>
               <dd>
-                <a href='tel:'>{orderDetails.user?.name}</a>
+                <a href={`tel:${orderDetails.user?.phone}`}>
+                  {orderDetails.user?.phone}
+                </a>
               </dd>
             </div>
           </dl>

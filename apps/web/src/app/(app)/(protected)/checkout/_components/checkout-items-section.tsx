@@ -43,7 +43,11 @@ export default function CheckoutItemsSection() {
 
     for (const item of cart)
       if (item.quantity === 0)
-        deleteCartItem({ itemVariantId: item.variantId, itemSize: item.size })
+        deleteCartItem({
+          itemVariantId: item.variantId,
+          itemSize: item.size,
+          itemColor: item.color,
+        })
     resetOverQuantities()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -57,7 +61,7 @@ export default function CheckoutItemsSection() {
         {isHydrated ? (
           cart.map((item) => (
             <CheckoutCartItem
-              key={item.id + item.season + item.category + item.size}
+              key={item.id + item.season + item.category + item.size + item.color}
               item={item}
             />
           ))

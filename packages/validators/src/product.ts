@@ -33,6 +33,8 @@ export const adminProductsSchema = paginationSchema.extend({
 })
 export type AdminProductsSchema = z.infer<typeof adminProductsSchema>
 
+export const colorSchema = z.string().regex(/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/)
+
 export const addProductNoImagesSchema = z.object({
   id: cuidSchema.optional(),
   name: z.string().trim().min(1, { message: 'اسم المنتج مطلوب' }),
@@ -44,6 +46,9 @@ export const addProductNoImagesSchema = z.object({
   sizes: z
     .array(z.enum(['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL']))
     .nonempty({ message: 'يجب ان تختار حجم واحد على الاقل' }),
+  colors: z
+    .array(colorSchema)
+    .nonempty({ message: 'يجب ان تختار لون واحد على الاقل' }),
   variants: z
     .array(
       z.object({

@@ -1,9 +1,11 @@
 import type { CartItem } from '@repo/store/types'
+import { IoMdColorFilter } from 'react-icons/io'
 
 import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/utils/cn'
 import { AR, SIZES } from '@/utils/constants'
+import { invertColor } from '@/utils/invert-color'
 
 type CheckoutCartItemProps = {
   item: CartItem
@@ -45,9 +47,21 @@ export default function CheckoutCartItem({ item }: CheckoutCartItemProps) {
             <Badge className='inline-block bg-sky-500 hover:bg-sky-500/80'>
               {AR.category[item.category]}
             </Badge>
-            <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
-              {SIZES[item.size]}
-            </Badge>
+            <div className='flex gap-x-1.5'>
+              <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
+                {SIZES[item.size]}
+              </Badge>
+              <Badge
+                style={{
+                  backgroundColor: item.color,
+                }}
+              >
+                <IoMdColorFilter
+                  className='text-[14px]'
+                  color={invertColor(item.color)}
+                />
+              </Badge>
+            </div>
           </div>
         </div>
         <p className='text-lg font-bold'>{item.price} جنية</p>
