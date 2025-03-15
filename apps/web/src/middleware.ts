@@ -40,7 +40,9 @@ export default auth((req) => {
   // https://next-auth.js.org/configuration/nextjs#caveats
   // const isLoggedIn = !!req.auth
 
-  const cookie = req.cookies.get('authjs.session-token')?.value
+  const cookie =
+    req.cookies.get('authjs.session-token')?.value ??
+    req.cookies.get('__Secure-authjs.session-token')?.value
 
   // @ts-expect-error ...
   const isAuthRoute = PAGES.authRoutes().includes(nextUrl.pathname)

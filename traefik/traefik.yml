@@ -50,6 +50,6 @@ accesslog:
         User-Agent: keep
 
 log:
-  level: DEBUG
+  level: INFO
   format: common
   filePath: /logs/traefik.log
