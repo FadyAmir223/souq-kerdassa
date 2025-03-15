@@ -66,6 +66,11 @@ CREATE TABLE "Order" (
 CREATE TABLE "ProductOrder" (
     "id" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "discount" DOUBLE PRECISION,
+    "size" TEXT NOT NULL,
+    "color" TEXT NOT NULL,
+    "season" "Season" NOT NULL,
     "productId" TEXT NOT NULL,
     "productVariantId" TEXT NOT NULL,
     "orderId" TEXT NOT NULL,
@@ -79,11 +84,12 @@ CREATE TABLE "Product" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL DEFAULT '',
     "images" TEXT[],
-    "price" DOUBLE PRECISION NOT NULL,
+    "sizes" TEXT[],
+    "colors" TEXT[],
+    "seasons" "Season"[],
+    "visibility" "VisibilityStatus" NOT NULL DEFAULT 'draft',
     "rating" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "reviewsCount" INTEGER NOT NULL DEFAULT 0,
-    "visibility" "VisibilityStatus" NOT NULL DEFAULT 'draft',
-    "sales" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -93,9 +99,9 @@ CREATE TABLE "Product" (
 -- CreateTable
 CREATE TABLE "ProductVariant" (
     "id" TEXT NOT NULL,
-    "season" "Season" NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "discount" DOUBLE PRECISION,
     "category" "Category" NOT NULL,
-    "stock" INTEGER NOT NULL DEFAULT 0,
     "productId" TEXT NOT NULL,
 
     CONSTRAINT "ProductVariant_pkey" PRIMARY KEY ("id")
@@ -131,7 +137,6 @@ CREATE TABLE "User" (
 CREATE TABLE "Session" (
     "id" TEXT NOT NULL,
     "sessionToken" TEXT NOT NULL,
-    "accessToken" TEXT,
     "expires" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -169,6 +174,9 @@ CREATE UNIQUE INDEX "Order_addressId_key" ON "Order"("addressId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Product_name_key" ON "Product"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ProductVariant_productId_category_key" ON "ProductVariant"("productId", "category");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Review_productId_userId_key" ON "Review"("productId", "userId");

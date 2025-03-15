@@ -1,29 +1,19 @@
-import type {
-  Category,
-  DB,
-  Prisma,
-  Product,
-  ProductVariant,
-  Season,
-  VisibilityStatus,
-} from '@repo/db/types'
+import type { Category, DB, Prisma, Product, VisibilityStatus } from '@repo/db/types'
 import type {
   AddProductImagePathsSchema,
   AdminProductsSchema,
-  CreateOrderSchema,
   ProductsByFiltersSchema,
 } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
 
 import type { ProductByQuerySchema } from '../validations/products'
 
-// TODO: cache products if possible
-
 type ProductEssentials = {
   id: string
   name: string
   image: string
   price: number
+  discount: number | null
   rating: number
   reviewsCount: number
 }[]
@@ -32,45 +22,16 @@ const productCardSelections = {
   id: true,
   images: true,
   name: true,
-  price: true,
   rating: true,
   reviewsCount: true,
-}
-
-export async function getAllProducts(db: DB) {
-  try {
-    const products = await db.product.findMany({
-      where: {
-        visibility: 'active',
-        variants: {
-          some: {
-            stock: {
-              gt: 0,
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        images: true,
-        name: true,
-        price: true,
-        rating: true,
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      take: 10,
-    })
-
-    return products.map(({ images, ...product }) => ({
-      ...product,
-      image: images[0],
-    }))
-  } catch {
-    return []
-  }
-}
+  variants: {
+    select: {
+      price: true,
+      discount: true,
+    },
+    take: 1,
+  },
+} satisfies Prisma.ProductFindManyArgs['select']
 
 export async function getProductIds(db: DB) {
   try {
@@ -98,16 +59,16 @@ export async function getProductById(db: DB, id: Product['id']) {
         id: true,
         name: true,
         description: true,
-        price: true,
         sizes: true,
         colors: true,
         images: true,
+        seasons: true,
         variants: {
           select: {
             id: true,
-            season: true,
+            price: true,
+            discount: true,
             category: true,
-            stock: true,
           },
         },
       },
@@ -123,7 +84,6 @@ export async function getProductsByFilters({
   page,
   type,
   category,
-  season,
   cursor,
 }: {
   db: DB
@@ -131,7 +91,6 @@ export async function getProductsByFilters({
   page: ProductsByFiltersSchema['page']
   type?: ProductsByFiltersSchema['type']
   category?: Category
-  season?: Season
   cursor?: string
 }) {
   const isInfinite = page === -1
@@ -142,10 +101,6 @@ export async function getProductsByFilters({
       variants: {
         some: {
           category,
-          season,
-          stock: {
-            gt: 0,
-          },
         },
       },
     },
@@ -166,6 +121,7 @@ export async function getProductsByFilters({
     else
       [products, count] = await db.$transaction([
         db.product.findMany(query),
+        // TODO: optimize to get only first time
         db.product.count({ where: query.where }),
       ])
 
@@ -173,10 +129,24 @@ export async function getProductsByFilters({
     if (products.length > limit) nextCursor = products.pop()?.id
 
     return {
-      products: products.map(({ images, ...product }) => ({
-        ...product,
-        image: images[0]!,
-      })),
+      products: products.map(({ images, variants, ...product }) => {
+        const selectedVariant = variants.reduce(
+          (best, curr) =>
+            !best ||
+            (curr.discount ?? 0) < (best.discount ?? 0) ||
+            (!curr.discount && !best.discount && curr.price < best.price)
+              ? curr
+              : best,
+          null as null | (typeof variants)[0],
+        )
+
+        return {
+          ...product,
+          price: selectedVariant?.price,
+          discount: selectedVariant?.discount,
+          image: images[0]!,
+        }
+      }),
       total: count ?? 0,
       nextCursor,
     }
@@ -234,21 +204,20 @@ export async function getSimilarProducts(db: DB, limit: number) {
     const products = await db.product.findMany({
       where: {
         visibility: 'active',
-        variants: {
-          some: {
-            stock: {
-              gt: 0,
-            },
-          },
-        },
       },
       select: {
         id: true,
         name: true,
         images: true,
-        price: true,
         rating: true,
         reviewsCount: true,
+        variants: {
+          select: {
+            price: true,
+            discount: true,
+          },
+          take: 1,
+        },
       },
       take: limit,
     })
@@ -257,46 +226,6 @@ export async function getSimilarProducts(db: DB, limit: number) {
       ...product,
       image: images[0],
     }))
-  } catch {
-    return []
-  }
-}
-
-export async function getSoldOutVariants(
-  db: DB,
-  cartItems: CreateOrderSchema['cart'],
-) {
-  try {
-    const variants = await db.productVariant.findMany({
-      where: {
-        id: {
-          in: cartItems.map((item) => item.variantId),
-        },
-      },
-      select: {
-        id: true,
-        stock: true,
-      },
-    })
-
-    const variantMap = variants.reduce(
-      (acc, variant) => {
-        acc[variant.id] = variant.stock
-        return acc
-      },
-      {} as Record<ProductVariant['id'], ProductVariant['stock'] | null>,
-    )
-
-    const soldOutVariants = cartItems
-      .map((item) => {
-        const stock = variantMap[item.variantId] ?? 0
-
-        if (item.quantity > stock)
-          return { variantId: item.variantId, remaining: stock }
-      })
-      .filter(Boolean)
-
-    return soldOutVariants
   } catch {
     return []
   }
@@ -336,11 +265,16 @@ export async function getAdminProducts({
       select: {
         id: true,
         name: true,
-        price: true,
         createdAt: true,
         images: true,
         visibility: true,
-        sales: true,
+        variants: {
+          select: {
+            price: true,
+            discount: true,
+          },
+          take: 1,
+        },
       },
       orderBy: {
         updatedAt: 'desc',
@@ -368,16 +302,16 @@ export async function getAdminProductDetails(db: DB, productId: Product['id']) {
         id: true,
         name: true,
         description: true,
-        price: true,
         sizes: true,
         colors: true,
         images: true,
         visibility: true,
+        seasons: true,
         variants: {
           select: {
             id: true,
-            stock: true,
-            season: true,
+            price: true,
+            discount: true,
             category: true,
           },
         },
@@ -431,15 +365,15 @@ export async function addAdminProduct(db: DB, product: AddProductImagePathsSchem
         name: product.name,
         description: product.description,
         images: product.imagePaths,
-        price: product.price,
         sizes: product.sizes,
         colors: product.colors,
         visibility: product.visibility,
+        seasons: product.seasons,
         variants: {
           createMany: {
             data: product.variants.map((variant) => ({
-              stock: variant.stock,
-              season: variant.season,
+              price: variant.price,
+              discount: variant.discount ? variant.discount : undefined,
               category: variant.category,
             })),
           },
@@ -468,7 +402,6 @@ export async function editAdminProduct(db: DB, product: AddProductImagePathsSche
           name: product.name,
           description: product.description,
           images: product.imagePaths,
-          price: product.price,
           sizes: product.sizes,
           colors: product.colors,
           visibility: product.visibility,
@@ -485,7 +418,7 @@ export async function editAdminProduct(db: DB, product: AddProductImagePathsSche
       const existingVariantIds = productVariants.variants.map(({ id }) => id)
       const newVariantIds = product.variants.map(({ id }) => id)
 
-      await tx.productVariant.deleteMany({
+      const deleteQuery = tx.productVariant.deleteMany({
         where: {
           id: {
             in: existingVariantIds.filter((id) => !newVariantIds.includes(id)),
@@ -493,23 +426,26 @@ export async function editAdminProduct(db: DB, product: AddProductImagePathsSche
         },
       })
 
-      for (const variant of product.variants)
-        await tx.productVariant.upsert({
+      const upsertQueries = product.variants.map((variant) =>
+        tx.productVariant.upsert({
           where: {
-            id: variant.id ?? '',
+            id: variant.id,
           },
           create: {
             productId: product.id!,
-            season: variant.season,
+            price: variant.price,
+            discount: variant.discount ? variant.discount : undefined,
             category: variant.category,
-            stock: variant.stock,
           },
           update: {
-            season: variant.season,
+            price: variant.price,
+            discount: variant.discount ? variant.discount : null,
             category: variant.category,
-            stock: variant.stock,
           },
-        })
+        }),
+      )
+
+      await Promise.all([deleteQuery, ...upsertQueries])
     })
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)

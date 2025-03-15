@@ -9,12 +9,9 @@ import ImageSlider from './_components/image-slider'
 import ProductMiniList from './_components/product/product-mini-list'
 
 const seasonProducts = [
-  // @ts-expect-error page & limit has default
   { label: 'احدث المنتجات', filter: { type: 'latest', limit: 8 } },
-  // @ts-expect-error page & limit has default
-  { label: 'منتجات الصيف', filter: { season: 'summer' } },
-  // @ts-expect-error page & limit has default
-  { label: 'منتجات الشتاء', filter: { season: 'winter' } },
+  { label: 'عبايات النساء', filter: { category: 'women' } },
+  { label: 'عبايات الاطفال', filter: { category: 'children' } },
 ] satisfies {
   label: string
   filter: ProductsByFiltersSchema
@@ -41,7 +38,6 @@ export default function HomePage() {
               </Button>
             </div>
 
-            {/* @ts-expect-error page & limit has default */}
             <ProductMiniList filter={filter} />
           </div>
 

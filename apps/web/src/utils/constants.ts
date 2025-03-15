@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef } from 'react'
+
 import { env } from '@/lib/env'
 
 export const bcryptSalt = 10
@@ -20,7 +22,7 @@ export const SEARCH_PARAMS = {
 
 export const PLACEHOLDER = {
   form: {
-    name: 'سارة',
+    name: '',
     phone: '01XXXXXXXXXX',
     password: '********',
   },
@@ -69,13 +71,8 @@ export const PAGES = {
 } as const
 
 export const SIZES = {
-  S: 'S',
-  M: 'M',
-  L: 'L',
-  XL: 'XL',
-  XXL: '2XL',
-  XXXL: '3XL',
-  XXXXL: '4XL',
+  '1': 'بيلبس من 60:85kg',
+  '2': 'بيلبس من 90:120kg',
 } as const
 
 export const AR = {
@@ -101,6 +98,7 @@ export const loginFormInputs = [
     label: 'رقم التليفون',
     name: 'phone',
     placeholder: PLACEHOLDER.form.phone,
+    autoComplete: 'off',
   },
   {
     type: 'password',
@@ -109,4 +107,4 @@ export const loginFormInputs = [
     placeholder: PLACEHOLDER.form.password,
     autoComplete: 'current-password',
   },
-] as const
+] as const satisfies ({ label: string } & ComponentPropsWithoutRef<'input'>)[]

@@ -26,8 +26,7 @@ export default function ProductsPage({
   if (!result.success) notFound()
   const searchParams = result.data
 
-  const hasParams =
-    !!searchParams.type || !!searchParams.season || !!searchParams.category
+  const hasParams = !!searchParams.type || !!searchParams.category
 
   return (
     <main className='container'>

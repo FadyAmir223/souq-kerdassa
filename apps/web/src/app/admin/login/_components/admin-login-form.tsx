@@ -35,7 +35,8 @@ export default function AdminLoginForm() {
 
   const loginUser = api.auth.login.useMutation({
     onSuccess: ({ success }) => {
-      if (success) router.refresh()
+      if (!success) return
+      location.reload() // router.refresh()
 
       const redirectTo =
         searchParams.get(SEARCH_PARAMS.redirectTo) ?? PAGES.dashboard

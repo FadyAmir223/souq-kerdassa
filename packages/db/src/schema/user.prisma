@@ -28,7 +28,6 @@ model Session {
   id String @id @default(cuid())
 
   sessionToken String   @unique
-  accessToken  String?
   expires      DateTime
 
   userId String

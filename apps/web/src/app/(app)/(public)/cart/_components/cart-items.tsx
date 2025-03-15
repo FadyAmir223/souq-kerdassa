@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/providers/app-store-provider'
 import { cn } from '@/utils/cn'
-import { AR, PAGES, SIZES } from '@/utils/constants'
+import { AR, PAGES } from '@/utils/constants'
 import { invertColor } from '@/utils/invert-color'
 
 import CartItemSkeleton from './cart-item-skeleton'
@@ -97,7 +97,7 @@ export default function CartItems() {
                   </Badge>
                   <div className='flex gap-x-2'>
                     <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
-                      {SIZES[item.size]}
+                      الحجم {item.size}
                     </Badge>
                     <Badge
                       style={{
@@ -114,9 +114,25 @@ export default function CartItems() {
               </div>
             </div>
 
-            <span className='text-lg font-semibold text-primary'>
-              {item.price} جنية
-            </span>
+            <div className='flex gap-2 sm:flex-col sm:gap-0 md:min-w-36 md:flex-row md:gap-2'>
+              <span
+                className={cn('text-lg font-semibold text-primary', {
+                  'text-primary/60 line-through': item.discount,
+                })}
+              >
+                {item.price}
+              </span>
+
+              {!!item.discount && (
+                <span className='text-lg font-semibold text-primary'>
+                  {item.discount}
+                </span>
+              )}
+
+              <span className='text-lg font-semibold text-primary sm:hidden md:block'>
+                جنية
+              </span>
+            </div>
 
             <div className='flex w-fit gap-x-4 border-2 border-gray-400 p-0.5'>
               <Button

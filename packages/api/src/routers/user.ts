@@ -23,7 +23,7 @@ import { adminProcedure, protectedProcedure, publicProcedure } from '../trpc'
 export const userRouter = {
   editProfile: protectedProcedure
     .input(editProfileSchema)
-    .mutation(async ({ ctx, input }) =>
+    .mutation(({ ctx, input }) =>
       editUserProfile(ctx.db, { id: ctx.session.user.id, ...input }),
     ),
 
@@ -40,13 +40,13 @@ export const userRouter = {
     }),
 
   addresses: {
-    all: protectedProcedure.query(async ({ ctx }) =>
+    all: protectedProcedure.query(({ ctx }) =>
       getAddresses(ctx.db, ctx.session.user.id),
     ),
 
     add: protectedProcedure
       .input(addressSchema)
-      .mutation(async ({ ctx, input: address }) =>
+      .mutation(({ ctx, input: address }) =>
         addAddress({
           db: ctx.db,
           userId: ctx.session.user.id,
@@ -56,7 +56,7 @@ export const userRouter = {
 
     edit: protectedProcedure
       .input(addressSchemaWithId)
-      .mutation(async ({ ctx, input: address }) =>
+      .mutation(({ ctx, input: address }) =>
         editAddress({
           db: ctx.db,
           userId: ctx.session.user.id,
@@ -66,13 +66,13 @@ export const userRouter = {
 
     delete: protectedProcedure
       .input(cuidSchema)
-      .mutation(async ({ ctx, input: addressId }) =>
+      .mutation(({ ctx, input: addressId }) =>
         deleteAddress({ db: ctx.db, userId: ctx.session.user.id, addressId }),
       ),
   } satisfies TRPCRouterRecord,
 
   admin: {
-    count: adminProcedure.query(async ({ ctx }) => getAdminUsersCount(ctx.db)),
+    count: adminProcedure.query(({ ctx }) => getAdminUsersCount(ctx.db)),
 
     all: adminProcedure.input(paginationSchema).query(async ({ ctx, input }) =>
       getAdminUsers({
@@ -82,6 +82,6 @@ export const userRouter = {
       }),
     ),
 
-    statistics: adminProcedure.query(async ({ ctx }) => getUserStatistics(ctx.db)),
+    statistics: adminProcedure.query(({ ctx }) => getUserStatistics(ctx.db)),
   } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

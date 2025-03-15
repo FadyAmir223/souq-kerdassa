@@ -2,22 +2,22 @@ import { z } from 'zod'
 
 import { cuidSchema, paginationSchema } from './utils'
 
-export const productTypeSchema = z.enum(['latest', 'top-rated'])
-export type ProductTypeSchema = z.infer<typeof productTypeSchema>
+const productTypeSchema = z.enum(['latest', 'top-rated'])
+
+export const productSizeSchema = z.enum(['1', '2'], {
+  message: 'يجب اختيار الحجم: 1 او 2',
+})
 
 export const productSeasonSchema = z.enum(['summer', 'winter'], {
   message: 'يجب اختيار الموسم: صيفى او شتوى',
 })
-export type ProductSeasonSchema = z.infer<typeof productSeasonSchema>
 
-export const productCategorySchema = z.enum(['women', 'children'], {
+const productCategorySchema = z.enum(['women', 'children'], {
   message: 'يجب اختيار النوع: نساء او اطفال',
 })
-export type ProductCategorySchema = z.infer<typeof productCategorySchema>
 
 export const productsByFiltersSchema = paginationSchema.extend({
   type: productTypeSchema.optional(),
-  season: productSeasonSchema.optional(),
   category: productCategorySchema.optional(),
   cursor: z.string().optional(),
 })
@@ -39,33 +39,40 @@ export const addProductNoImagesSchema = z.object({
   id: cuidSchema.optional(),
   name: z.string().trim().min(1, { message: 'اسم المنتج مطلوب' }),
   description: z.string().trim(),
-  price: z.coerce
-    .number({ message: 'يجب ان يكون رقم' })
-    .int({ message: 'يجب ان يكون رقم صحيح' })
-    .positive({ message: 'يجب ان يكون رقم موجب' }),
   sizes: z
-    .array(z.enum(['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL']))
+    .array(z.enum(['1', '2']))
     .nonempty({ message: 'يجب ان تختار حجم واحد على الاقل' }),
   colors: z
     .array(colorSchema)
     .nonempty({ message: 'يجب ان تختار لون واحد على الاقل' }),
-  variants: z
-    .array(
-      z.object({
-        id: cuidSchema.optional(),
-        stock: z.coerce
-          .number({ message: 'يجب ان يكون رقم' })
-          .int({ message: 'يجب ان يكون رقم صحيح' })
-          .min(0, { message: 'اقل رقم 0' }),
-        season: productSeasonSchema,
-        category: productCategorySchema,
-      }),
-    )
-    .min(1, { message: 'اضف تفريع واحد على الاقل' })
-    .max(4, { message: 'اقصى عدد 4 تفريعات' }),
+  seasons: z
+    .array(productSeasonSchema)
+    .nonempty({ message: 'يجب ان تختار موسم واحد على الاقل' }),
   visibility: z.enum(['active', 'draft'], {
     message: 'يجب اختيار الحالة: نشط او مخفى',
   }),
+  variants: z
+    .array(
+      z
+        .object({
+          id: cuidSchema.optional(),
+          price: z.coerce
+            .number({ message: 'يجب ان يكون رقم' })
+            .int({ message: 'يجب ان يكون رقم صحيح' })
+            .positive({ message: 'يجب ان يكون رقم موجب' }),
+          discount: z.coerce
+            .number({ message: 'يجب ان يكون رقم' })
+            .int({ message: 'يجب ان يكون رقم صحيح' })
+            .optional(),
+          category: productCategorySchema,
+        })
+        .refine(({ price, discount }) => (discount ?? 0) < price, {
+          message: 'الخصم اكثر من السعر',
+          path: ['discount'],
+        }),
+    )
+    .min(1, { message: 'اضف تفريع واحد على الاقل' })
+    .max(2, { message: 'اقصى عدد 2 تفريعات' }),
 })
 
 export const addProductImagesSchema = z.object({

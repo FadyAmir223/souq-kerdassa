@@ -1,6 +1,6 @@
 'use client'
 
-import type { Category, Season } from '@repo/db/types'
+import type { Category } from '@repo/db/types'
 import type { AddProductSchema } from '@repo/validators'
 import { PlusCircle } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
@@ -36,20 +36,6 @@ import { cn } from '@/utils/cn'
 
 const variantsDetailsFields = [
   {
-    label: 'الموسم',
-    value: 'season',
-    options: [
-      {
-        label: 'صيفى',
-        value: 'summer',
-      },
-      {
-        label: 'شتوى',
-        value: 'winter',
-      },
-    ],
-  },
-  {
     label: 'النوع',
     value: 'category',
     options: [
@@ -77,14 +63,14 @@ export default function VariantsStoreSection() {
     <Card>
       <CardHeader>
         <CardTitle>المخزن</CardTitle>
-        <CardDescription>اضف نوع و موسم و عدد كل تفريع</CardDescription>
+        <CardDescription>اضف السعر و سعر بعد الخصم و نوع كل تفريع</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>العدد</TableHead>
-              <TableHead>الموسم</TableHead>
+              <TableHead>السعر</TableHead>
+              <TableHead>الخصم</TableHead>
               <TableHead>النوع</TableHead>
               <TableHead />
             </TableRow>
@@ -96,7 +82,27 @@ export default function VariantsStoreSection() {
                 <TableCell>
                   <FormField
                     control={form.control}
-                    name={`variants.${fieldIndex}.stock`}
+                    name={`variants.${fieldIndex}.price`}
+                    render={({ field }) => (
+                      <FormItem className='grid'>
+                        <FormControl>
+                          <Input
+                            type='number'
+                            min={0}
+                            {...field}
+                            className='w-full'
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <FormField
+                    control={form.control}
+                    name={`variants.${fieldIndex}.discount`}
                     render={({ field }) => (
                       <FormItem className='grid'>
                         <FormControl>
@@ -169,7 +175,7 @@ export default function VariantsStoreSection() {
 
       <CardFooter
         className={cn('justify-center border-t p-4', {
-          hidden: variantsInputs.fields.length === 4,
+          hidden: variantsInputs.fields.length === 2,
         })}
       >
         <Button
@@ -179,8 +185,8 @@ export default function VariantsStoreSection() {
           type='button'
           onClick={() =>
             variantsInputs.append({
-              stock: 0,
-              season: '' as Season,
+              price: 0,
+              discount: 0,
               category: '' as Category,
             })
           }

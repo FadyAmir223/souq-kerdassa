@@ -1,4 +1,12 @@
-import type { DB, Order, OrderStatus, Prisma, Product, User } from '@repo/db/types'
+import { createId } from '@paralleldrive/cuid2'
+import type {
+  DB,
+  Order,
+  OrderStatus,
+  Prisma,
+  ProductVariant,
+  User,
+} from '@repo/db/types'
 import type { AdminOrdersSchema, CreateOrderSchema } from '@repo/validators'
 import { TRPCError } from '@trpc/server'
 import { startOfMonth, startOfWeek, subMonths, subWeeks } from 'date-fns'
@@ -26,72 +34,25 @@ async function changeOrderStatusWithStock({
   )
     action = 'order'
 
-  let productIds: string[] = []
-
-  await db.$transaction(async (tx) => {
-    const { products } = await tx.order.update({
-      where: filters,
-      data: {
-        status: to,
-      },
-      select: {
-        id: action === 'none',
-        products:
-          action !== 'none'
-            ? {
-                select: {
-                  productId: true,
-                  productVariantId: true,
-                  quantity: true,
-                },
-              }
-            : undefined,
-      },
-    })
-
-    if (action === 'none') return
-
-    const groupedCanceledProducts = products.reduce(
-      (acc, item) => {
-        if (acc[item.productId]) acc[item.productId]! += item.quantity
-        else acc[item.productId] = item.quantity
-        return acc
-      },
-      {} as Record<Product['id'], CreateOrderSchema['cart'][number]['quantity']>,
-    )
-
-    productIds = Object.keys(groupedCanceledProducts)
-
-    for (const productId of productIds)
-      await tx.product.update({
-        where: {
-          id: productId,
-        },
-        data: {
-          sales: {
-            [action === 'order' ? 'increment' : 'decrement']:
-              groupedCanceledProducts[productId],
-          },
-        },
-        select: {
-          id: true,
-        },
-      })
-
-    for (const product of products)
-      await tx.productVariant.update({
-        where: {
-          id: product.productVariantId,
-        },
-        data: {
-          stock: {
-            [action === 'order' ? 'decrement' : 'increment']: product.quantity,
-          },
-        },
-      })
+  await db.order.update({
+    where: filters,
+    data: {
+      status: to,
+    },
+    select: {
+      id: action === 'none',
+      products:
+        action !== 'none'
+          ? {
+              select: {
+                productId: true,
+                productVariantId: true,
+                quantity: true,
+              },
+            }
+          : undefined,
+    },
   })
-
-  return productIds
 }
 
 export async function getOrders(db: DB, userId: User['id']) {
@@ -110,18 +71,19 @@ export async function getOrders(db: DB, userId: User['id']) {
             id: true,
             size: true,
             color: true,
+            season: true,
             quantity: true,
+            price: true,
+            discount: true,
             product: {
               select: {
                 id: true,
                 name: true,
-                price: true,
                 images: true,
               },
             },
             productVariant: {
               select: {
-                season: true,
                 category: true,
               },
             },
@@ -159,9 +121,11 @@ export async function getOrders(db: DB, userId: User['id']) {
         quantity: product.quantity,
         productId: product.product.id,
         name: product.product.name,
-        price: product.product.price,
         size: product.size,
         color: product.color,
+        season: product.season,
+        price: product.price,
+        discount: product.discount,
         image: product.product.images[0] ?? '',
         ...product.productVariant,
       })),
@@ -182,47 +146,63 @@ export async function createOrder({
   address: CreateOrderSchema['address']
   cart: CreateOrderSchema['cart']
 }) {
-  // why make multiple queries for same product
-
-  const groupedCartProducts = cart.reduce(
+  const groupedCartProductsVariants = cart.reduce(
     (acc, item) => {
-      if (acc[item.id]) acc[item.id]! += item.quantity
-      else acc[item.id] = item.quantity
+      if (acc[item.variantId]) acc[item.variantId]! += item.quantity
+      else acc[item.variantId] = item.quantity
       return acc
     },
-    {} as Record<Product['id'], CreateOrderSchema['cart'][number]['quantity']>,
+    {} as Record<
+      ProductVariant['id'],
+      CreateOrderSchema['cart'][number]['quantity']
+    >,
   )
 
-  const productIds = Object.keys(groupedCartProducts)
+  const productsVariantIds = Object.keys(groupedCartProductsVariants)
 
   try {
-    const products = await db.product.findMany({
+    const productVariants = await db.productVariant.findMany({
       where: {
         id: {
-          in: productIds,
+          in: productsVariantIds,
         },
       },
       select: {
         id: true,
         price: true,
+        discount: true,
       },
     })
 
-    const totalPrice = products.reduce((total, product) => {
-      const quantity = groupedCartProducts[product.id]!
-      return total + product.price * quantity
+    const totalPrice = productVariants.reduce((total, variant) => {
+      const quantity = groupedCartProductsVariants[variant.id]!
+      return total + (variant.discount ?? variant.price) * quantity
     }, 0)
 
-    // careful with performance
-    await db.$transaction(async (tx) => {
-      const { id: addressId } = await tx.address.create({
-        data: address,
+    const variantMapping = productVariants.reduce(
+      (acc, variant) => {
+        acc[variant.id] = { price: variant.price, discount: variant.discount }
+        return acc
+      },
+      {} as Record<
+        string,
+        { price: ProductVariant['price']; discount: ProductVariant['discount'] }
+      >,
+    )
+
+    const addressId = createId()
+
+    await db.$transaction([
+      db.address.create({
+        data: {
+          id: addressId,
+          ...address,
+        },
         select: {
           id: true,
         },
-      })
-
-      await tx.order.create({
+      }),
+      db.order.create({
         data: {
           userId,
           addressId,
@@ -230,11 +210,14 @@ export async function createOrder({
           products: {
             createMany: {
               data: cart.map((item) => ({
-                productId: item.id,
-                productVariantId: item.variantId,
+                quantity: item.quantity,
+                price: variantMapping[item.variantId]?.price ?? 0,
+                discount: variantMapping[item.variantId]?.discount,
                 size: item.size,
                 color: item.color,
-                quantity: item.quantity,
+                season: item.season,
+                productId: item.id,
+                productVariantId: item.variantId,
               })),
             },
           },
@@ -242,37 +225,8 @@ export async function createOrder({
         select: {
           id: true,
         },
-      })
-
-      for (const productId of productIds)
-        await tx.product.update({
-          where: {
-            id: productId,
-          },
-          data: {
-            sales: {
-              increment: groupedCartProducts[productId],
-            },
-          },
-          select: {
-            id: true,
-          },
-        })
-
-      for (const item of cart)
-        await tx.productVariant.update({
-          where: {
-            id: item.variantId,
-          },
-          data: {
-            stock: {
-              decrement: item.quantity,
-            },
-          },
-        })
-    })
-
-    return productIds
+      }),
+    ])
   } catch (error) {
     if (error && typeof error === 'object' && 'code' in error)
       if (error.code === 'P2025')
@@ -399,18 +353,19 @@ export async function getAdminOrderDetails(db: DB, orderId: Order['id']) {
           select: {
             size: true,
             color: true,
+            season: true,
             quantity: true,
             product: {
               select: {
                 name: true,
-                price: true,
                 images: true,
               },
             },
             productVariant: {
               select: {
                 id: true,
-                season: true,
+                price: true,
+                discount: true,
                 category: true,
               },
             },
@@ -449,11 +404,12 @@ export async function getAdminOrderDetails(db: DB, orderId: Order['id']) {
         quantity: product.quantity,
         size: product.size,
         color: product.color,
+        season: product.season,
         name: product.product.name,
-        price: product.product.price,
         image: product.product.images[0]!,
-        season: product.productVariant.season,
         category: product.productVariant.category,
+        price: product.productVariant.price,
+        discount: product.productVariant.discount,
       })),
     }
   } catch {

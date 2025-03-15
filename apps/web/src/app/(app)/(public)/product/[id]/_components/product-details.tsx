@@ -8,6 +8,7 @@ import { api } from '@/trpc/server'
 import StarRating from '../../../_components/star-rating'
 import AddToCart from './add-to-cart'
 import ImageViewer from './image-viewer'
+import ProductPrice from './product-price'
 import { ReviewsCount, ReviewsRating } from './reviews/reviews-info'
 
 type ProductDetailsProps = {
@@ -38,7 +39,9 @@ export default async function ProductDetails({ productId }: ProductDetailsProps)
             <ReviewsRating productId={productId} />
           </div>
         </Suspense>
-        <p className='mb-5 text-3xl font-bold text-primary'>{product.price} جنية</p>
+        <p className='mb-5 space-x-2 text-3xl font-bold text-primary'>
+          <ProductPrice />
+        </p>
 
         <div>
           <AddToCart product={product} />

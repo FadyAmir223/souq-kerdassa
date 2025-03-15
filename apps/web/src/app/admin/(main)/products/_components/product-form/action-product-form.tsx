@@ -1,13 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import type {
-  Category,
-  Product,
-  Season,
-  Size,
-  VisibilityStatus,
-} from '@repo/db/types'
+import type { Category, Product, VisibilityStatus } from '@repo/db/types'
 import type { AddProductSchema } from '@repo/validators'
 import { addProductSchema } from '@repo/validators'
 import Link from 'next/link'
@@ -70,37 +64,31 @@ const productDetailsFields = [
   {
     name: 'name',
     label: 'الاسم',
-    fezza: Input,
+    field: Input,
     type: 'text',
   },
   {
     name: 'description',
     label: 'الوصف',
-    fezza: Textarea,
-  },
-  {
-    name: 'price',
-    label: 'السعر',
-    fezza: Input,
-    type: 'number',
-    min: 1,
+    field: Textarea,
   },
 ] as const
 
 const defaultValues = {
   name: '',
   description: '',
-  price: 1,
-  // @ts-expect-error wants non empty array
+  // @ts-expect-error...
   sizes: [],
-  // @ts-expect-error wants non empty array
+  // @ts-expect-error...
   colors: [],
+  // @ts-expect-error...
+  seasons: [],
   images: [],
   visibility: '' as VisibilityStatus,
   variants: [
     {
-      stock: 0,
-      season: '' as Season,
+      price: 0,
+      discount: 0,
       category: '' as Category,
     },
   ],
@@ -189,83 +177,85 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
         imagePaths: uploadRes ? uploadRes.imagePaths : undefined,
         ...formData,
       })
-    } else {
-      const addedImages = images.filter(
-        (newItem) =>
-          !imagesMetaRef.current.some(
-            (mainItem) =>
-              mainItem.size === newItem.size &&
-              mainItem.lastModified === newItem.lastModified,
-          ),
-      )
 
-      const hadImages = productDetails?.images.length
-
-      const projectPath = hadImages
-        ? productDetails.images[0]!.substring(
-            0,
-            productDetails.images[0]!.lastIndexOf('/'),
-          )
-        : null
-
-      const deletedImages = hadImages
-        ? imagesMetaRef.current
-            .filter(
-              (mainItem) =>
-                !images.some(
-                  (newItem) =>
-                    mainItem.size === newItem.size &&
-                    mainItem.lastModified === newItem.lastModified,
-                ),
-            )
-            .map((mainItem) => mainItem.name)
-        : []
-
-      const imagesForm = new FormData()
-      addedImages.forEach((image, index) => {
-        imagesForm.append(`images.${index}`, image as Blob)
-      })
-
-      let uploadRes: Awaited<ReturnType<typeof uploadImages>> | undefined
-
-      if (addedImages.length > 0 || deletedImages.length > 0) {
-        uploadRes = projectPath
-          ? await uploadImages({
-              formData: imagesForm,
-              projectPath,
-              deletedImages,
-              action: 'edit',
-            })
-          : await uploadImages({
-              formData: imagesForm,
-              action: 'add',
-            })
-
-        if (uploadRes.error)
-          return toast({
-            description: uploadRes.error,
-            variant: 'destructive',
-          })
-      }
-
-      const unchangedImages = imagesMetaRef.current
-        .filter((mainItem) =>
-          images.some(
-            (newItem) =>
-              mainItem.size === newItem.size &&
-              mainItem.lastModified === newItem.lastModified,
-          ),
-        )
-        .map((image) => `${projectPath}/${image.name}`)
-
-      actionProduct.mutate({
-        id: productDetails!.id,
-        imagePaths: uploadRes
-          ? [...unchangedImages, ...uploadRes.imagePaths!]
-          : undefined,
-        ...formData,
-      })
+      return
     }
+
+    const addedImages = images.filter(
+      (newItem) =>
+        !imagesMetaRef.current.some(
+          (mainItem) =>
+            mainItem.size === newItem.size &&
+            mainItem.lastModified === newItem.lastModified,
+        ),
+    )
+
+    const hadImages = productDetails?.images.length
+
+    const projectPath = hadImages
+      ? productDetails.images[0]!.substring(
+          0,
+          productDetails.images[0]!.lastIndexOf('/'),
+        )
+      : null
+
+    const deletedImages = hadImages
+      ? imagesMetaRef.current
+          .filter(
+            (mainItem) =>
+              !images.some(
+                (newItem) =>
+                  mainItem.size === newItem.size &&
+                  mainItem.lastModified === newItem.lastModified,
+              ),
+          )
+          .map((mainItem) => mainItem.name)
+      : []
+
+    const imagesForm = new FormData()
+    addedImages.forEach((image, index) => {
+      imagesForm.append(`images.${index}`, image as Blob)
+    })
+
+    let uploadRes: Awaited<ReturnType<typeof uploadImages>> | undefined
+
+    if (addedImages.length > 0 || deletedImages.length > 0) {
+      uploadRes = projectPath
+        ? await uploadImages({
+            formData: imagesForm,
+            projectPath,
+            deletedImages,
+            action: 'edit',
+          })
+        : await uploadImages({
+            formData: imagesForm,
+            action: 'add',
+          })
+
+      if (uploadRes.error)
+        return toast({
+          description: uploadRes.error,
+          variant: 'destructive',
+        })
+    }
+
+    const unchangedImages = imagesMetaRef.current
+      .filter((mainItem) =>
+        images.some(
+          (newItem) =>
+            mainItem.size === newItem.size &&
+            mainItem.lastModified === newItem.lastModified,
+        ),
+      )
+      .map((image) => `${projectPath}/${image.name}`)
+
+    actionProduct.mutate({
+      id: productDetails!.id,
+      imagePaths: uploadRes
+        ? [...unchangedImages, ...uploadRes.imagePaths!]
+        : undefined,
+      ...formData,
+    })
   }
 
   return (
@@ -283,6 +273,10 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
           >
             <div className='flex items-center gap-4'>
               <div className='hidden items-center gap-2 md:ml-auto md:flex'>
+                <Button size='sm' disabled={actionProduct.isPending}>
+                  {labels.save}
+                </Button>
+
                 <Button
                   asChild
                   variant='outline'
@@ -291,9 +285,6 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                   type='button'
                 >
                   <Link href={PAGES.products.root}>تراجع</Link>
-                </Button>
-                <Button size='sm' disabled={actionProduct.isPending}>
-                  {labels.save}
                 </Button>
               </div>
             </div>
@@ -307,7 +298,7 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                   <CardContent>
                     <div className='grid gap-6'>
                       {productDetailsFields.map(
-                        ({ fezza: Input, name, label, ...inputProps }) => (
+                        ({ field: Input, name, label, ...inputProps }) => (
                           <FormField
                             key={name}
                             control={form.control}
@@ -318,6 +309,7 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                                 <FormControl>
                                   <Input
                                     {...inputProps}
+                                    rows={3}
                                     {...field}
                                     className='w-full'
                                   />
@@ -328,6 +320,7 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                           />
                         ),
                       )}
+
                       <FormField
                         control={form.control}
                         name='sizes'
@@ -337,15 +330,58 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                             <div className='flex flex-wrap gap-x-5 gap-y-2'>
                               {Object.keys(SIZES).map((size) => (
                                 <span key={size} className='flex items-center gap-1'>
-                                  <FormLabel>{SIZES[size as Size]}</FormLabel>
+                                  <FormLabel>{size}</FormLabel>
                                   <Checkbox
                                     className='mb-[0.1875rem]'
                                     id={size}
-                                    checked={field.value.includes(size as Size)}
+                                    checked={field.value.includes(size as '1' | '2')}
                                     onCheckedChange={(checked) => {
                                       const newValue = checked
                                         ? [...field.value, size]
                                         : field.value.filter((val) => val !== size)
+                                      field.onChange(newValue)
+                                    }}
+                                  />
+                                </span>
+                              ))}
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name='seasons'
+                        render={({ field }) => (
+                          <FormItem className=''>
+                            <FormLabel>المواسم</FormLabel>
+                            <div className='flex flex-wrap gap-x-5 gap-y-2'>
+                              {(
+                                [
+                                  {
+                                    label: 'صيفى',
+                                    value: 'summer',
+                                  },
+                                  {
+                                    label: 'شتوى',
+                                    value: 'winter',
+                                  },
+                                ] as const
+                              ).map(({ label, value }) => (
+                                <span
+                                  key={value}
+                                  className='flex items-center gap-1'
+                                >
+                                  <FormLabel>{label}</FormLabel>
+                                  <Checkbox
+                                    className='mb-[0.1875rem]'
+                                    id={value}
+                                    checked={field.value.includes(value)}
+                                    onCheckedChange={(checked) => {
+                                      const newValue = checked
+                                        ? [...field.value, value]
+                                        : field.value.filter((val) => val !== value)
                                       field.onChange(newValue)
                                     }}
                                   />
@@ -462,6 +498,10 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
               </div>
             </div>
             <div className='flex items-center justify-center gap-2 md:hidden'>
+              <Button size='sm' disabled={actionProduct.isPending}>
+                {labels.save}
+              </Button>
+
               <Button
                 asChild
                 variant='outline'
@@ -470,10 +510,6 @@ export default function ActionProductForm({ productId }: ActionProductFormProps)
                 type='button'
               >
                 <Link href={PAGES.products.root}>تراجع</Link>
-              </Button>
-
-              <Button size='sm' disabled={actionProduct.isPending}>
-                {labels.save}
               </Button>
             </div>
           </form>

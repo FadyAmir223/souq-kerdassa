@@ -39,29 +39,17 @@ export default function CheckoutAddressSelection({
   const { toast } = useToast()
   const utils = api.useUtils()
 
-  const {
-    cart,
-    getCartTotalQuantity,
-    updateOverQuantities,
-    selectedAddress,
-    setSelectedAddress,
-  } = useAppStore(
-    useShallow(
-      ({
-        cart,
-        getCartTotalQuantity,
-        updateOverQuantities,
-        selectedAddress,
-        setSelectedAddress,
-      }) => ({
-        cart,
-        getCartTotalQuantity,
-        updateOverQuantities,
-        selectedAddress,
-        setSelectedAddress,
-      }),
-    ),
-  )
+  const { cart, getCartTotalQuantity, selectedAddress, setSelectedAddress } =
+    useAppStore(
+      useShallow(
+        ({ cart, getCartTotalQuantity, selectedAddress, setSelectedAddress }) => ({
+          cart,
+          getCartTotalQuantity,
+          selectedAddress,
+          setSelectedAddress,
+        }),
+      ),
+    )
 
   const createOrder = api.order.create.useMutation({
     onSuccess: () => {
@@ -72,10 +60,6 @@ export default function CheckoutAddressSelection({
         variant: 'destructive',
         description: error.message,
       })
-
-      // @ts-expect-error impossible typing
-      const soldOutVariants = error.data?.cause?.soldOutVariants
-      if (soldOutVariants) updateOverQuantities(soldOutVariants)
     },
   })
 
@@ -83,13 +67,18 @@ export default function CheckoutAddressSelection({
     if (selectedAddress === null) return setSelectedAddress(undefined)
     if (selectedAddress === undefined) return
 
-    const filteredCart = cart.reduce(
-      (acc, { id, variantId, size, color, quantity }) => {
-        if (quantity > 0) acc.push({ id, variantId, size, color, quantity })
-        return acc
-      },
-      [] as CartItemSchema[],
-    )
+    const filteredCart = cart.reduce((acc, item) => {
+      if (item.quantity > 0)
+        acc.push({
+          id: item.id,
+          variantId: item.variantId,
+          season: item.season,
+          size: item.size as '1' | '2',
+          color: item.color,
+          quantity: item.quantity,
+        })
+      return acc
+    }, [] as CartItemSchema[])
 
     createOrder.mutate({
       address: selectedAddress,

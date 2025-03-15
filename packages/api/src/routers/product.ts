@@ -45,7 +45,7 @@ export const productRouter = {
 
   byFilter: publicProcedure
     .input(productsByFiltersSchema)
-    .query(async ({ ctx, input }) => getProductsByFilters({ db: ctx.db, ...input })),
+    .query(({ ctx, input }) => getProductsByFilters({ db: ctx.db, ...input })),
 
   byQuery: publicProcedure
     .input(productByQuerySchema)
@@ -65,7 +65,7 @@ export const productRouter = {
           page: z.coerce.number().default(1),
         }),
       )
-      .query(async ({ ctx, input }) => getReviews({ db: ctx.db, ...input })),
+      .query(({ ctx, input }) => getReviews({ db: ctx.db, ...input })),
 
     add: protectedProcedure
       .input(z.object({ productId: cuidSchema, review: reviewSchema }))
@@ -92,7 +92,7 @@ export const productRouter = {
 
     delete: protectedProcedure
       .input(cuidSchema)
-      .mutation(async ({ ctx, input: productId }) =>
+      .mutation(({ ctx, input: productId }) =>
         deleteReview({ db: ctx.db, userId: ctx.session.user.id, productId }),
       ),
   } satisfies TRPCRouterRecord,
@@ -100,11 +100,11 @@ export const productRouter = {
   admin: {
     count: adminProcedure
       .input(adminProductStatusSchema)
-      .query(async ({ ctx, input: visibility }) =>
+      .query(({ ctx, input: visibility }) =>
         getAdminProductsCount(ctx.db, visibility !== 'all' ? visibility : undefined),
       ),
 
-    all: adminProcedure.input(adminProductsSchema).query(async ({ ctx, input }) =>
+    all: adminProcedure.input(adminProductsSchema).query(({ ctx, input }) =>
       getAdminProducts({
         db: ctx.db,
         limit: input.limit,
@@ -115,7 +115,7 @@ export const productRouter = {
 
     detailsById: adminProcedure
       .input(cuidSchema)
-      .query(async ({ ctx, input: productId }) =>
+      .query(({ ctx, input: productId }) =>
         getAdminProductDetails(ctx.db, productId),
       ),
 
@@ -126,7 +126,7 @@ export const productRouter = {
           visibility: adminProductStatusSchema,
         }),
       )
-      .mutation(async ({ ctx, input }) =>
+      .mutation(({ ctx, input }) =>
         changeProductStatus({
           db: ctx.db,
           productId: input.productId,
@@ -136,9 +136,7 @@ export const productRouter = {
 
     add: adminProcedure
       .input(addProductImagePathsSchema)
-      .mutation(async ({ ctx, input: newProduct }) =>
-        addAdminProduct(ctx.db, newProduct),
-      ),
+      .mutation(({ ctx, input: newProduct }) => addAdminProduct(ctx.db, newProduct)),
 
     edit: adminProcedure
       .input(addProductImagePathsSchema)

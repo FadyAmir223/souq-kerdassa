@@ -12,7 +12,10 @@ type ProductListProps = {
 }
 
 export default async function ProductList({ searchParams }: ProductListProps) {
-  const { products, total } = await api.product.byFilter(searchParams)
+  const { products, total } = await api.product.byFilter({
+    ...searchParams,
+    limit: 12,
+  })
 
   if (!products.length)
     return (

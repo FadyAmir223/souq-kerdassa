@@ -1,9 +1,10 @@
 'use client'
 
 import type { RouterOutputs } from '@repo/api'
-import type { Category, Season, Size } from '@repo/db/types'
-import { useState } from 'react'
+import type { Category, Season } from '@repo/db/types'
+import { useEffect, useState } from 'react'
 import { FaCheck } from 'react-icons/fa6'
+import { useShallow } from 'zustand/react/shallow'
 
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
@@ -16,25 +17,19 @@ type AddToCartProps = {
 }
 
 export default function AddToCart({ product }: AddToCartProps) {
-  const seasons: Season[] = Array.from(
-    new Set(
-      product.variants
-        .filter((variant) => variant.stock !== 0)
-        .map((variant) => variant.season),
-    ),
+  const variants = product.variants.sort((a, b) =>
+    a.category.localeCompare(b.category),
   )
-
-  const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons[0]!)
-
-  const variants = product.variants
-    .filter((variant) => variant.season === selectedSeason && variant.stock !== 0)
-    .sort((a, b) => (a.category as string).localeCompare(b.category))
 
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(
     variants[0]?.category,
   )
 
-  const [selectedSize, setSelectedSize] = useState<Size | undefined>(
+  const [selectedSeason, setSelectedSeason] = useState<Season | undefined>(
+    product.seasons[0]!,
+  )
+
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(
     product.sizes[0],
   )
 
@@ -42,7 +37,20 @@ export default function AddToCart({ product }: AddToCartProps) {
     product.colors[0],
   )
 
-  const addCartItem = useAppStore((s) => s.addCartItem)
+  const { selectedVariant, setSelectedVariant, addCartItem } = useAppStore(
+    useShallow(({ selectedVariant, setSelectedVariant, addCartItem }) => ({
+      selectedVariant,
+      setSelectedVariant,
+      addCartItem,
+    })),
+  )
+
+  useEffect(() => {
+    const variant = variants[0]
+    if (!variant) return
+    setSelectedVariant({ price: variant.price, discount: variant.discount })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const { toast } = useToast()
 
   if (variants.length === 0)
@@ -56,13 +64,11 @@ export default function AddToCart({ product }: AddToCartProps) {
     addCartItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: selectedVariant?.price ?? 0,
+      discount: selectedVariant?.discount,
       image: product.images[0]!,
       variantId:
-        variants.find(
-          ({ season, category }) =>
-            season === selectedSeason && category === selectedCategory,
-        )?.id ?? '',
+        variants.find(({ category }) => category === selectedCategory)?.id ?? '',
       category: selectedCategory!,
       season: selectedSeason!,
       size: selectedSize!,
@@ -76,22 +82,12 @@ export default function AddToCart({ product }: AddToCartProps) {
     <>
       <div className='mb-4 flex gap-x-4'>
         <span className='mb-3 min-w-16 text-lg font-semibold'>الموسم</span>
-        {seasons.map((season) => (
+        {product.seasons.map((season) => (
           <Button
             key={season}
             variant='outline'
-            onClick={() => {
-              setSelectedSeason(season)
-
-              const firstVariant = product.variants
-                .filter((variant) => variant.season === season)
-                .sort((a, b) =>
-                  (a.category as string).localeCompare(b.category),
-                )[0]?.category
-
-              setSelectedCategory(firstVariant)
-            }}
-            className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            onClick={() => setSelectedSeason(season)}
+            className='select-none disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={season === selectedSeason}
           >
             {AR.season[season]}
@@ -105,8 +101,19 @@ export default function AddToCart({ product }: AddToCartProps) {
           <Button
             key={category}
             variant='outline'
-            onClick={() => setSelectedCategory(category)}
-            className='disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+            onClick={() => {
+              const selectedCategory = variants.find(
+                ({ category: c }) => c === category,
+              )
+              if (!selectedCategory) return
+
+              setSelectedCategory(category)
+              setSelectedVariant({
+                price: selectedCategory.price,
+                discount: selectedCategory.discount,
+              })
+            }}
+            className='select-none disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
             disabled={category === selectedCategory}
           >
             {AR.category[category as Category]}
@@ -114,18 +121,21 @@ export default function AddToCart({ product }: AddToCartProps) {
         ))}
       </div>
 
-      <div className='mb-4 flex gap-x-4'>
+      <div className='mb-4 space-y-2'>
         <span className='mb-3 min-w-16 text-lg font-semibold'>الحجم</span>
         {product.sizes.map((size) => (
-          <Button
-            key={size}
-            variant='outline'
-            onClick={() => setSelectedSize(size)}
-            className='text-[0.8125rem] disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
-            disabled={size === selectedSize}
-          >
-            {SIZES[size]}
-          </Button>
+          <div key={size}>
+            <Button
+              key={size}
+              variant='outline'
+              onClick={() => setSelectedSize(size)}
+              className='me-4 select-none text-[0.8125rem] disabled:bg-accent disabled:text-accent-foreground disabled:opacity-90'
+              disabled={size === selectedSize}
+            >
+              {size}
+            </Button>
+            <span className=''>{SIZES[size as keyof typeof SIZES]}</span>
+          </div>
         ))}
       </div>
 
@@ -152,7 +162,7 @@ export default function AddToCart({ product }: AddToCartProps) {
       <Button
         onClick={handleAddCartItem}
         disabled={!(selectedCategory && selectedSeason)}
-        className='px-6 py-2'
+        className='px-6 py-2 md:mb-10'
         size='none'
       >
         اضف إلى العربة

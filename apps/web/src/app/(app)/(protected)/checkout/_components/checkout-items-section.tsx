@@ -14,28 +14,13 @@ export default function CheckoutItemsSection() {
   const [isHydrated, setHydrated] = useState(false)
   const router = useRouter()
 
-  const {
-    cart,
-    getCartTotalPrice,
-    deleteCartItem,
-    resetOverQuantities,
-    shippingCost,
-  } = useAppStore(
-    useShallow(
-      ({
-        cart,
-        getCartTotalPrice,
-        deleteCartItem,
-        resetOverQuantities,
-        selectedAddress,
-      }) => ({
-        cart,
-        getCartTotalPrice,
-        deleteCartItem,
-        resetOverQuantities,
-        shippingCost: selectedAddress?.price ?? 0,
-      }),
-    ),
+  const { cart, getCartTotalPrice, deleteCartItem, shippingCost } = useAppStore(
+    useShallow(({ cart, getCartTotalPrice, deleteCartItem, selectedAddress }) => ({
+      cart,
+      getCartTotalPrice,
+      deleteCartItem,
+      shippingCost: selectedAddress?.price ?? 0,
+    })),
   )
 
   useEffect(() => {
@@ -48,7 +33,6 @@ export default function CheckoutItemsSection() {
           itemSize: item.size,
           itemColor: item.color,
         })
-    resetOverQuantities()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

@@ -143,8 +143,6 @@ export default function ProductTabs({ defaultTab }: ProductTabsProps) {
                       </TableHead>
                       <TableHead>الإسم</TableHead>
                       <TableHead>الحالة</TableHead>
-                      <TableHead>السعر</TableHead>
-                      <TableHead>المبيعات</TableHead>
                       <TableHead className='hidden md:table-cell'>
                         تم الإنشاء
                       </TableHead>

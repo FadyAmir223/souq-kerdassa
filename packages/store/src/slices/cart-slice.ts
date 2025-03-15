@@ -1,4 +1,4 @@
-import type { Product, ProductVariant, Size } from '@repo/db/types'
+import type { Product, ProductVariant } from '@repo/db/types'
 import type { StateCreator } from 'zustand'
 
 import type { UnpersistedSlice } from './unpersisted-slice'
@@ -7,14 +7,14 @@ export type CartItem = {
   id: Product['id']
   name: Product['name']
   image: Product['images'][number]
-  price: Product['price']
+  size: Product['sizes'][number]
+  color: Product['colors'][number]
+  season: Product['seasons'][number]
   variantId: ProductVariant['id']
-  season: ProductVariant['season']
+  price: ProductVariant['price']
+  discount?: ProductVariant['discount']
   category: ProductVariant['category']
-  size: Size
-  color: string
   quantity: number
-  overQuantity?: number
 }
 
 type CartState = {
@@ -23,7 +23,7 @@ type CartState = {
 
 type ItemArgs = {
   itemVariantId: ProductVariant['id']
-  itemSize: Size
+  itemSize: Product['sizes'][number]
   itemColor: string
 }
 
@@ -35,13 +35,6 @@ type CartActions = {
   deleteCartItem: ({ itemVariantId, itemSize, itemColor }: ItemArgs) => void
   getCartTotalPrice: () => CartItem['price']
   getCartTotalQuantity: () => number
-  updateOverQuantities: (
-    overQuantities: {
-      variantId: ProductVariant['id']
-      remaining: CartItem['quantity']
-    }[],
-  ) => void
-  resetOverQuantities: () => void
 }
 
 export type CartSlice = CartState & CartActions
@@ -106,28 +99,11 @@ export const createCartSlice: StateCreator<
     }),
 
   getCartTotalPrice: () =>
-    get().cart.reduce((acc, { quantity, price }) => acc + price * quantity, 0),
+    get().cart.reduce(
+      (acc, { quantity, price, discount }) => acc + (discount ?? price) * quantity,
+      0,
+    ),
 
   getCartTotalQuantity: () =>
     get().cart.reduce((acc, { quantity }) => acc + quantity, 0),
-
-  updateOverQuantities: (overQuantities) => {
-    set(({ cart }) => {
-      overQuantities.forEach(({ variantId, remaining }) => {
-        const itemIndex = cart.findIndex((item) => item.variantId === variantId)
-        if (itemIndex === -1) return
-
-        const itemExists = cart[itemIndex]!
-        itemExists.overQuantity = itemExists.quantity
-        itemExists.quantity = remaining
-      })
-    })
-  },
-
-  resetOverQuantities: () =>
-    set((state) => {
-      state.cart = state.cart.map((item) =>
-        item.overQuantity ? { ...item, overQuantity: undefined } : item,
-      )
-    }),
 })

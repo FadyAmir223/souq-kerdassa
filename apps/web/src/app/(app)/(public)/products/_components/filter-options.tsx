@@ -15,14 +15,6 @@ const filters = [
     ],
   },
   {
-    title: 'الموسم',
-    key: 'season',
-    options: [
-      { label: 'صيفى', value: 'summer' },
-      { label: 'شتوى', value: 'winter' },
-    ],
-  },
-  {
     title: 'الفئة',
     key: 'category',
     options: [

@@ -5,6 +5,7 @@ import type { AdminOrderStatusSchema } from '@repo/validators'
 import { keepPreviousData } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ar } from 'date-fns/locale'
+import { IoMdColorFilter } from 'react-icons/io'
 
 import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
@@ -18,6 +19,8 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { api } from '@/trpc/react'
 import { cn } from '@/utils/cn'
+import { AR } from '@/utils/constants'
+import { invertColor } from '@/utils/invert-color'
 
 import { orderFilterOptions } from '../_utils/order-filter-opts'
 
@@ -87,20 +90,60 @@ export default function OrderDetailsSection({ orderId }: OrderDetailsSectionProp
                   product.size +
                   product.color
                 }
-                className='flex items-center justify-between'
               >
-                <div className='relative aspect-[83/100] w-12'>
-                  <ImageApi
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes='3rem'
-                  />
+                <div className='flex items-center justify-between gap-x-2'>
+                  <div className='flex gap-x-2'>
+                    <div className='relative aspect-[83/100] w-14 grow'>
+                      <ImageApi
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        sizes='3rem'
+                      />
+                    </div>
+
+                    <div className='flex grow flex-col items-start gap-y-1'>
+                      <Badge className='inline-block'>
+                        {AR.season[product.season]}
+                      </Badge>
+                      <Badge className='inline-block bg-sky-500 hover:bg-sky-500/80'>
+                        {AR.category[product.category]}
+                      </Badge>
+                      <div className='flex gap-x-2'>
+                        <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
+                          الحجم {product.size}
+                        </Badge>
+                        <Badge
+                          style={{
+                            backgroundColor: product.color,
+                          }}
+                        >
+                          <IoMdColorFilter
+                            className='text-[14px]'
+                            color={invertColor(product.color)}
+                          />
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span className='text-muted-foreground'>
-                  {product.name} x <span>{product.quantity}</span>
-                </span>
-                <span>{product.price}</span>
+
+                <div className='flex gap-x-4'>
+                  <span className='grow text-muted-foreground'>
+                    {product.name} x <span>{product.quantity}</span>
+                  </span>
+
+                  <div className='space-x-2'>
+                    <span
+                      className={cn({
+                        'line-through opacity-60': product.discount,
+                      })}
+                    >
+                      {product.price}
+                    </span>
+                    {!!product.discount && <span>{product.discount}</span>}
+                  </div>
+                </div>
               </li>
             ))}
           </ul>

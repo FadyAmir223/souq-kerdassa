@@ -61,8 +61,6 @@ export default function ProductItem({
           activeTab={activeTab}
         />
       </TableCell>
-      <TableCell>{product.price}</TableCell>
-      <TableCell>{product.sales}</TableCell>
       <TableCell className='hidden md:table-cell'>
         {format(product.createdAt, 'yyyy-MM-dd', { locale: ar })}
       </TableCell>

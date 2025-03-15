@@ -321,7 +321,11 @@ export async function deleteAddress({
 
 export async function getAdminUsersCount(db: DB) {
   try {
-    return await db.user.count()
+    return await db.user.count({
+      where: {
+        role: 'USER',
+      },
+    })
   } catch {
     return 0
   }
@@ -338,6 +342,9 @@ export async function getAdminUsers({
 }) {
   try {
     const users = await db.user.findMany({
+      where: {
+        role: 'USER',
+      },
       select: {
         id: true,
         name: true,
@@ -402,6 +409,7 @@ export async function getUserStatistics(db: DB) {
   try {
     const totalThisMonth = await db.user.count({
       where: {
+        role: 'USER',
         createdAt: {
           gte: currentMonthStart,
         },

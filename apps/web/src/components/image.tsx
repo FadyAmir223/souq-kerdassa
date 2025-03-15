@@ -18,6 +18,6 @@ export default function ImageApi({ src, alt, ...props }: ImageApiProps) {
       {...props}
     />
   ) : (
-    <div className='h-full bg-neutral-500/50' />
+    <div className='h-full rounded-md bg-neutral-500/50' />
   )
 }

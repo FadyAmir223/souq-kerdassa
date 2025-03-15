@@ -6,8 +6,6 @@ import {
   cuidSchema,
 } from '@repo/validators'
 import type { TRPCRouterRecord } from '@trpc/server'
-import { TRPCError } from '@trpc/server'
-import { revalidateTag } from 'next/cache'
 import { z } from 'zod'
 
 import {
@@ -21,46 +19,28 @@ import {
   getOrders,
   getOrderStatistics,
 } from '../data/order'
-import { getSoldOutVariants } from '../data/product'
 import { adminProcedure, protectedProcedure } from '../trpc'
 
 export const ordersRouter = {
   all: protectedProcedure.query(({ ctx }) => getOrders(ctx.db, ctx.session.user.id)),
 
-  create: protectedProcedure
-    .input(createOrderSchema)
-    .mutation(async ({ ctx, input }) => {
-      const soldOutVariants = await getSoldOutVariants(ctx.db, input.cart)
-
-      if (soldOutVariants.length !== 0)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'الكمية المطلوبة غير متوفرة من بعض المنتجات',
-          cause: { soldOutVariants },
-        })
-
-      const productIds = await createOrder({
-        db: ctx.db,
-        userId: ctx.session.user.id,
-        address: input.address,
-        cart: input.cart,
-      })
-
-      productIds.forEach((id) => revalidateTag(id))
+  create: protectedProcedure.input(createOrderSchema).mutation(({ ctx, input }) =>
+    createOrder({
+      db: ctx.db,
+      userId: ctx.session.user.id,
+      address: input.address,
+      cart: input.cart,
     }),
+  ),
 
   // TODO: maybe permit canceling just for a certain duration
-  cancel: protectedProcedure
-    .input(cuidSchema)
-    .mutation(async ({ ctx, input: orderId }) => {
-      const productIds = await cancelOrder({
-        db: ctx.db,
-        userId: ctx.session.user.id,
-        orderId,
-      })
-
-      productIds.forEach((id) => revalidateTag(id))
+  cancel: protectedProcedure.input(cuidSchema).mutation(({ ctx, input: orderId }) =>
+    cancelOrder({
+      db: ctx.db,
+      userId: ctx.session.user.id,
+      orderId,
     }),
+  ),
 
   admin: {
     count: adminProcedure
@@ -96,15 +76,13 @@ export const ordersRouter = {
           newStatus: adminOrderStatusSchema,
         }),
       )
-      .mutation(async ({ ctx, input }) => {
-        const productIds = await changeOrderStatus({
+      .mutation(({ ctx, input }) =>
+        changeOrderStatus({
           db: ctx.db,
           orderId: input.orderId,
           oldStatus: input.oldStatus as OrderStatus,
           newStatus: input.newStatus as OrderStatus,
-        })
-
-        productIds.forEach((id) => revalidateTag(id))
-      }),
+        }),
+      ),
   } satisfies TRPCRouterRecord,
 } satisfies TRPCRouterRecord

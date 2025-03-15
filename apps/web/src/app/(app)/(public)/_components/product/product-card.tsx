@@ -10,7 +10,7 @@ type ProductCardProps = {
 }
 
 export default function ProductCard({ product, className }: ProductCardProps) {
-  const { name, price, rating, image, reviewsCount } = product
+  const { name, rating, image, reviewsCount, price, discount } = product
 
   return (
     <div
@@ -35,7 +35,20 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           <StarRating rating={rating} />
           <span>({reviewsCount})</span>
         </div>
-        <p className='font-bold text-primary'>{price} جنية</p>
+
+        <div className='flex justify-center gap-x-2'>
+          <span
+            className={cn('font-bold text-primary', {
+              'text-primary/60 line-through': discount,
+            })}
+          >
+            {price}
+          </span>
+
+          {discount && <span className='font-bold text-primary'>{discount}</span>}
+
+          <span className='font-bold text-primary'>جنية</span>
+        </div>
       </div>
     </div>
   )

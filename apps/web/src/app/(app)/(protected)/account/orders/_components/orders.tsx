@@ -10,7 +10,7 @@ import ImageApi from '@/components/image'
 import { Badge } from '@/components/ui/badge'
 import { api } from '@/trpc/react'
 import { cn } from '@/utils/cn'
-import { AR, PAGES, SIZES } from '@/utils/constants'
+import { AR, PAGES } from '@/utils/constants'
 import { invertColor } from '@/utils/invert-color'
 
 import CancelOrderButton from './cancel-order-button'
@@ -28,11 +28,7 @@ export default function Orders() {
 
     const shippingCost = order.address.city.cityCategoryPrice?.price ?? 0
 
-    const totalPrice =
-      order.products.reduce(
-        (acc, { price, quantity }) => acc + price * quantity,
-        0,
-      ) + shippingCost
+    const totalPrice = order.totalPrice + shippingCost
 
     return (
       <li key={order.id} className='rounded-md bg-white p-4 shadow-md'>
@@ -92,7 +88,7 @@ export default function Orders() {
                     </Badge>
                     <div className='flex gap-x-2'>
                       <Badge className='bg-indigo-500 hover:bg-indigo-500/80'>
-                        {SIZES[item.size]}
+                        الحجم {item.size}
                       </Badge>
                       <Badge
                         style={{
@@ -119,9 +115,15 @@ export default function Orders() {
                   <span className='font-semibold'>السعر: </span>
                   {item.price}
                 </p>
+                {item.discount && (
+                  <p>
+                    <span className='font-semibold'>الخصم: </span>
+                    {item.discount}
+                  </p>
+                )}
                 <p className='mt-1 border-t border-t-gray-400 pt-1'>
                   <span className='font-semibold'>السعر الكلى: </span>
-                  {item.price * item.quantity}
+                  {item.discount ?? item.price * item.quantity}
                 </p>
               </div>
             </li>

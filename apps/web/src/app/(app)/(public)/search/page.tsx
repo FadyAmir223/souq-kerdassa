@@ -14,7 +14,7 @@ export default function SearchPage() {
   return (
     <main className='container'>
       <SearchField />
-      <H1 className='mt-6 sm:mt-0'>نتائج البحث</H1>
+      <H1 className='mt-6 md:mt-0'>نتائج البحث</H1>
       <SearchResults />
     </main>
   )
