@@ -1,5 +1,6 @@
 import { FlashList } from '@shopify/flash-list'
 import { useLocalSearchParams } from 'expo-router'
+import { Fragment } from 'react'
 import { ActivityIndicator, Text, View } from 'react-native'
 
 import ProductCard from '@/components/product/product-card'
@@ -24,7 +25,6 @@ export default function ProductsScreen() {
         page: -1,
         limit: +(searchParams.limit ?? 10),
         type: searchParams.type,
-        season: searchParams.season,
         category: searchParams.category,
       },
       {
@@ -40,7 +40,7 @@ export default function ProductsScreen() {
   const products = data as RouterOutputs['product']['byFilter'] | undefined
 
   return (
-    <View className='mx-6 size-full pb-2 pt-4'>
+    <View className='size-full px-6 pb-2 pt-4'>
       <FlashList
         data={products?.products}
         keyExtractor={({ id }) => id}
@@ -50,11 +50,11 @@ export default function ProductsScreen() {
         ListHeaderComponent={<FilterDrawer />}
         ListEmptyComponent={
           isFetching ? (
-            <>
+            <Fragment>
               <ProductCardSkeleton />
               <View className='h-6' />
               <ProductCardSkeleton />
-            </>
+            </Fragment>
           ) : (
             <View className='flex-row'>
               <Text className='text-center text-xl font-semibold'>

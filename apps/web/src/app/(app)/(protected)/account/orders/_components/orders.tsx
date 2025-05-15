@@ -117,7 +117,7 @@ export default function Orders() {
                 </p>
                 {item.discount && (
                   <p>
-                    <span className='font-semibold'>الخصم: </span>
+                    <span className='font-semibold'>بعد الخصم: </span>
                     {item.discount}
                   </p>
                 )}

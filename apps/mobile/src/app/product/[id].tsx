@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router'
-import { useLayoutEffect } from 'react'
+import { Fragment, useLayoutEffect } from 'react'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -43,13 +43,13 @@ export default function ProductByIdScreen() {
               <ProductDetailsSkeleton />
             ) : (
               product && (
-                <>
+                <Fragment>
                   <ImageViewer images={product.images} />
                   <ProductDetails productId={productId} />
                   <ProductSidebar />
                   <ReviewsSection productId={productId} />
                   <SimilarProducts />
-                </>
+                </Fragment>
               )
             )}
           </View>

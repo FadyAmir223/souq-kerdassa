@@ -1,4 +1,5 @@
 import type { Product } from '@repo/db/types'
+import { Fragment } from 'react'
 import { Text, View } from 'react-native'
 
 import { api } from '@/utils/api'
@@ -16,7 +17,7 @@ export default function ProductDetails({ productId }: ProductDetailsProps) {
   if (!product) return null
 
   return (
-    <>
+    <Fragment>
       <Text className='mb-3 mt-7 self-start text-4xl font-bold'>{product.name}</Text>
       <View className='mb-3 flex-row items-center gap-x-4'>
         <Text className='text-2xl text-primary'>
@@ -24,9 +25,6 @@ export default function ProductDetails({ productId }: ProductDetailsProps) {
         </Text>
         <ReviewsRating productId={productId} />
       </View>
-      <Text className='ios:self-start mb-5 text-4xl font-bold text-primary'>
-        {product.price} جنية
-      </Text>
 
       <AddToCart product={product} />
 
@@ -36,6 +34,6 @@ export default function ProductDetails({ productId }: ProductDetailsProps) {
         </Text>
         <Text className='text-xl font-semibold'>{product.description}</Text>
       </View>
-    </>
+    </Fragment>
   )
 }

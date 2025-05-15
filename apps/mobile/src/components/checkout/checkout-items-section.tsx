@@ -1,39 +1,17 @@
 import { useCombinedStore } from '@repo/store/mobile'
-import { useEffect } from 'react'
 import { Text, View } from 'react-native'
 import { useShallow } from 'zustand/react/shallow'
 
 import CheckoutCartItem from './checkout-cart-item'
 
 export default function CheckoutItemsSection() {
-  const {
-    cart,
-    getCartTotalPrice,
-    deleteCartItem,
-    resetOverQuantities,
-    shippingCost,
-  } = useCombinedStore(
-    useShallow(
-      ({
-        cart,
-        getCartTotalPrice,
-        deleteCartItem,
-        resetOverQuantities,
-        selectedAddress,
-      }) => ({
-        cart,
-        getCartTotalPrice,
-        deleteCartItem,
-        resetOverQuantities,
-        shippingCost: selectedAddress?.price ?? 0,
-      }),
-    ),
+  const { cart, getCartTotalPrice, shippingCost } = useCombinedStore(
+    useShallow(({ cart, getCartTotalPrice, selectedAddress }) => ({
+      cart,
+      getCartTotalPrice,
+      shippingCost: selectedAddress?.price ?? 0,
+    })),
   )
-
-  useEffect(() => {
-    for (const item of cart) if (item.quantity === 0) deleteCartItem(item.variantId)
-    resetOverQuantities()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <View>

@@ -1,7 +1,7 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 
@@ -18,14 +18,6 @@ const filters = [
     ],
   },
   {
-    title: 'الموسم',
-    key: 'season',
-    options: [
-      { label: 'صيفى', value: 'summer' },
-      { label: 'شتوى', value: 'winter' },
-    ],
-  },
-  {
     title: 'الفئة',
     key: 'category',
     options: [
@@ -39,11 +31,10 @@ export default function FilterDrawer() {
   const [isOpen, setOpen] = useState(false)
   const searchParams = useLocalSearchParams<ProductFilterParams>()
 
-  const hasParams =
-    !!searchParams.type || !!searchParams.season || !!searchParams.category
+  const hasParams = !!searchParams.type || !!searchParams.category
 
   return (
-    <>
+    <Fragment>
       <Pressable
         className='mb-6 flex-row items-center gap-x-4 self-start rounded-md bg-white px-4 py-2 shadow-sm'
         onPress={() => setOpen(true)}
@@ -101,7 +92,7 @@ export default function FilterDrawer() {
           </View>
         </View>
       </Modal>
-    </>
+    </Fragment>
   )
 }
 

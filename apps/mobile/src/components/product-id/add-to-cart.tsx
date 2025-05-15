@@ -1,36 +1,54 @@
+import { MaterialIcons } from '@expo/vector-icons'
 import type { RouterOutputs } from '@repo/api'
 import type { Category, Season } from '@repo/db/types'
 import { useCombinedStore } from '@repo/store/mobile'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import Toast from 'react-native-toast-message'
+import { useShallow } from 'zustand/react/shallow'
 
-import { AR } from '@/utils/constants'
+import { cn } from '@/utils/cn'
+import { AR, SIZES } from '@/utils/constants'
+import { invertColor } from '@/utils/helpers/invert-number'
 
 type AddToCartProps = {
   product: NonNullable<RouterOutputs['product']['byId']>
 }
 
 export default function AddToCart({ product }: AddToCartProps) {
-  const seasons: Season[] = Array.from(
-    new Set(
-      product.variants
-        .filter((variant) => variant.stock !== 0)
-        .map((variant) => variant.season),
-    ),
+  const variants = product.variants.sort((a, b) =>
+    a.category.localeCompare(b.category),
   )
-
-  const [selectedSeason, setSelectedSeason] = useState<Season | null>(seasons[0]!)
-
-  const variants = product.variants
-    .filter((variant) => variant.season === selectedSeason && variant.stock !== 0)
-    .sort((a, b) => (a.category as string).localeCompare(b.category))
 
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(
     variants[0]?.category,
   )
 
-  const addCartItem = useCombinedStore((s) => s.addCartItem)
+  const [selectedSeason, setSelectedSeason] = useState<Season | undefined>(
+    product.seasons[0]!,
+  )
+
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(
+    product.sizes[0],
+  )
+
+  const [selectedColor, setSelectedColor] = useState<string | undefined>(
+    product.colors[0],
+  )
+
+  const { selectedVariant, setSelectedVariant, addCartItem } = useCombinedStore(
+    useShallow(({ selectedVariant, setSelectedVariant, addCartItem }) => ({
+      selectedVariant,
+      setSelectedVariant,
+      addCartItem,
+    })),
+  )
+
+  useEffect(() => {
+    const variant = variants[0]
+    if (!variant) return
+    setSelectedVariant({ price: variant.price, discount: variant.discount })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (variants.length === 0)
     return (
@@ -43,15 +61,15 @@ export default function AddToCart({ product }: AddToCartProps) {
     addCartItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: selectedVariant?.price ?? 0,
+      discount: selectedVariant?.discount,
       image: product.images[0]!,
       variantId:
-        variants.find(
-          ({ season, category }) =>
-            season === selectedSeason && category === selectedCategory,
-        )?.id ?? '',
+        variants.find(({ category }) => category === selectedCategory)?.id ?? '',
       category: selectedCategory!,
       season: selectedSeason!,
+      size: selectedSize!,
+      color: selectedColor!,
     })
 
     Toast.show({
@@ -67,23 +85,31 @@ export default function AddToCart({ product }: AddToCartProps) {
 
   return (
     <View>
+      <View className='flex-row gap-x-2'>
+        <Text
+          className={cn('ios:self-start mb-5 text-4xl font-bold text-primary', {
+            'text-primary/60 line-through': selectedVariant?.discount,
+          })}
+        >
+          {selectedVariant?.price}
+        </Text>
+        {selectedVariant?.discount && (
+          <Text className='ios:self-start mb-5 text-4xl font-bold text-primary'>
+            {selectedVariant.discount}
+          </Text>
+        )}
+        <Text className='ios:self-start mb-5 text-4xl font-bold text-primary'>
+          جنية
+        </Text>
+      </View>
+
       <View className='mb-4 flex-row items-center gap-x-4'>
         <Text className='min-w-16 text-2xl font-semibold'>الموسم</Text>
-        {seasons.map((season) => (
+        {product.seasons.map((season) => (
           <Pressable
             key={season}
             className='rounded-md border border-black bg-white px-4 py-2 disabled:opacity-60'
-            onPress={() => {
-              setSelectedSeason(season)
-
-              const firstVariant = product.variants
-                .filter((variant) => variant.season === season)
-                .sort((a, b) =>
-                  (a.category as string).localeCompare(b.category),
-                )[0]?.category
-
-              setSelectedCategory(firstVariant)
-            }}
+            onPress={() => setSelectedSeason(season)}
             disabled={season === selectedSeason}
           >
             <Text className='text-2xl font-semibold'>{AR.season[season]}</Text>
@@ -96,12 +122,64 @@ export default function AddToCart({ product }: AddToCartProps) {
         {variants.map(({ category }) => (
           <Pressable
             key={category}
-            onPress={() => setSelectedCategory(category)}
+            onPress={() => {
+              const selectedCategory = variants.find(
+                ({ category: c }) => c === category,
+              )
+              if (!selectedCategory) return
+
+              setSelectedCategory(category)
+              setSelectedVariant({
+                price: selectedCategory.price,
+                discount: selectedCategory.discount,
+              })
+            }}
             className='rounded-md border border-black bg-white px-4 py-2 disabled:opacity-60'
             disabled={category === selectedCategory}
           >
             <Text className='text-2xl font-semibold'>
               {AR.category[category as Category]}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      <View className='mb-4 flex-row gap-x-4'>
+        <Text className='mt-2 min-w-16 text-2xl font-semibold'>الحجم</Text>
+        <View className='gap-y-2'>
+          {product.sizes.map((size) => (
+            <Pressable
+              key={size}
+              onPress={() => setSelectedSize(size)}
+              className='rounded-md border border-black bg-white px-4 py-2 disabled:opacity-60'
+              disabled={size === selectedSize}
+            >
+              <Text className='text-2xl font-semibold'>
+                {SIZES[size as keyof typeof SIZES]}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </View>
+
+      <View className='mb-4 flex-row gap-x-4'>
+        <Text className='mt-2 min-w-16 text-2xl font-semibold'>اللون</Text>
+        {product.colors.map((color) => (
+          <Pressable
+            key={color}
+            onPress={() => setSelectedColor(color)}
+            className='flex aspect-square items-center justify-between rounded-md border border-black bg-white disabled:opacity-60'
+            disabled={color === selectedSize}
+            style={{ backgroundColor: color }}
+          >
+            <Text className='text-2xl font-semibold'>
+              {color === selectedColor && (
+                <MaterialIcons
+                  name='check'
+                  size={20}
+                  style={{ color: invertColor(selectedColor) }}
+                />
+              )}
             </Text>
           </Pressable>
         ))}

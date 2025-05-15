@@ -9,6 +9,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { cn } from '@/utils/cn'
 import { AR } from '@/utils/constants'
+import { invertColor } from '@/utils/helpers/invert-number'
 
 import { Image } from '../image'
 
@@ -81,13 +82,44 @@ export default function CartItems() {
                   <Text className='mb-1.5 rounded-md bg-sky-500 px-2.5 py-0.5 text-center text-lg font-bold text-white'>
                     {AR.category[item.category]}
                   </Text>
+                  <View className='flex-row gap-x-2'>
+                    <Text className='w-24 rounded-md bg-indigo-500 px-2.5 py-0.5 text-center text-lg font-bold text-white'>
+                      الحجم {item.size}
+                    </Text>
+                    <Text
+                      className='w-14 rounded-md px-2.5 py-0.5 text-center text-lg font-bold text-white'
+                      style={{ backgroundColor: item.color }}
+                    >
+                      <MaterialIcons
+                        name='colorize'
+                        size={20}
+                        style={{ color: invertColor(item.color) }}
+                      />
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
 
-            <Text className='ios:self-start text-2xl font-semibold text-primary'>
-              {item.price} جنية
-            </Text>
+            <View className='flex-row gap-x-2'>
+              <Text
+                className={cn('ios:self-start text-2xl font-semibold text-primary', {
+                  'text-primary/60 line-through': item.discount,
+                })}
+              >
+                {item.price}
+              </Text>
+
+              {!!item.discount && (
+                <Text className='ios:self-start text-2xl font-semibold text-primary'>
+                  {item.discount}
+                </Text>
+              )}
+
+              <Text className='ios:self-start text-2xl font-semibold text-primary'>
+                جنية
+              </Text>
+            </View>
 
             <View className='flex-row items-center gap-x-7'>
               <View className='w-fit flex-row items-center gap-x-6 self-start border-2 border-gray-400 px-3 py-2'>

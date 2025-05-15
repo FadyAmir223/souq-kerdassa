@@ -41,8 +41,8 @@ export default auth((req) => {
   // const isLoggedIn = !!req.auth
 
   const cookie =
-    req.cookies.get('authjs.session-token')?.value ??
-    req.cookies.get('__Secure-authjs.session-token')?.value
+    req.cookies.get('__Secure-authjs.session-token')?.value ??
+    req.cookies.get('authjs.session-token')?.value
 
   // @ts-expect-error ...
   const isAuthRoute = PAGES.authRoutes().includes(nextUrl.pathname)

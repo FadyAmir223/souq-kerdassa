@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons'
 import type { Category, Order, Season } from '@repo/db/types'
 import { formatDistanceToNow } from 'date-fns'
 import { ar } from 'date-fns/locale'
@@ -7,6 +8,7 @@ import { Text, View } from 'react-native'
 import { api } from '@/utils/api'
 import { cn } from '@/utils/cn'
 import { AR } from '@/utils/constants'
+import { invertColor } from '@/utils/helpers/invert-number'
 
 import { Image } from '../image'
 import CancelOrderButton from './cancel-order-button'
@@ -29,7 +31,7 @@ export function Orders() {
 
     const totalPrice =
       order.products.reduce(
-        (acc, { price, quantity }) => acc + price * quantity,
+        (acc, { price, discount, quantity }) => acc + (discount ?? price) * quantity,
         0,
       ) + shippingCost
 
@@ -87,13 +89,30 @@ export function Orders() {
                 </Link>
 
                 <View>
-                  <Text className='mb-2 text-xl font-bold'>{item.name}</Text>
+                  <Text className='mb-2 self-start text-xl font-bold'>
+                    {item.name}
+                  </Text>
                   <Text className='mb-1.5 w-20 rounded-md bg-primary px-2.5 py-0.5 text-center text-lg font-bold text-white'>
                     {AR.season[item.season as Season]}
                   </Text>
                   <Text className='mb-1.5 w-20 rounded-md bg-sky-500 px-2.5 py-0.5 text-center text-lg font-bold text-white'>
                     {AR.category[item.category as Category]}
                   </Text>
+                  <View className='flex-row gap-x-2'>
+                    <Text className='mb-1.5 w-24 rounded-md bg-indigo-500 px-2.5 py-0.5 text-center text-lg font-bold text-white'>
+                      الحجم {item.size}
+                    </Text>
+                    <Text
+                      className='mb-1.5 w-12 rounded-md px-2.5 py-0.5 text-center text-lg font-bold text-white'
+                      style={{ backgroundColor: item.color }}
+                    >
+                      <MaterialIcons
+                        name='colorize'
+                        size={20}
+                        style={{ color: invertColor(item.color) }}
+                      />
+                    </Text>
+                  </View>
                 </View>
               </View>
 
@@ -106,9 +125,15 @@ export function Orders() {
                   <Text className='text-xl font-bold'>السعر: </Text>
                   {item.price}
                 </Text>
+                {!!item.discount && (
+                  <Text className='self-start text-lg'>
+                    <Text className='text-xl font-bold'>بعد الخصم: </Text>
+                    {item.discount}
+                  </Text>
+                )}
                 <Text className='mt-1.5 border-t border-t-gray-400 pt-1.5 text-lg'>
                   <Text className='text-xl font-bold'>السعر الكلى: </Text>
-                  {item.price * item.quantity}
+                  {(item.discount ?? item.price) * item.quantity}
                 </Text>
               </View>
             </View>

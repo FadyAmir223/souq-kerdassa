@@ -3,6 +3,7 @@ import { Link } from 'expo-router'
 import { Pressable, Text, View } from 'react-native'
 
 import { Image } from '@/components/image'
+import { cn } from '@/utils/cn'
 
 import StarRating from './star-rating'
 
@@ -11,7 +12,7 @@ type ProductCardProps = {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { name, price, rating, image, reviewsCount } = product
+  const { name, price, discount, rating, image, reviewsCount } = product
 
   return (
     <Link
@@ -35,9 +36,23 @@ export default function ProductCard({ product }: ProductCardProps) {
             <Text className='text-lg'>({reviewsCount})</Text>
           </View>
 
-          <Text className='text-center text-2xl font-bold text-primary'>
-            {price} جنية
-          </Text>
+          <View className='flex-row justify-center gap-x-2'>
+            <Text
+              className={cn('text-center text-2xl font-bold text-primary', {
+                'text-primary/60 line-through': discount,
+              })}
+            >
+              {price}
+            </Text>
+
+            {discount && (
+              <Text className='text-center text-2xl font-bold text-primary'>
+                {discount}
+              </Text>
+            )}
+
+            <Text className='text-2xl font-bold text-primary'>جنية</Text>
+          </View>
         </View>
       </Pressable>
     </Link>

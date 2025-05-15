@@ -7,6 +7,11 @@ export const SEARCH_PARAMS = {
   redirectedFrom: 'redirectedFrom',
 } as const
 
+export const SIZES = {
+  '1': 'بيلبس من 60:85kg',
+  '2': 'بيلبس من 90:120kg',
+} as const
+
 export const AR = {
   season: {
     summer: 'صيفى',

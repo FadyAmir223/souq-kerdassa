@@ -11,29 +11,18 @@ import CheckoutCartItem from './checkout-cart-item'
 import CheckoutCartItemsSkeleton from './checkout-cart-items-skeleton'
 
 export default function CheckoutItemsSection() {
-  const [isHydrated, setHydrated] = useState(false)
   const router = useRouter()
 
-  const { cart, getCartTotalPrice, deleteCartItem, shippingCost } = useAppStore(
-    useShallow(({ cart, getCartTotalPrice, deleteCartItem, selectedAddress }) => ({
+  const { cart, getCartTotalPrice, shippingCost } = useAppStore(
+    useShallow(({ cart, getCartTotalPrice, selectedAddress }) => ({
       cart,
       getCartTotalPrice,
-      deleteCartItem,
       shippingCost: selectedAddress?.price ?? 0,
     })),
   )
 
-  useEffect(() => {
-    setHydrated(true)
-
-    for (const item of cart)
-      if (item.quantity === 0)
-        deleteCartItem({
-          itemVariantId: item.variantId,
-          itemSize: item.size,
-          itemColor: item.color,
-        })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const [isHydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
 
   useEffect(() => {
     if (isHydrated && cart.length === 0) router.replace(PAGES.public.main)

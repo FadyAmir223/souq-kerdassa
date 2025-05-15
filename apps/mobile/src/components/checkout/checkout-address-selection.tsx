@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons'
 import { useCombinedStore } from '@repo/store/mobile'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
 import Toast from 'react-native-toast-message'
@@ -17,29 +17,17 @@ export default function CheckoutAddressSelection() {
   const router = useRouter()
   const utils = api.useUtils()
 
-  const {
-    cart,
-    getCartTotalQuantity,
-    updateOverQuantities,
-    selectedAddress,
-    setSelectedAddress,
-  } = useCombinedStore(
-    useShallow(
-      ({
-        cart,
-        getCartTotalQuantity,
-        updateOverQuantities,
-        selectedAddress,
-        setSelectedAddress,
-      }) => ({
-        cart,
-        getCartTotalQuantity,
-        updateOverQuantities,
-        selectedAddress,
-        setSelectedAddress,
-      }),
-    ),
-  )
+  const { cart, getCartTotalQuantity, selectedAddress, setSelectedAddress } =
+    useCombinedStore(
+      useShallow(
+        ({ cart, getCartTotalQuantity, selectedAddress, setSelectedAddress }) => ({
+          cart,
+          getCartTotalQuantity,
+          selectedAddress,
+          setSelectedAddress,
+        }),
+      ),
+    )
 
   const createOrder = api.order.create.useMutation({
     onSuccess: () => {
@@ -52,10 +40,6 @@ export default function CheckoutAddressSelection() {
         text1Style: { fontSize: 18, textAlign: 'left' },
         position: 'bottom',
       })
-
-      // @ts-expect-error impossible typing
-      const soldOutVariants = error.data?.cause?.soldOutVariants
-      if (soldOutVariants) updateOverQuantities(soldOutVariants)
     },
   })
 
@@ -79,7 +63,7 @@ export default function CheckoutAddressSelection() {
   }
 
   return (
-    <>
+    <Fragment>
       <View className='mb-16'>
         <Text className='mb-2 self-start text-2xl font-bold'>
           اختر عنوان التوصيل
@@ -124,6 +108,6 @@ export default function CheckoutAddressSelection() {
           </Pressable>
         </View>
       </Modal>
-    </>
+    </Fragment>
   )
 }
