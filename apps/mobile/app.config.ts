@@ -52,5 +52,23 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     tsconfigPaths: true,
     typedRoutes: true,
   },
-  plugins: ['expo-router'],
+  plugins: [
+    'expo-router',
+    [
+      'expo-build-properties',
+      {
+        android: {
+          compileSdkVersion: 35,
+          targetSdkVersion: 33,
+          minSdkVersion: 23,
+          buildToolsVersion: '34.0.0',
+          kotlinVersion: '1.8.22',
+        },
+        ios: {
+          deploymentTarget: '13.0',
+          useFrameworks: 'static',
+        },
+      },
+    ],
+  ],
 })
