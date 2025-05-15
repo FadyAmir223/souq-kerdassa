@@ -65,7 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           kotlinVersion: '1.8.22',
         },
         ios: {
-          deploymentTarget: '13.0',
+          deploymentTarget: '15.1',
           useFrameworks: 'static',
         },
       },
