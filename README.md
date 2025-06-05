@@ -20,7 +20,7 @@ find packages -name dist -type d -prune -exec rm -rf '{}' + && \
 find packages -name .cache -type d -prune -exec rm -rf '{}' + && \
 rm -rf apps/web/.next && \
 pnpm clean:workspaces && \
-rm pnpm-lock.yaml && \
+rm -f pnpm-lock.yaml && \
 pnpm i && \
 pnpm db:generate && \
 pnpm build \
@@ -81,4 +81,49 @@ pnpm docker:prod:up
 ```sh
 # generate secret
 openssl rand -base64 32
+```
+
+## Mobile
+
+```sh
+# open emulator
+~/Android/Sdk/emulator/emulator @Pixel_4_API_35
+
+# develop
+cd apps/mobile
+npx expo start --dev-client
+# or
+npx expo run:android
+
+# new package
+npx expo install --pnpm package_name
+
+# testing urls
+npx uri-scheme open myapp://path/into/app?hello=world --android
+
+# clear bundler cache
+npx expo start --dev-client -c
+
+# reset
+rm -rf \
+  apps/mobile/.expo \
+  apps/mobile/android \
+  apps/mobile/ios
+
+# ci build (push tag)
+git tag v0.0.0.preview && git push origin v0.0.0.preview
+git tag v0.0.0.prod && git push origin v0.0.0.prod
+
+# local build
+eas build --local --platform=android --profile=preview --output=./app.preview.apk
+
+# debug build
+adb logcat -c && adb logcat | grep -iE "ReactNative|ReactNativeJS|your.bundle.identifier|AndroidRuntime|Exception"
+```
+
+# CI/CD
+
+```sh
+# manually trigger deploy
+gh workflow run deploy.yml
 ```

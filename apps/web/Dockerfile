@@ -23,8 +23,9 @@ COPY --from=builder /app/out/full/packages/db packages/db
 COPY --from=builder /app/out/full/tooling/eslint tooling/eslint
 COPY --from=builder /app/out/full/tooling/prettier tooling/prettier
 COPY --from=builder /app/out/full/tooling/typescript tooling/typescript
-COPY --from=builder /app/out/full/apps/web/envs/staging/.env.staging.local apps/web
-COPY --from=builder /app/out/full/apps/web/envs/production/.env.production.local apps/web
+
+ARG ENVIRONMENT
+COPY --from=builder /app/out/full/apps/web/envs/${ENVIRONMENT}/.env.${ENVIRONMENT}.local apps/web
 
 RUN --mount=type=cache,id=pnmcache,target=/pnpm_store \
     npm install -g pnpm && \

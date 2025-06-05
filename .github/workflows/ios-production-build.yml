@@ -2,10 +2,11 @@ name: iOS App Release Build
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+.ios'
+  workflow_dispatch:
 
 jobs:
   build:
