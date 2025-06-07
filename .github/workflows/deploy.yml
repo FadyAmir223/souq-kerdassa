@@ -1,11 +1,6 @@
 name: 'Deploy to VPS'
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #   tags:
-  #     - 'v[0-9]+.[0-9]+.[0-9]+.deploy'
   workflow_dispatch:
 
 jobs:
@@ -16,14 +11,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set commit SHA
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+
       - name: Build Docker image
         run: |
           echo "${{ secrets.SECRET_ENVS }}" > ./apps/web/envs/production/.env.production.build.local
           echo "${{ secrets.PRODUCTION_LOCAL }}" > ./apps/web/envs/production/.env.production.local
-          docker compose -f docker-compose.prod.yml --env-file=apps/web/envs/production/.env.production build app-prod
+          TAG=${{ env.GITHUB_SHA_SHORT }} docker compose -f docker-compose.prod.yml \
+            --env-file=apps/web/envs/production/.env.production build --no-cache app-prod
 
       - name: Save Docker image as tar file
-        run: docker save -o app-prod.tar fadyamir/app-prod
+        run: docker save -o app-prod.tar fadyamir/app-prod:${{ env.GITHUB_SHA_SHORT }}
 
       - name: Transfer Docker image to remote server
         run: |
@@ -43,9 +42,7 @@ jobs:
 
       - name: Transfer Docker Compose file to remote server
         run: |
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
-          docker-compose.prod.yml \
-          packages/db/src/migrations/ \
+          rsync -az -e "ssh -o StrictHostKeyChecking=no" . \
           ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_ADDRESS }}:${{ secrets.VPS_PATH }}
 
       - name: Deploy Docker containers using Docker Compose on remote server
@@ -53,6 +50,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_ADDRESS }} << \
           'ENDSSH'
             cd ${{ secrets.VPS_PATH }}
-            docker compose -f docker-compose.prod.yml up -d app-prod
+            TAG=${{ env.GITHUB_SHA_SHORT }} \
+            docker compose -f docker-compose.prod.yml up -d --force-recreate app-prod
             docker system prune --volumes --all --force
           ENDSSH

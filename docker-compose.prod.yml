@@ -1,6 +1,6 @@
 services:
   app-prod:
-    image: fadyamir/app-prod
+    image: fadyamir/app-prod:${TAG:-latest}
     # container_name: app-prod
     build:
       context: .
